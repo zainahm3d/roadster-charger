@@ -1,0 +1,5 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "USB4505-03-0-A_REVA")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/USB4505-03-0-A_REVA")(options "")(descr ""))
+  (lib (name "TES_1-0523")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/TES_1-0523")(options "")(descr ""))
+)

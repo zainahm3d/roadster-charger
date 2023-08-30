@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "USB4505-03-0-A_REVA")(type "Legacy")(uri "/Users/zain/Developer/roadster-charger/hardware/components/USB4505-03-0-A_REVA/USB4505-03-0-A_REVA.lib")(options "")(descr ""))
   (lib (name "TES_1-0523")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/TES_1-0523/TES_1-0523.kicad_sym")(options "")(descr ""))
+  (lib (name "LTC3786EUD_TRPBF")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/LTC3786EUD_TRPBF/LTC3786EUD_TRPBF.kicad_sym")(options "")(descr ""))
 )

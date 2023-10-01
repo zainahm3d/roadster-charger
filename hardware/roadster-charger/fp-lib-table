@@ -5,6 +5,6 @@
   (lib (name "LTC3786EUD_TRPBF")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/LTC3786EUD_TRPBF")(options "")(descr ""))
   (lib (name "DAC70501")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/ul_DAC70501MDQFR/KiCADv6/footprints.pretty")(options "")(descr ""))
   (lib (name "54-00166")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/54-00166")(options "")(descr ""))
-  (lib (name "LTM8074IY_PBF")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/LTM8074IY_PBF")(options "")(descr ""))
   (lib (name "PA2050.193NL")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/PA2050.193NL")(options "")(descr ""))
+  (lib (name "MPM3606A")(type "KiCad")(uri "/Users/zain/Developer/roadster-charger/hardware/components/ul_MPM3606AGQV-P/KiCADv6/footprints.pretty")(options "")(descr ""))
 )

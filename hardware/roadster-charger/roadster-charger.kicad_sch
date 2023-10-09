@@ -3153,6 +3153,10 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 6c30091f-7655-4f68-99e0-2e65596a1abd)
   )
+  (text "TVS CLAMP" (at 210.82 181.61 0)
+    (effects (font (size 3 3) (thickness 0.6) bold (color 255 22 22 1)) (justify left bottom))
+    (uuid 7419f46e-ff80-4e60-b2dd-5d0cad1ad6fe)
+  )
   (text "1/16 BATP\n50V @ battery = 3.125V @ V_SENSE" (at 340.36 189.23 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 82408691-f288-4642-8aea-0a44a07b61ef)
@@ -3186,6 +3190,10 @@
     (at 261.62 189.23 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid e9239943-8e66-413c-8c1d-7fb7e241b144)
+  )
+  (text "CHANGE FB RESISTOR VALUES" (at 31.75 158.75 0)
+    (effects (font (size 3 3) (thickness 0.6) bold (color 255 22 22 1)) (justify left bottom))
+    (uuid f2fe886b-4a39-4997-b249-abc4292819ef)
   )
 
   (label "V_SENSE" (at 344.17 163.83 0) (fields_autoplaced)
@@ -3724,8 +3732,8 @@
     (property "MPN" "RC0603FR-075K1L" (at 303.53 43.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 6005e0da-81ae-4a05-a88f-95c9b6d1d84b))
-    (pin "2" (uuid 5302b364-e24b-475c-8d5c-387f7585bbb3))
+    (pin "1" (uuid 9d9dd05d-7a58-4a80-a8d0-a8c3ade97a81))
+    (pin "2" (uuid 587d8651-2535-4756-8456-5c1c78175116))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -3854,7 +3862,7 @@
     (property "Datasheet" "" (at 344.17 48.26 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 587da22d-1c83-4d1a-8c07-e51aed743df1))
+    (pin "1" (uuid b8f6051a-9f6c-44b7-b406-8b1c54e077fd))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4052,8 +4060,8 @@
     (property "MPN" "RC0603FR-075K1L" (at 300.99 43.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid c28dba9e-6d8e-4348-be34-99264b6e4be7))
-    (pin "2" (uuid a53bf1fc-757a-46a4-847b-556f13a6b1ff))
+    (pin "1" (uuid 50e3f0be-85f6-4180-a936-e0dfe61bd2b8))
+    (pin "2" (uuid c147b6e4-caa3-4339-8e8c-5b4cd0c5d179))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4156,8 +4164,8 @@
     (property "MPN" "RC0603FR-071KL" (at 344.17 36.83 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 9a0e7119-7266-45b0-99fa-06eb80544ee5))
-    (pin "2" (uuid be06cc28-4d88-433e-aed9-071a18c9257a))
+    (pin "1" (uuid e2c6b248-0d40-4e16-89ea-e849780f3846))
+    (pin "2" (uuid 307e3f23-15c3-4f93-9b0d-ea29c2563029))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4299,7 +4307,7 @@
     (property "Datasheet" "" (at 292.1 69.85 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid dd6b6ef9-0648-4899-bde5-dea07db4fe29))
+    (pin "1" (uuid d8f96533-acb2-4424-a490-481283182a83))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4541,7 +4549,7 @@
     (property "Datasheet" "" (at 374.65 53.34 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid cf8af8c6-48a3-4f29-8e07-d32dbb66e1ed))
+    (pin "1" (uuid 3ef38c9d-2364-4ca4-8f17-2fa5feccb4bc))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4686,10 +4694,10 @@
     (property "MPN" "PRTR5V0U2X,215" (at 311.15 80.01 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 208ee6eb-ce54-4c7b-8e7a-1ffc71dcc90c))
-    (pin "2" (uuid c48f09b8-959c-4179-b966-6b1b14862b2f))
-    (pin "3" (uuid 780cf111-257d-4256-8724-cd64af1d4fab))
-    (pin "4" (uuid 458cac2e-cb38-4c1a-8684-3ad4adf1023c))
+    (pin "1" (uuid a05039fd-a628-4d23-8945-b4f884ca1eb0))
+    (pin "2" (uuid ad9cb006-e1ef-4493-a817-086ac3f168c8))
+    (pin "3" (uuid cf21d5a6-0a76-42ee-88a6-343a5097926a))
+    (pin "4" (uuid c39ee3f4-c83f-4442-b6b3-a65035886bdb))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4933,7 +4941,7 @@
     (property "Datasheet" "" (at 374.65 27.94 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 68dffad8-4618-4a1e-a4ff-4af7838fd503))
+    (pin "1" (uuid 9eaadc58-5bb3-47aa-bb09-e0385b120690))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -4989,7 +4997,7 @@
     (property "Datasheet" "" (at 300.99 46.99 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid de35e74a-efd8-4303-b31c-6693d7c22479))
+    (pin "1" (uuid e8062b2f-d202-4b6f-a064-458ab2cfd415))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -5448,22 +5456,22 @@
     (property "MPN" "USB4505-03-0-A" (at 271.78 43.18 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "A1_B12" (uuid 156af00e-cbd6-4e62-855b-c8d1057bf09a))
-    (pin "A5" (uuid ded6d93c-5b00-4201-8fce-3607b7b5d661))
-    (pin "A6" (uuid 858bd6d9-d251-4055-bd2b-a096a50bc918))
-    (pin "A7" (uuid f1287359-4a95-4d59-bdb0-d402b49785ce))
-    (pin "A8" (uuid 10b3621a-eca5-429d-8a16-cba3abcb8b29))
-    (pin "B1_A12" (uuid e9f44f7e-7c62-42d0-861f-8cfac214e158))
-    (pin "B5" (uuid 1e873ae1-127d-4d07-9ad0-d324402af650))
-    (pin "B6" (uuid fd0b4e8a-5382-418a-af53-5d9c018da56f))
-    (pin "B7" (uuid 31fd39ee-d594-4fcb-8832-27bea0a6fb2e))
-    (pin "B8" (uuid c336dfd0-3cfb-41da-8d8d-038e162d0d46))
-    (pin "S1" (uuid 46899f97-6e4f-4385-be4a-f52eab5769dc))
-    (pin "S2" (uuid 4ea84155-441f-4386-9bad-c62bf03ae2aa))
-    (pin "S3" (uuid dbbff8d1-7e38-461d-8c2e-105dc1b4029a))
-    (pin "S4" (uuid 038cd852-6f97-45a3-8d22-b1d7e7d0543d))
-    (pin "A4_B9" (uuid 7950a749-aa3b-4765-ab4d-84408854952f))
-    (pin "B4_A9" (uuid f06a113d-ecfd-4f15-8680-96def1f266e4))
+    (pin "A1_B12" (uuid 42b902c4-8bd5-4bc5-b33b-72cff943334e))
+    (pin "A5" (uuid 92413ed3-218a-4166-9c50-1fcf82b8a35f))
+    (pin "A6" (uuid 03e3930e-d5a8-4f6c-9388-189beba7a636))
+    (pin "A7" (uuid 39238a91-d06e-4609-ba49-da51d5789416))
+    (pin "A8" (uuid ac4604f8-134d-4b83-b5b3-e0b12421f0c4))
+    (pin "B1_A12" (uuid 5caed864-0f20-4416-9d64-44811eb28951))
+    (pin "B5" (uuid 6d3c0c8f-db9b-4d49-86d3-b387f252d2e4))
+    (pin "B6" (uuid a6791189-5c26-4b12-b13a-1095d4a144c7))
+    (pin "B7" (uuid 977ec4a2-2507-4d73-b25c-9a65aeb0765a))
+    (pin "B8" (uuid 4730ac82-8dc1-49cc-8b38-60b439e2270f))
+    (pin "S1" (uuid ca9aaed9-7fa9-41be-9ae9-606b7d207be2))
+    (pin "S2" (uuid f6e15bb4-24ac-48c4-9389-3e41d4488d15))
+    (pin "S3" (uuid 9268fa35-5baa-49ce-a683-dbc37e43e481))
+    (pin "S4" (uuid 3ba9c029-7bcd-4ee1-88ab-7b60ecf06bec))
+    (pin "A4_B9" (uuid 1acbbb66-9525-40ff-b049-6921769fb1f6))
+    (pin "B4_A9" (uuid 0c12e5f8-4194-449d-b0d9-0e362772b620))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -5659,8 +5667,8 @@
     (property "MPN" "RC0603FR-071KL" (at 344.17 44.45 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 0adc3081-3e32-453e-8aba-4af4c56cc238))
-    (pin "2" (uuid 54be48db-d0dd-4f41-84e1-6082b0ab3cc0))
+    (pin "1" (uuid 19793965-6fd2-4856-9cbc-b4a845bf735d))
+    (pin "2" (uuid 7d8a8b1c-b7b1-477d-895d-3772f42276fe))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -5992,7 +6000,7 @@
     (property "Datasheet" "" (at 311.15 92.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid e8e185d4-c6c0-4e95-8b71-111764bb15cb))
+    (pin "1" (uuid 56001b53-e65b-48d3-9bf7-219daffb84e2))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -6268,10 +6276,10 @@
     (property "MPN" "PRTR5V0U2X,215" (at 374.65 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid edcf6571-5c52-43c1-bdf1-766da23b1dc5))
-    (pin "2" (uuid d7523dbf-07c9-4e68-ae74-1cc716ef55b3))
-    (pin "3" (uuid 0b31f748-3580-4706-808c-13ca50692718))
-    (pin "4" (uuid b80e0c5e-7d81-4b60-ae38-d8ec6c634d39))
+    (pin "1" (uuid eb977842-0691-404f-a1b1-1f010a4078d5))
+    (pin "2" (uuid ef5bfebb-430a-4684-8147-9d3dedc3e2bd))
+    (pin "3" (uuid 3e034d0a-74bf-46f8-b3a0-31d9e65911a1))
+    (pin "4" (uuid 863a6519-518b-47c1-86cb-e24eb2dccddd))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -6299,8 +6307,8 @@
     (property "MPN" "CL31A106MBHNNNE" (at 36.83 130.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 89447b4d-57be-4063-ab6e-b74a1447620b))
-    (pin "2" (uuid 5b075637-c3d7-4554-ae96-0bb914fc4c9f))
+    (pin "1" (uuid 34ab4039-43e2-46c8-84c7-6a5df8490d53))
+    (pin "2" (uuid bc16d49f-fe59-4906-9355-ed7aa131060c))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
@@ -6325,7 +6333,7 @@
     (property "Datasheet" "" (at 311.15 67.31 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (pin "1" (uuid 5660f7ad-ffab-4581-a364-16cefe9d7c9a))
+    (pin "1" (uuid b238d714-c259-43c6-b703-998e39027e9a))
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"

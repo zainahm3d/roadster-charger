@@ -199,11 +199,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiWyIsICJDYXBSaWdodENob2ljZSI6ICJdIiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIi43NSIsICJMYXllckNvbWJvQm94IjogIkYuU2lsa1MiLCAiTXVsdGlMaW5lVGV4dCI6ICJTREEiLCAiUGFkZGluZ0JvdHRvbUN0cmwiOiAiNSIsICJQYWRkaW5nTGVmdEN0cmwiOiAiNSIsICJQYWRkaW5nUmlnaHRDdHJsIjogIjUiLCAiUGFkZGluZ1RvcEN0cmwiOiAiNSIsICJXaWR0aEN0cmwiOiAiIn0=")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-657BB005" (at 0 -3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp cec18d56-f431-40e6-8f90-bcc1cc8b7eef)
     )
     (fp_text value "G***" (at 0 3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 5698293b-be67-4655-9861-6c2114aef1ad)
     )
     (fp_poly
@@ -3118,11 +3118,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiPCIsICJDYXBSaWdodENob2ljZSI6ICI8IiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIjEiLCAiTGF5ZXJDb21ib0JveCI6ICJGLlNpbGtTIiwgIk11bHRpTGluZVRleHQiOiAiUE9XRVIgSU4iLCAiUGFkZGluZ0JvdHRvbUN0cmwiOiAiNSIsICJQYWRkaW5nTGVmdEN0cmwiOiAiNSIsICJQYWRkaW5nUmlnaHRDdHJsIjogIjUiLCAiUGFkZGluZ1RvcEN0cmwiOiAiNSIsICJXaWR0aEN0cmwiOiAiIn0=")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-657BB0E9" (at 0 -3.93356) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp f91fa15a-37b0-4c9e-83b3-f431e72f2e82)
     )
     (fp_text value "G***" (at 0 3.93356) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 5c4a5a99-8167-4879-b7d6-95a8e67907e4)
     )
     (fp_poly
@@ -3925,7 +3925,7 @@
       (net 12 "Net-(Q3-D)") (pintype "passive") (solder_mask_margin 0.102) (tstamp c6cf25e1-d7a7-4065-86c5-a5324fb4ab56))
     (pad "3" smd rect (at 0 -9.2) (size 5.2 2.5) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 40 "unconnected-(L2-ANCHOR-Pad3)") (pinfunction "ANCHOR") (pintype "no_connect") (solder_mask_margin 0.102) (tstamp a6274f86-6689-4f1d-88fc-5b1522a8aeb6))
-    (model "/Users/zain/Developer/roadster-charger/hardware/components/PA2050.193NL/pa2050.193nl.step"
+    (model "${KIPRJMOD}/components/PA2050.193NL/pa2050.193nl.step"
       (offset (xyz 3.25 0.6 0))
       (scale (xyz 1 1 1))
       (rotate (xyz -90 0 -180))
@@ -4523,6 +4523,11 @@
           (xy 190.075005 117.319995)
         )
       )
+    )
+    (model "${KIPRJMOD}/components/ul_MPM3606AGQV-P/MPM3606.STEP"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 90 180 -90))
     )
   )
 
@@ -5362,6 +5367,11 @@
       (net 45 "/SDA") (pinfunction "SDIN/SDA") (pintype "unspecified") (tstamp 85adfd5a-0924-41ea-8755-95480826d288))
     (pad "8" smd rect (at 0.900001 -0.750001 270) (size 0.8128 0.254) (layers "F.Cu" "F.Paste" "F.Mask")
       (net 79 "unconnected-(U7-VREFIO-Pad8)") (pinfunction "VREFIO") (pintype "power_in+no_connect") (tstamp 9dc18088-2e68-4a87-bd3d-cdac14074fe2))
+    (model ":KICAD7_3DMODEL_DIR:Package_SON.3dshapes/WSON-8-1EP_2x2mm_P0.5mm_EP0.9x1.6mm.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu")
@@ -5536,11 +5546,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiLyIsICJDYXBSaWdodENob2ljZSI6ICIvIiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIjEuMiIsICJMYXllckNvbWJvQm94IjogIkYuU2lsa1MiLCAiTXVsdGlMaW5lVGV4dCI6ICJSRVYgMSIsICJQYWRkaW5nQm90dG9tQ3RybCI6ICI1IiwgIlBhZGRpbmdMZWZ0Q3RybCI6ICI1IiwgIlBhZGRpbmdSaWdodEN0cmwiOiAiNSIsICJQYWRkaW5nVG9wQ3RybCI6ICI1IiwgIldpZHRoQ3RybCI6ICIifQ==")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-657BB102" (at 0 -4.096385) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp b43ca7c4-80e4-4abe-87f3-a062a1b96e5d)
     )
     (fp_text value "G***" (at 0 4.096385) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 33f537db-2ea2-486d-8deb-bb333778b6cc)
     )
     (fp_poly
@@ -6015,7 +6025,7 @@
         )
       )
     )
-    (model "${KICAD7_3RD_PARTY}/3dmodels/com_github_espressif_kicad-libraries/espressif.3dshapes/ESP32-C3-MINI-1.STEP"
+    (model "${KIPRJMOD}/components/ESP32-C3-MINI-1.STEP"
       (offset (xyz -6.6 -8.37 0))
       (scale (xyz 1 1 1))
       (rotate (xyz 0 0 0))
@@ -6232,11 +6242,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiWyIsICJDYXBSaWdodENob2ljZSI6ICJdIiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIi43NSIsICJMYXllckNvbWJvQm94IjogIkYuU2lsa1MiLCAiTXVsdGlMaW5lVGV4dCI6ICJSR0IiLCAiUGFkZGluZ0JvdHRvbUN0cmwiOiAiNSIsICJQYWRkaW5nTGVmdEN0cmwiOiAiNSIsICJQYWRkaW5nUmlnaHRDdHJsIjogIjUiLCAiUGFkZGluZ1RvcEN0cmwiOiAiNSIsICJXaWR0aEN0cmwiOiAiIn0=")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-657BAFE4" (at 0 -3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 144f7f5f-df82-42d0-8bb9-219abcc5f2c1)
     )
     (fp_text value "G***" (at 0 3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 763db0a9-734a-453b-9277-46db8b432c17)
     )
     (fp_poly
@@ -6933,11 +6943,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiWyIsICJDYXBSaWdodENob2ljZSI6ICJdIiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIi43NSIsICJMYXllckNvbWJvQm94IjogIkYuU2lsa1MiLCAiTXVsdGlMaW5lVGV4dCI6ICJHTkQiLCAiUGFkZGluZ0JvdHRvbUN0cmwiOiAiNSIsICJQYWRkaW5nTGVmdEN0cmwiOiAiNSIsICJQYWRkaW5nUmlnaHRDdHJsIjogIjUiLCAiUGFkZGluZ1RvcEN0cmwiOiAiNSIsICJXaWR0aEN0cmwiOiAiIn0=")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-657BAFF1" (at 0 -3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 164fad88-e4f6-41d7-9e43-b8dd0b54007c)
     )
     (fp_text value "G***" (at 0 3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 8dd3cbb6-ec05-4640-aa5b-a0ab841260bc)
     )
     (fp_poly
@@ -9236,11 +9246,11 @@
     (tags "kb_params=eyJBbGlnbm1lbnRDaG9pY2UiOiAiQ2VudGVyIiwgIkNhcExlZnRDaG9pY2UiOiAiWyIsICJDYXBSaWdodENob2ljZSI6ICJdIiwgIkZvbnRDb21ib0JveCI6ICJCZXJrZWxleU1vbm8tQm9sZCIsICJIZWlnaHRDdHJsIjogIi43NSIsICJMYXllckNvbWJvQm94IjogIkYuU2lsa1MiLCAiTXVsdGlMaW5lVGV4dCI6ICJTQ0wiLCAiUGFkZGluZ0JvdHRvbUN0cmwiOiAiNSIsICJQYWRkaW5nTGVmdEN0cmwiOiAiNSIsICJQYWRkaW5nUmlnaHRDdHJsIjogIjUiLCAiUGFkZGluZ1RvcEN0cmwiOiAiNSIsICJXaWR0aEN0cmwiOiAiIn0=")
     (attr board_only exclude_from_pos_files exclude_from_bom)
     (fp_text reference "kibuzzard-657BAFFB" (at 0 -3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 75923295-7b2e-48f1-88de-5172f47124f1)
     )
     (fp_text value "G***" (at 0 3.71217) (layer "F.SilkS") hide
-        (effects (font (size 0 0)))
+        (effects (font (size 0 0) (thickness 0.15)))
       (tstamp 81fe7749-68f5-4bf8-88de-c09fda2999ef)
     )
     (fp_poly
@@ -9602,6 +9612,11 @@
       (net 2 "GND") (pintype "passive") (solder_mask_margin 0.102) (tstamp 0abf9cdd-3b44-4fac-acde-6d837045faf1))
     (pad "C" thru_hole oval (at 4.8 -3.25 90) (size 1.4 3.6) (drill oval 0.8 3) (layers "*.Cu" "*.Mask")
       (net 2 "GND") (pintype "passive") (solder_mask_margin 0.102) (tstamp 81a64e0e-604e-4fb5-aa60-95e98ea95214))
+    (model "${KIPRJMOD}/components/54-00166/54-00166.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz -90 0 0))
+    )
   )
 
   (footprint "Capacitor_SMD:C_0603_1608Metric" (layer "F.Cu")
@@ -10511,6 +10526,11 @@
       (net 42 "Net-(Q2-G)") (pinfunction "TG") (pintype "passive") (solder_mask_margin 0.102) (tstamp 96868bde-50bf-4920-8a5f-9d72444caafc))
     (pad "17" smd rect (at 0 0) (size 1.55 1.55) (layers "F.Cu" "F.Mask")
       (net 2 "GND") (pinfunction "EPAD") (pintype "passive") (solder_mask_margin 0.102) (tstamp f26e5629-8ae1-4dee-b98d-99f831631f85))
+    (model ":KICAD7_3DMODEL_DIR:Package_DFN_QFN.3dshapes/QFN-16-1EP_3x3mm_P0.5mm_EP1.8x1.8mm.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (footprint "Resistor_SMD:R_0603_1608Metric" (layer "F.Cu")

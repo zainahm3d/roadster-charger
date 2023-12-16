@@ -4,6 +4,10 @@
 
   (paper "B")
 
+  (title_block
+    (rev "1")
+  )
+
   (lib_symbols
     (symbol "DAC70501:DAC70501MDQFR" (pin_names (offset 0.254)) (in_bom yes) (on_board yes)
       (property "Reference" "U5" (at 29.21 7.62 0)

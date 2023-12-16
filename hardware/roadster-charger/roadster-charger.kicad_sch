@@ -4,6 +4,10 @@
 
   (paper "B")
 
+  (title_block
+    (rev "1")
+  )
+
   (lib_symbols
     (symbol "54-00166:54-00166" (pin_names (offset 1.016)) (in_bom yes) (on_board yes)
       (property "Reference" "J" (at -7.62 5.08 0)
@@ -3753,7 +3757,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 400.05 238.76 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 0ca43e2a-bf1a-468d-9f15-617919e2101e)
     (property "Reference" "H1" (at 402.59 237.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -3765,6 +3769,9 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 400.05 238.76 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "DNP" (at 400.05 238.76 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (instances
@@ -4707,7 +4714,7 @@
   )
 
   (symbol (lib_id "Mechanical:MountingHole") (at 400.05 245.11 0) (unit 1)
-    (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
+    (in_bom no) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 52466d0e-affa-49a9-b319-1d967e245320)
     (property "Reference" "H2" (at 402.59 243.84 0)
       (effects (font (size 1.27 1.27)) (justify left))
@@ -4719,6 +4726,9 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 400.05 245.11 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "DNP" (at 400.05 245.11 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (instances
@@ -5728,6 +5738,9 @@
     (property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm75b.pdf" (at 189.23 180.34 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "MPN" "LM75BDP" (at 189.23 180.34 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "6" (uuid 5a18e6d3-e24f-4273-be6a-40212fdc0e23))
     (pin "8" (uuid fbd3e279-88e7-47de-b641-b916c76632be))
     (pin "3" (uuid 8a515387-ab2c-471f-b1a4-b7c37eac1de8))
@@ -6620,6 +6633,9 @@
     (property "Datasheet" "~" (at 207.01 31.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "MPN" "RCU-0C" (at 201.93 31.75 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid 0006186b-f9c0-4f8f-847c-dff1a11fd6a8))
     (instances
       (project "roadster-charger"
@@ -6718,6 +6734,9 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 114.3 219.71 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RCU-0C" (at 119.38 219.71 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 21ceb9d4-c971-4279-9dfc-3410cd118559))
@@ -6950,6 +6969,9 @@
     (property "Datasheet" "~" (at 196.85 31.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
+    (property "MPN" "RCU-0C" (at 191.77 31.75 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
     (pin "1" (uuid df4848a0-bb56-45bf-b368-85a26a448487))
     (instances
       (project "roadster-charger"
@@ -7002,6 +7024,9 @@
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "~" (at 201.93 31.75 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RCU-0C" (at 196.85 31.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 43489047-ebf5-472c-9f39-dd8ae4a76a53))

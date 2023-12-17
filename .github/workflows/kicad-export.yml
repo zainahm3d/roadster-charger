@@ -1,0 +1,71 @@
+name: KiCad Export
+run-name: KiCad Export 🚀
+on: [push]
+
+defaults:
+  run:
+    working-directory:
+      ./hardware/roadster-charger/
+
+jobs:
+  KiCad-Export:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code  # needs to be first for working-directory to succeed
+        uses: actions/checkout@v3
+
+      - name: Install KiCad
+        run: |
+          sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+          sudo apt update
+          sudo apt install --install-recommends kicad
+
+      - name: Create output directory
+        run: mkdir output
+
+      - name: Export schematic PDFs
+        run: |
+          pwd
+          mkdir -p output/schem-pdf
+          for file in roadster-charger.kicad_sch; do kicad-cli sch export pdf --output output/schem-pdf/$(basename "$file" .kicad_sch).pdf "$file"; done
+
+      - name: Export BOM
+        run: |
+          mkdir -p output/bom
+          for file in *.kicad_sch; do kicad-cli sch export python-bom --output output/bom/$(basename "$file" .kicad_sch).xml "$file"; done
+
+      - name: Export PCB PDFs
+        run: |
+          mkdir -p output/pcb-pdf
+          for file in *.kicad_pcb; do kicad-cli pcb export pdf --layers F.Cu,In1.Cu,In2.Cu,B.Cu,B.SilkS,B.SilkS,Edge.Cuts --output output/pcb-pdf/$(basename "$file" .kicad_pcb).pdf "$file"; done
+
+      # --board-plot-params doesn't seem to work, should work after:
+      #  https://gitlab.com/kicad/code/kicad/-/issues/15634
+      - name: Export gerbers
+        run: |
+          mkdir -p output/gerbers
+          kicad-cli pcb export gerbers --board-plot-params --output output/gerbers --layers F.Cu,In1.Cu,In2.Cu,B.Cu,B.Paste,F.Paste,B.SilkS,F.SilkS,B.Mask,F.Mask,Edge.Cuts,B.Fab,F.Fab --precision 6 *.kicad_pcb
+
+      # This task includes a trailing slash on the output directory due to a kicad-cli bug.
+      - name: Export drill
+        run: |
+          mkdir -p output/gerbers
+          kicad-cli pcb export drill *.kicad_pcb --format gerber --output output/gerbers/
+
+      - name: Export component positions
+        run: |
+          mkdir -p output/pos
+          kicad-cli pcb export pos --format csv --side both --units mm --output output/pos/pos.csv *.kicad_pcb
+
+      - name: Export STEP
+        run: |
+          mkdir -p output/step
+          for file in *.kicad_pcb; do kicad-cli pcb export step --subst-models --output output/step/$(basename "$file" .kicad_pcb).stp "$file"; done
+
+      # This step does not respect working-directory
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifacts
+          path: ./hardware/roadster-charger/output

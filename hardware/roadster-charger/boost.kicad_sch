@@ -1227,7 +1227,7 @@
   (symbol (lib_id "Device:C_Small") (at 311.15 113.03 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 01d61fde-c725-488d-b9e8-c9e18d510662)
-    (property "Reference" "C16" (at 313.69 110.49 0)
+    (property "Reference" "C?" (at 313.69 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 313.69 113.03 0)
@@ -1247,10 +1247,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C17") (unit 1)
+          (reference "C30") (unit 1)
         )
       )
     )
@@ -1259,7 +1259,7 @@
   (symbol (lib_id "DAC70501:DAC70501MDQFR") (at 134.62 111.76 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 051775d4-45bd-499b-b756-c950a23751e8)
-    (property "Reference" "U5" (at 163.83 104.14 0)
+    (property "Reference" "U?" (at 163.83 104.14 0)
       (effects (font (size 1.524 1.524)))
     )
     (property "Value" "DAC70501MDQFR" (at 152.4 130.81 0)
@@ -1285,10 +1285,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "U5") (unit 1)
+          (reference "U?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "U7") (unit 1)
+          (reference "U10") (unit 1)
         )
       )
     )
@@ -1297,7 +1297,7 @@
   (symbol (lib_id "power:GND") (at 251.46 152.4 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0860dc5a-d1b2-4c51-8c6f-71bd096baf0c)
-    (property "Reference" "#PWR033" (at 251.46 158.75 0)
+    (property "Reference" "#PWR?" (at 251.46 158.75 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 251.46 157.48 0)
@@ -1313,10 +1313,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR033") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR053") (unit 1)
+          (reference "#PWR080") (unit 1)
         )
       )
     )
@@ -1325,7 +1325,7 @@
   (symbol (lib_id "Device:C_Small") (at 191.77 146.05 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 0c0a37ed-071c-4c1f-a219-17aa33a2c3fb)
-    (property "Reference" "C13" (at 194.31 144.7863 0)
+    (property "Reference" "C?" (at 194.31 144.7863 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "220pF" (at 194.31 147.3263 0)
@@ -1345,10 +1345,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C13") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C26") (unit 1)
+          (reference "C20") (unit 1)
         )
       )
     )
@@ -1357,7 +1357,7 @@
   (symbol (lib_id "power:GND") (at 241.3 162.56 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 15d6f7d5-f876-4a95-b280-8d156bb62822)
-    (property "Reference" "#PWR034" (at 241.3 168.91 0)
+    (property "Reference" "#PWR?" (at 241.3 168.91 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 241.3 167.64 0)
@@ -1373,10 +1373,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR034") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR052") (unit 1)
+          (reference "#PWR078") (unit 1)
         )
       )
     )
@@ -1385,7 +1385,7 @@
   (symbol (lib_id "power:GND") (at 266.7 176.53 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 1a1a7360-6f39-4f48-a525-e42f5586f3b3)
-    (property "Reference" "#PWR032" (at 266.7 182.88 0)
+    (property "Reference" "#PWR?" (at 266.7 182.88 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 266.7 181.61 0)
@@ -1401,10 +1401,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR032") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR054") (unit 1)
+          (reference "#PWR083") (unit 1)
         )
       )
     )
@@ -1413,7 +1413,7 @@
   (symbol (lib_id "power:VBUS") (at 251.46 106.68 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 1ce9c8c1-63b2-4bca-b634-b66a60289906)
-    (property "Reference" "#PWR028" (at 251.46 110.49 0)
+    (property "Reference" "#PWR?" (at 251.46 110.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "VBUS" (at 251.46 101.6 0)
@@ -1429,10 +1429,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR028") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR051") (unit 1)
+          (reference "#PWR079") (unit 1)
         )
       )
     )
@@ -1441,7 +1441,7 @@
   (symbol (lib_id "Device:C_Small") (at 281.94 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 237ee792-f869-4283-baf7-a7e1a6b8e37d)
-    (property "Reference" "C16" (at 284.48 138.43 0)
+    (property "Reference" "C?" (at 284.48 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 284.48 140.97 0)
@@ -1461,10 +1461,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C7") (unit 1)
+          (reference "C26") (unit 1)
         )
       )
     )
@@ -1473,7 +1473,7 @@
   (symbol (lib_id "Transistor_FET:CSD19532Q5B") (at 259.08 133.35 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 258bd2b0-aecc-46df-9f5a-ac7c5602c694)
-    (property "Reference" "Q1" (at 262.89 130.81 90)
+    (property "Reference" "Q?" (at 262.89 130.81 90)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "CSD19532Q5B" (at 259.08 142.24 90)
@@ -1496,10 +1496,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "Q1") (unit 1)
+          (reference "Q?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "Q2") (unit 1)
+          (reference "Q3") (unit 1)
         )
       )
     )
@@ -1508,7 +1508,7 @@
   (symbol (lib_id "power:GND") (at 172.72 114.3 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 25d4b24b-8054-4976-811e-43df87ef893e)
-    (property "Reference" "#PWR037" (at 172.72 120.65 0)
+    (property "Reference" "#PWR?" (at 172.72 120.65 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 172.72 119.38 0)
@@ -1524,10 +1524,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR037") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR046") (unit 1)
+          (reference "#PWR075") (unit 1)
         )
       )
     )
@@ -1536,7 +1536,7 @@
   (symbol (lib_id "power:+3.3V") (at 133.35 106.68 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 2717118a-8b8b-4222-8d1a-e7aee4210eb1)
-    (property "Reference" "#PWR041" (at 133.35 110.49 0)
+    (property "Reference" "#PWR?" (at 133.35 110.49 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3V" (at 133.35 101.6 0)
@@ -1552,10 +1552,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR041") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR044") (unit 1)
+          (reference "#PWR073") (unit 1)
         )
       )
     )
@@ -1564,7 +1564,7 @@
   (symbol (lib_id "power:GND") (at 133.35 128.27 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 281715f9-9cc4-4a6c-b216-414f5e871b6e)
-    (property "Reference" "#PWR038" (at 133.35 134.62 0)
+    (property "Reference" "#PWR?" (at 133.35 134.62 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 133.35 133.35 0)
@@ -1580,10 +1580,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR038") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR045") (unit 1)
+          (reference "#PWR074") (unit 1)
         )
       )
     )
@@ -1592,7 +1592,7 @@
   (symbol (lib_id "Device:C_Small") (at 187.96 149.86 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 2ee1c50b-a0ae-45a6-bd5c-f7866570ba6a)
-    (property "Reference" "C12" (at 185.42 148.5963 0)
+    (property "Reference" "C?" (at 185.42 148.5963 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "15nF" (at 185.42 151.1363 0)
@@ -1612,10 +1612,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C12") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C25") (unit 1)
+          (reference "C19") (unit 1)
         )
       )
     )
@@ -1624,7 +1624,7 @@
   (symbol (lib_id "Device:R_Small") (at 266.7 165.1 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 31b7fc7a-1210-4257-a686-c8a1ec38ab09)
-    (property "Reference" "R10" (at 269.24 163.83 0)
+    (property "Reference" "R?" (at 269.24 163.83 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "475K" (at 269.24 166.37 0)
@@ -1644,10 +1644,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "R10") (unit 1)
+          (reference "R?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R17") (unit 1)
+          (reference "R25") (unit 1)
         )
       )
     )
@@ -1656,7 +1656,7 @@
   (symbol (lib_id "Device:D_Schottky_Small") (at 241.3 151.13 270) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 4edd99c3-bf81-44e9-bf0f-d3485fc0e48d)
-    (property "Reference" "D5" (at 243.84 150.876 90)
+    (property "Reference" "D?" (at 243.84 150.876 90)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "D_Schottky_Small" (at 243.84 152.146 90)
@@ -1676,10 +1676,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "D5") (unit 1)
+          (reference "D?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "D6") (unit 1)
+          (reference "D7") (unit 1)
         )
       )
     )
@@ -1688,7 +1688,7 @@
   (symbol (lib_id "Transistor_FET:CSD19532Q5B") (at 248.92 147.32 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 58b95ef5-49ba-4cd1-bd15-042de8cfca15)
-    (property "Reference" "Q1" (at 254 147.32 0)
+    (property "Reference" "Q?" (at 254 147.32 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "CSD19532Q5B" (at 255.27 148.59 0)
@@ -1711,10 +1711,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "Q1") (unit 1)
+          (reference "Q?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "Q3") (unit 1)
+          (reference "Q2") (unit 1)
         )
       )
     )
@@ -1723,7 +1723,7 @@
   (symbol (lib_id "Device:C_Small") (at 304.8 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5c80a795-ef66-46ec-b90f-7733a12be444)
-    (property "Reference" "C16" (at 307.34 138.43 0)
+    (property "Reference" "C?" (at 307.34 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 307.34 140.97 0)
@@ -1743,10 +1743,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C13") (unit 1)
+          (reference "C29") (unit 1)
         )
       )
     )
@@ -1755,7 +1755,7 @@
   (symbol (lib_id "Device:C_Small") (at 172.72 111.76 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 5cbcfb04-627e-454f-bc6b-9232a1a1189e)
-    (property "Reference" "C21" (at 175.26 109.22 0)
+    (property "Reference" "C?" (at 175.26 109.22 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "0.1uF" (at 175.26 111.76 0)
@@ -1775,10 +1775,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C21") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C24") (unit 1)
+          (reference "C18") (unit 1)
         )
       )
     )
@@ -1787,7 +1787,7 @@
   (symbol (lib_id "Device:C_Small") (at 266.7 113.03 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 63f9cff7-a5c5-4fed-b603-894e893fc84d)
-    (property "Reference" "C16" (at 269.24 110.49 0)
+    (property "Reference" "C?" (at 269.24 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 269.24 113.03 0)
@@ -1807,10 +1807,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C14") (unit 1)
+          (reference "C23") (unit 1)
         )
       )
     )
@@ -1819,7 +1819,7 @@
   (symbol (lib_id "LTC3786EUD_TRPBF:LTC3786EUD#TRPBF") (at 176.53 110.49 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6416dda1-b51b-441a-8634-59b35319d230)
-    (property "Reference" "U4" (at 203.2 104.14 0)
+    (property "Reference" "U?" (at 203.2 104.14 0)
       (effects (font (size 1.27 1.27)))
     )
     (property "Value" "LTC3786EUD#TRPBF" (at 210.82 172.72 0)
@@ -1863,10 +1863,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "U4") (unit 1)
+          (reference "U?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "U8") (unit 1)
+          (reference "U11") (unit 1)
         )
       )
     )
@@ -1875,7 +1875,7 @@
   (symbol (lib_id "power:GND") (at 270.51 146.05 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 6797920a-0d93-4462-b35a-26b453e8c979)
-    (property "Reference" "#PWR035" (at 270.51 152.4 0)
+    (property "Reference" "#PWR?" (at 270.51 152.4 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 270.51 151.13 0)
@@ -1891,10 +1891,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR035") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR055") (unit 1)
+          (reference "#PWR084") (unit 1)
         )
       )
     )
@@ -1903,7 +1903,7 @@
   (symbol (lib_id "Device:R_Small") (at 191.77 120.65 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 7583c5b9-26a8-41ca-b65d-58c2cc3fc743)
-    (property "Reference" "R13" (at 189.23 119.38 0)
+    (property "Reference" "R?" (at 189.23 119.38 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "8.66K" (at 189.23 121.92 0)
@@ -1923,10 +1923,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "R13") (unit 1)
+          (reference "R?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R15") (unit 1)
+          (reference "R23") (unit 1)
         )
       )
     )
@@ -1935,7 +1935,7 @@
   (symbol (lib_id "power:GND") (at 191.77 124.46 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 8fbc6179-387b-4ab8-bb5f-c349090d7550)
-    (property "Reference" "#PWR036" (at 191.77 130.81 0)
+    (property "Reference" "#PWR?" (at 191.77 130.81 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 191.77 129.54 0)
@@ -1951,10 +1951,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR036") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR047") (unit 1)
+          (reference "#PWR076") (unit 1)
         )
       )
     )
@@ -1963,7 +1963,7 @@
   (symbol (lib_id "Device:C_Small") (at 295.91 113.03 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 93c260b7-67c5-4708-8c29-c5cc98920fa8)
-    (property "Reference" "C16" (at 298.45 110.49 0)
+    (property "Reference" "C?" (at 298.45 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 298.45 113.03 0)
@@ -1983,10 +1983,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C16") (unit 1)
+          (reference "C28") (unit 1)
         )
       )
     )
@@ -1995,7 +1995,7 @@
   (symbol (lib_id "Device:C_Small") (at 241.3 160.02 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a06fc7f0-0c68-4ae5-ac87-5b9d1ed409c9)
-    (property "Reference" "C15" (at 238.76 157.48 0)
+    (property "Reference" "C?" (at 238.76 157.48 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "4.7uF" (at 238.76 160.02 0)
@@ -2015,10 +2015,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C15") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C32") (unit 1)
+          (reference "C22") (unit 1)
         )
       )
     )
@@ -2027,7 +2027,7 @@
   (symbol (lib_id "Device:C_Small") (at 270.51 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid a29d08eb-8e6e-4556-8b4a-730b3756a6ea)
-    (property "Reference" "C16" (at 273.05 138.43 0)
+    (property "Reference" "C?" (at 273.05 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 273.05 140.97 0)
@@ -2047,10 +2047,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C33") (unit 1)
+          (reference "C24") (unit 1)
         )
       )
     )
@@ -2059,7 +2059,7 @@
   (symbol (lib_id "power:+3.3V") (at 119.38 102.87 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid a2ed053c-0093-40af-8cb6-db9e7bce1681)
-    (property "Reference" "#PWR040" (at 119.38 106.68 0)
+    (property "Reference" "#PWR?" (at 119.38 106.68 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "+3.3V" (at 119.38 97.79 0)
@@ -2075,10 +2075,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR040") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR042") (unit 1)
+          (reference "#PWR071") (unit 1)
         )
       )
     )
@@ -2087,7 +2087,7 @@
   (symbol (lib_id "power:GND") (at 191.77 171.45 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid af8832ce-c72e-4cc4-bfbc-52bf7c668218)
-    (property "Reference" "#PWR031" (at 191.77 177.8 0)
+    (property "Reference" "#PWR?" (at 191.77 177.8 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 191.77 176.53 0)
@@ -2103,10 +2103,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR031") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR048") (unit 1)
+          (reference "#PWR077") (unit 1)
         )
       )
     )
@@ -2115,7 +2115,7 @@
   (symbol (lib_id "Device:C_Small") (at 241.3 140.97 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid afa172d5-02fc-4b49-9d42-5af3ed25b9bb)
-    (property "Reference" "C14" (at 238.76 138.43 0)
+    (property "Reference" "C?" (at 238.76 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "0.1uF" (at 238.76 140.97 0)
@@ -2135,10 +2135,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C14") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C31") (unit 1)
+          (reference "C21") (unit 1)
         )
       )
     )
@@ -2147,7 +2147,7 @@
   (symbol (lib_id "Device:R_Small") (at 187.96 142.24 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b1126bd7-81b3-406e-8516-0a44396eb170)
-    (property "Reference" "R9" (at 185.42 140.97 0)
+    (property "Reference" "R?" (at 185.42 140.97 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "8.66K" (at 185.42 143.51 0)
@@ -2167,10 +2167,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "R9") (unit 1)
+          (reference "R?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R14") (unit 1)
+          (reference "R22") (unit 1)
         )
       )
     )
@@ -2179,7 +2179,7 @@
   (symbol (lib_id "Device:C_Small") (at 280.67 113.03 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid b45086c7-b9a4-45ee-9970-2e260cbd7401)
-    (property "Reference" "C16" (at 283.21 110.49 0)
+    (property "Reference" "C?" (at 283.21 110.49 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 283.21 113.03 0)
@@ -2199,10 +2199,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C15") (unit 1)
+          (reference "C25") (unit 1)
         )
       )
     )
@@ -2211,7 +2211,7 @@
   (symbol (lib_id "Device:R_Small") (at 266.7 172.72 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid ceae55c2-17f5-4c3a-9afe-d7f45842b187)
-    (property "Reference" "R11" (at 269.24 171.45 0)
+    (property "Reference" "R?" (at 269.24 171.45 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "12.1K" (at 269.24 173.99 0)
@@ -2231,10 +2231,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "R11") (unit 1)
+          (reference "R?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R18") (unit 1)
+          (reference "R26") (unit 1)
         )
       )
     )
@@ -2243,7 +2243,7 @@
   (symbol (lib_id "Device:C_Small") (at 119.38 106.68 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid cf130c39-517e-4748-92fc-91ca854d5c73)
-    (property "Reference" "C22" (at 116.84 105.4163 0)
+    (property "Reference" "C?" (at 116.84 105.4163 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
     (property "Value" "0.1uF" (at 116.84 107.9563 0)
@@ -2263,10 +2263,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C22") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C23") (unit 1)
+          (reference "C17") (unit 1)
         )
       )
     )
@@ -2275,7 +2275,7 @@
   (symbol (lib_id "Device:R_Small") (at 251.46 114.3 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d0700874-5ad8-41ce-8fd8-3f50c195ba53)
-    (property "Reference" "R12" (at 254 113.03 0)
+    (property "Reference" "R?" (at 254 113.03 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "8m" (at 254 115.57 0)
@@ -2295,10 +2295,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "R12") (unit 1)
+          (reference "R?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R16") (unit 1)
+          (reference "R24") (unit 1)
         )
       )
     )
@@ -2307,7 +2307,7 @@
   (symbol (lib_id "Device:L_Small") (at 251.46 123.19 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid d0fcc4f4-6a5b-4cbd-8593-a8aa7189c7bc)
-    (property "Reference" "L1" (at 252.73 121.92 0)
+    (property "Reference" "L?" (at 252.73 121.92 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "16uH" (at 252.73 124.46 0)
@@ -2328,10 +2328,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "L1") (unit 1)
+          (reference "L?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "L2") (unit 1)
+          (reference "L1") (unit 1)
         )
       )
     )
@@ -2340,7 +2340,7 @@
   (symbol (lib_id "Device:C_Small") (at 293.37 140.97 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid db36abce-40ff-4f3f-9167-bd2aa65f049a)
-    (property "Reference" "C16" (at 295.91 138.43 0)
+    (property "Reference" "C?" (at 295.91 138.43 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "6.8uF" (at 295.91 140.97 0)
@@ -2360,10 +2360,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "C16") (unit 1)
+          (reference "C?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "C12") (unit 1)
+          (reference "C27") (unit 1)
         )
       )
     )
@@ -2372,7 +2372,7 @@
   (symbol (lib_id "power:GND") (at 119.38 110.49 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid ddf9f813-50fd-41a4-96d0-789dfa6425b5)
-    (property "Reference" "#PWR039" (at 119.38 116.84 0)
+    (property "Reference" "#PWR?" (at 119.38 116.84 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 119.38 115.57 0)
@@ -2388,10 +2388,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR039") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR043") (unit 1)
+          (reference "#PWR072") (unit 1)
         )
       )
     )
@@ -2400,7 +2400,7 @@
   (symbol (lib_id "power:VBUS") (at 266.7 107.95 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid f2406250-3dd0-4f6e-966d-cc2449a75dea)
-    (property "Reference" "#PWR029" (at 266.7 111.76 0)
+    (property "Reference" "#PWR?" (at 266.7 111.76 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "VBUS" (at 266.7 102.87 0)
@@ -2416,10 +2416,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR029") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR049") (unit 1)
+          (reference "#PWR081") (unit 1)
         )
       )
     )
@@ -2428,7 +2428,7 @@
   (symbol (lib_id "power:GND") (at 266.7 118.11 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid f4c98be5-d95f-4e05-b559-b24326aa230e)
-    (property "Reference" "#PWR030" (at 266.7 124.46 0)
+    (property "Reference" "#PWR?" (at 266.7 124.46 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Value" "GND" (at 266.7 123.19 0)
@@ -2444,10 +2444,10 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "#PWR030") (unit 1)
+          (reference "#PWR?") (unit 1)
         )
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR050") (unit 1)
+          (reference "#PWR082") (unit 1)
         )
       )
     )

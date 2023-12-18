@@ -110,6 +110,7 @@
         "lib_footprint_issues|216000000|150400000|c304f88a-3570-49f9-be46-8d00d9506992|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|217900000|110600000|263a6149-037c-4181-8d5b-5c649520b618|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|224800000|154400000|b9b4d34e-46ac-408c-8395-ce3be21655ff|00000000-0000-0000-0000-000000000000",
+        "lib_footprint_issues|227000000|123600913|7270806b-54f4-48a8-8988-78aab749d1fd|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|241900000|112100000|9b6cdaf3-238e-420a-b2f0-2c2cc6c2518e|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|251400000|126700000|8bc68c5e-b613-4600-ae22-f25d21bd27d3|00000000-0000-0000-0000-000000000000",
         "lib_footprint_issues|251600000|147000000|deadc1e8-e23a-4e62-a670-0b1696ee592e|00000000-0000-0000-0000-000000000000",
@@ -548,7 +549,7 @@
     "meta": {
       "version": 1
     },
-    "net_format_name": "",
+    "net_format_name": "KiCad",
     "page_layout_descr_file": "sheet_template.kicad_wks",
     "plot_directory": "",
     "spice_current_sheet_as_root": false,

@@ -5332,7 +5332,7 @@
     (tstamp 790b3147-9bcc-4047-b84b-823f58af1873)
     (at 221.2 154.5 -90)
     (tags "DAC70501MDQFR ")
-    (property "MPN" "DAC70501MDQFR")
+    (property "MPN" "DAC70501ZDQFT")
     (property "Sheetfile" "boost.kicad_sch")
     (property "Sheetname" "boost")
     (property "ki_keywords" "DAC70501MDQFR")
@@ -5342,7 +5342,7 @@
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp d2aa84bc-2754-4fd9-ab20-08d151fa3835)
     )
-    (fp_text value "DAC70501MDQFR" (at 0 0 -90 unlocked) (layer "F.Fab") hide
+    (fp_text value "DAC70501ZDQFT" (at 0 0 -90 unlocked) (layer "F.Fab") hide
         (effects (font (size 1 1) (thickness 0.15)))
       (tstamp fed9621b-f9c1-43d6-b2c5-4d4bc7dca0fc)
     )

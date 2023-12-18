@@ -26,7 +26,6 @@ jobs:
 
       - name: Export schematic PDFs
         run: |
-          pwd
           mkdir -p output/schem-pdf
           for file in roadster-charger.kicad_sch; do kicad-cli sch export pdf --output output/schem-pdf/$(basename "$file" .kicad_sch).pdf "$file"; done
 

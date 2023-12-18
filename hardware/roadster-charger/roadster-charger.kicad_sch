@@ -2534,7 +2534,6 @@
   (no_connect (at 161.29 219.71) (uuid 5209450a-0ca6-4682-9f8e-583b953387e7))
   (no_connect (at 58.42 57.15) (uuid 5bd24d4b-995c-4a79-8787-8be79bb551db))
   (no_connect (at 179.07 182.88) (uuid 5d2a9c9a-757e-428f-98d8-5b7c1544402a))
-  (no_connect (at 96.52 234.95) (uuid 69bd23b8-98c9-4b4c-b340-1f2bf662e633))
   (no_connect (at 179.07 43.18) (uuid 6a3558a1-d021-4a54-8dcd-ac3a596fe4b0))
   (no_connect (at 179.07 53.34) (uuid 76ebb01c-c818-47af-b961-9932d7cf5b16))
   (no_connect (at 387.35 40.64) (uuid 7f9e2d0e-7347-4d56-a731-6bee63855da0))
@@ -2665,6 +2664,10 @@
   (wire (pts (xy 132.08 203.2) (xy 137.16 203.2))
     (stroke (width 0) (type default))
     (uuid 1c1a950c-aca3-47ef-a025-e6db8d15acba)
+  )
+  (wire (pts (xy 96.52 234.95) (xy 111.76 234.95))
+    (stroke (width 0) (type default))
+    (uuid 1cb41cc2-a00b-4d24-800f-5fa51537a313)
   )
   (wire (pts (xy 287.02 161.29) (xy 292.1 161.29))
     (stroke (width 0) (type default))
@@ -3677,6 +3680,10 @@
   (label "DBG_VBUS" (at 305.435 31.75 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid e96cd903-a205-4869-b96c-890e530c4d9b)
+  )
+  (label "IO9_BOOT" (at 109.22 234.95 180) (fields_autoplaced)
+    (effects (font (size 1.27 1.27)) (justify right bottom))
+    (uuid ea4b4ea0-ea83-46be-9ac5-77ff79237c18)
   )
   (label "V_SW" (at 71.12 138.43 0) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify left bottom))
@@ -5473,6 +5480,34 @@
     )
   )
 
+  (symbol (lib_id "Connector:TestPoint") (at 111.76 234.95 270) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 8076eea9-27f3-41c1-8aaf-5ca04614c965)
+    (property "Reference" "TP1" (at 113.03 232.41 90)
+      (effects (font (size 1.27 1.27)) (justify left))
+    )
+    (property "Value" "RCU-0C" (at 113.792 237.49 0)
+      (effects (font (size 1.27 1.27)) (justify left) hide)
+    )
+    (property "Footprint" "RCU-0C:TP+195X110" (at 111.76 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "~" (at 111.76 240.03 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "MPN" "RCU-0C" (at 111.76 234.95 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid df37f1cb-74bf-4d15-a1e7-797a6d658437))
+    (instances
+      (project "roadster-charger"
+        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
+          (reference "TP1") (unit 1)
+        )
+      )
+    )
+  )
+
   (symbol (lib_id "Device:R_Small") (at 222.25 29.21 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 81c9170d-9f5c-4123-9e8d-5b1ddbd1b1b2)
@@ -6662,7 +6697,7 @@
   (symbol (lib_id "Connector:TestPoint") (at 201.93 31.75 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid c1ee652f-81a3-48a9-94d1-60e0e2adf5fe)
-    (property "Reference" "TP4" (at 200.025 26.035 0)
+    (property "Reference" "TP5" (at 200.025 26.035 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "RCU-0C" (at 204.47 29.718 0)
@@ -6681,7 +6716,7 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "TP4") (unit 1)
+          (reference "TP5") (unit 1)
         )
       )
     )
@@ -6765,7 +6800,7 @@
   (symbol (lib_id "Connector:TestPoint") (at 119.38 219.71 180) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid cd946d5c-8031-4650-8b45-1dfe60bf930c)
-    (property "Reference" "TP1" (at 121.285 225.425 0)
+    (property "Reference" "TP2" (at 121.285 225.425 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "RCU-0C" (at 116.84 221.742 0)
@@ -6784,7 +6819,7 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "TP1") (unit 1)
+          (reference "TP2") (unit 1)
         )
       )
     )
@@ -6998,7 +7033,7 @@
   (symbol (lib_id "Connector:TestPoint") (at 191.77 31.75 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e021f6c2-2bf6-40e5-b24a-59d82cc1f9c7)
-    (property "Reference" "TP2" (at 189.865 26.035 0)
+    (property "Reference" "TP3" (at 189.865 26.035 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "RCU-0C" (at 194.31 29.718 0)
@@ -7017,7 +7052,7 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "TP2") (unit 1)
+          (reference "TP3") (unit 1)
         )
       )
     )
@@ -7055,7 +7090,7 @@
   (symbol (lib_id "Connector:TestPoint") (at 196.85 31.75 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid e32bc935-9d59-4ede-8200-6ac31f15c109)
-    (property "Reference" "TP3" (at 194.945 26.035 0)
+    (property "Reference" "TP4" (at 194.945 26.035 0)
       (effects (font (size 1.27 1.27)) (justify left))
     )
     (property "Value" "RCU-0C" (at 199.39 29.718 0)
@@ -7074,7 +7109,7 @@
     (instances
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-          (reference "TP3") (unit 1)
+          (reference "TP4") (unit 1)
         )
       )
     )

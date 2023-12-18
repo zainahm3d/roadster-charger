@@ -3562,8 +3562,8 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 8b0d32d4-a068-43b7-b0fb-c4ad9db272f1)
   )
-  (text "IO9 and IO2 must be high for SPI boot\nIO9 has internal weak pull up"
-    (at 50.8 254 0)
+  (text "IO9 and IO2 must be high for SPI boot\nIO9 has internal weak pull up\n\nADC inputs max out at 2.5V!"
+    (at 50.8 257.81 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 8ea0db46-89ed-49c3-89bf-d2357c557acc)
   )
@@ -3579,7 +3579,7 @@
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid c5fc10d2-097c-4f84-8a44-96114014b335)
   )
-  (text "3 * 0.020 = 0.060V @ 3A\n249K RL = 50V/V gain\n3A = 3V @ I_SENSE\n12 bit ADC = 0.805mA per bit\n0.18W dissapated @ 3A"
+  (text "2.5 * 0.020 = 0.050V @ 2.5A\n249K RL = 50V/V gain\n2.5A = 2.5V @ I_SENSE\n12 bit ADC = 0.805mA per bit\n0.18W dissapated @ 3A"
     (at 261.62 189.23 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid e9239943-8e66-413c-8c1d-7fb7e241b144)

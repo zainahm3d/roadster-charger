@@ -38,6 +38,7 @@ jobs:
         run: |
           mkdir -p output/pcb-pdf
           for file in *.kicad_pcb; do kicad-cli pcb export pdf --layers F.Cu,In1.Cu,In2.Cu,B.Cu,B.SilkS,B.SilkS,Edge.Cuts --output output/pcb-pdf/$(basename "$file" .kicad_pcb).pdf "$file"; done
+          for file in *.kicad_pcb; do kicad-cli pcb export pdf --layers F.Fab,B.Fab,Edge.Cuts --output output/pcb-pdf/$(basename "$file" .kicad_pcb)-fab.pdf "$file"; done
 
       # --board-plot-params doesn't seem to work, should work after:
       #  https://gitlab.com/kicad/code/kicad/-/issues/15634

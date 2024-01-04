@@ -74,34 +74,33 @@ fn main() -> ! {
         &clocks,
     );
 
-    // SHTC3
-    let sensor_address: u8 = 0x70;
-    let read_cmd: [u8; 2] = [0x78, 0x66];
-
-    let mut led = io.pins.gpio7.into_push_pull_output();
-    led.set_output_high(true);
-
     println!("booted!");
 
+    // i2c.write(sensor_address, &read_cmd).unwrap();
+    // led.set_output_high(true);
+    // delay.delay_ms(15 as u32);
 
+    // See if devices are alive
+    let fusb_address: u8 = 0x50;
+    let lm75_address: u8 = 0x4F;
+    let dac_address: u8 = 0x48;
+    let phony_address: u8 = 0x49;
+
+    let device_address = [
+        fusb_address,
+        lm75_address,
+        dac_address,
+        // phony_address, // panics with AckCheckFailed
+    ];
+
+    let nothing: [u8; 1] = [0x00];
+
+    for address in device_address {
+        println!("Attempting address: 0x{:02x}", address);
+        i2c.write(address, &nothing).unwrap();
+        delay.delay_ms(100u32);
+    }
 
     loop {
-        // tell sensor to read
-        i2c.write(sensor_address, &read_cmd).unwrap();
-        led.set_output_high(true);
-        delay.delay_ms(15 as u32);
-
-        // read out data from sensor
-        let mut databuf: [u8; 6] = [0x00; 6];
-        i2c.read(sensor_address, &mut databuf).unwrap();
-        let data = ShtData::read_from(&databuf).unwrap();
-
-        let temp: f32 = -45.0 + (175.0 * (data.temperature.swap_bytes() as f32 / 65536.0));
-        let temp_f: f32 = (temp * 1.8) + 32.0;
-        let rh: f32 = 100.0 * (data.humidity.swap_bytes() as f32 / 65536.0);
-
-        println!("Temp: {:.2}C / {:.2}F, rh: {:.2}%", temp, temp_f, rh);
-        led.set_output_high(false);
-        delay.delay_ms(85 as u32);
     }
 }

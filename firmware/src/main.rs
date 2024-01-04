@@ -76,30 +76,13 @@ fn main() -> ! {
 
     println!("booted!");
 
-    // i2c.write(sensor_address, &read_cmd).unwrap();
-    // led.set_output_high(true);
-    // delay.delay_ms(15 as u32);
-
-    // See if devices are alive
-    let fusb_address: u8 = 0x50;
     let lm75_address: u8 = 0x4F;
-    let dac_address: u8 = 0x48;
-    let phony_address: u8 = 0x49;
 
-    let device_address = [
-        fusb_address,
-        lm75_address,
-        dac_address,
-        // phony_address, // panics with AckCheckFailed
-    ];
+    let mut temperature: [u8; 2] = [0x00, 0x00];
 
-    let nothing: [u8; 1] = [0x00];
+    i2c.write_read(lm75_address, &[0x00], &mut temperature).unwrap();
 
-    for address in device_address {
-        println!("Attempting address: 0x{:02x}", address);
-        i2c.write(address, &nothing).unwrap();
-        delay.delay_ms(100u32);
-    }
+    println!("temperature: 0x{:02x} 0x{:02x}", temperature[0], temperature[1]);
 
     loop {
     }

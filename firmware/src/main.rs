@@ -76,13 +76,16 @@ fn main() -> ! {
 
     println!("booted!");
 
-    let lm75_address: u8 = 0x4F;
+    let fusb_address: u8 = 0x50;
 
-    let mut temperature: [u8; 2] = [0x00, 0x00];
+    let mut usbpdver: [u8; 1] = [0x00];
+    let mut usbpdrev: [u8; 1] = [0x00];
 
-    i2c.write_read(lm75_address, &[0x00], &mut temperature).unwrap();
+    i2c.write_read(fusb_address, &[0x08], &mut usbpdver).unwrap();
+    i2c.write_read(fusb_address, &[0x09], &mut usbpdrev).unwrap();
 
-    println!("temperature: 0x{:02x} 0x{:02x}", temperature[0], temperature[1]);
+    println!("usbpdver: 0x{:02x}", usbpdver[0]);
+    println!("usbpdrev: 0x{:02x}", usbpdrev[0]);
 
     loop {
     }

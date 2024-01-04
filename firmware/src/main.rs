@@ -5,9 +5,14 @@ extern crate alloc;
 
 use esp_backtrace as _;
 use esp_println::println;
-use hal::{clock::ClockControl, peripherals::Peripherals, prelude::*, timer::TimerGroup, Rtc, IO, Delay, i2c::I2C};
+use hal::{
+    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*, timer::TimerGroup, Delay,
+    Rtc, IO,
+};
 use zerocopy::*;
 
+mod fusb307b;
+mod usb_pd;
 
 #[global_allocator]
 static ALLOCATOR: esp_alloc::EspHeap = esp_alloc::EspHeap::empty();
@@ -25,7 +30,6 @@ fn init_heap() {
     }
 }
 
-
 #[repr(C, packed)]
 #[derive(FromBytes, FromZeroes)]
 struct ShtData {
@@ -34,7 +38,6 @@ struct ShtData {
     humidity: u16,
     humidity_checksum: u8,
 }
-
 
 #[entry]
 fn main() -> ! {
@@ -78,15 +81,32 @@ fn main() -> ! {
 
     let fusb_address: u8 = 0x50;
 
-    let mut usbpdver: [u8; 1] = [0x00];
-    let mut usbpdrev: [u8; 1] = [0x00];
+    // Reset the chip
+    i2c.write(fusb_address, &[fusb307b::Register::RESET as u8, 0x01])
+        .unwrap();
 
-    i2c.write_read(fusb_address, &[0x08], &mut usbpdver).unwrap();
-    i2c.write_read(fusb_address, &[0x09], &mut usbpdrev).unwrap();
+    delay.delay_ms(100u32);
 
-    println!("usbpdver: 0x{:02x}", usbpdver[0]);
-    println!("usbpdrev: 0x{:02x}", usbpdrev[0]);
+    // Read cable orientation
+    let mut ccstat: [u8; 1] = [0x00];
+    i2c.write_read(
+        fusb_address,
+        &[fusb307b::Register::CCSTAT as u8],
+        &mut ccstat,
+    )
+    .unwrap();
+    let cc1_stat = ccstat[0] & 0b11;
+    let cc2_stat = (ccstat[0] & 0b1100) >> 2;
 
-    loop {
+    println!("CC1: {:#b}\tCC2: {:#b}", cc1_stat, cc2_stat);
+
+    if cc1_stat != 0 {
+        println!("CC1 connected!");
+    } else if cc2_stat != 0 {
+        println!("CC2 connected!");
+    } else {
+        println!("No CC connection!");
     }
+
+    loop {}
 }

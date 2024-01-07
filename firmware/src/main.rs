@@ -72,113 +72,48 @@ fn main() -> ! {
         peripherals.I2C0,
         io.pins.gpio10,
         io.pins.gpio8,
-        100u32.kHz(),
+        400u32.kHz(),
         &mut system.peripheral_clock_control,
         &clocks,
     );
 
     println!("booted!");
 
-    let fusb_address: u8 = 0x50;
+    // Enable the boost converter
+    let mut ps_enable = io.pins.gpio21;
+    ps_enable.set_to_push_pull_output();
+    ps_enable.set_output_high(true);
+    println!("boost enabled");
 
-    // Reset the chip
-    i2c.write(fusb_address, &[fusb307b::Register::RESET as u8, 0x01])
-        .unwrap();
+    // Set up DAC
+    let dac_addr: u8 = 0x48;
 
-    delay.delay_ms(10u32);
+    // Internal reference is 2.5V, need to cut in half
+    // BUFF-GAIN bit set to 0, REF-DIV bit set to 1
+    i2c.write(dac_addr, &[0x04, 0x01, 0x00]).unwrap();
 
-    // Check for "chip has reset fault"
-    let mut faultstat: [u8; 1] = [0x00];
-    i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::FAULTSTAT as u8],
-        &mut faultstat,
-    )
-    .unwrap();
-    println!("FAULTSTAT: {:08b}", faultstat[0]);
+    // // Set DAC output to max voltage (1.25V)
+    // // set UPPER 14 bits of DAC-DATA (0xfffc) (left aligned for speed)
+    // i2c.write(dac_addr, &[0x08, 0xFF, 0xFC]).unwrap();
 
-    // Clear the "chip has reset" fault
-    println!("Clearing faultstat");
-    i2c.write(
-        fusb_address,
-        &[fusb307b::Register::FAULTSTAT as u8, 0b10000000],
-    )
-    .unwrap();
-
-    // Read faultstat again
-    i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::FAULTSTAT as u8],
-        &mut faultstat,
-    )
-    .unwrap();
-    println!("FAULTSTAT: {:08b}", faultstat[0]);
-
-    // Tell this thing it's not a dual role port
-    i2c.write(
-        fusb_address,
-        &[fusb307b::Register::ROLECTRL as u8, 0b00001010],
-    )
-    .unwrap();
-
-    // Print out rolectrl register
-    let mut rolectrl: [u8; 1] = [0x00];
-    i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::ROLECTRL as u8],
-        &mut rolectrl,
-    )
-    .unwrap();
-    println!("ROLECTRL: 0b{:08b}", rolectrl[0]);
-
-    // look for connection?
-    i2c.write(fusb_address, &[fusb307b::Register::COMMAND as u8, 0b1001_1001]).unwrap();
-
-    delay.delay_ms(100u32);
-
-    // Read cable orientation
-    let mut ccstat: [u8; 1] = [0x00];
-    i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::CCSTAT as u8],
-        &mut ccstat,
-    )
-    .unwrap();
-    let cc1_stat = ccstat[0] & 0b11;
-    let cc2_stat = (ccstat[0] & 0b1100) >> 2;
-
-    println!("CC1: {:#b}\tCC2: {:#b}", cc1_stat, cc2_stat);
-
-    // Tell the TCPC which CC pin to use for comms and disable disconnected pin
-    if cc1_stat != 0 {
-        println!("CC1 connected!");
-        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x00]).unwrap();
-        i2c.write(fusb_address, &[fusb307b::Register::ROLECTRL as u8, 0b0000_1110]).unwrap();
-    } else if cc2_stat != 0 {
-        println!("CC2 connected!");
-        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x01]).unwrap();
-        i2c.write(fusb_address, &[fusb307b::Register::ROLECTRL as u8, 0b0000_1011]).unwrap();
-    } else {
-        println!("No CC connection!");
-    }
-    // Enable transmission as a sink with retry counter set to 3x
-    let sink_tx_cfg: u8 = 0b00110000;
-    println!("Enabling sink tx");
-    i2c.write(fusb_address, &[fusb307b::Register::SINK_TRANSMIT as u8, sink_tx_cfg]).unwrap();
-
-    println!("Enabling SOP rx detection and auto goodcrc");
-    i2c.write(fusb_address, &[fusb307b::Register::RXDETECT as u8, 0x01])
-        .unwrap();
-
+    let mut dac_value: u16 = 0;
     loop {
-        // let mut rx_byte_count: [u8; 1] = [0x00];
-        // i2c.write_read(fusb_address, &[fusb307b::Register::RXBYTECNT as u8], &mut rx_byte_count).unwrap();
-        // println!("rx byte count: {:?}", rx_byte_count);
+        // Slowly ramp dac output up to full scale
+        if dac_value >= (i32::pow(2, 14)) as u16 {
+            dac_value = 0;
+        }
 
-        // if rx_byte_count[0] > 0 {
-        //     for _ in 0..rx_byte_count[0] {
+        let high_byte: u8 = (((dac_value << 2) & 0xFF00) >> 8) as u8;
+        let low_byte: u8 = ((dac_value << 2) & 0x00FF) as u8;
 
-        //     }
-        // }
+        i2c.write(dac_addr, &[0x08, high_byte, low_byte]).unwrap();
+
+        let dac_voltage: f32 = dac_value as f32 / u32::pow(2, 14) as f32 * 1.25;
+        println!("DAC voltage: {:?}", dac_voltage);
+        // println!("Bin: 0b{:b}", high_byte << 7 | low_byte);
+
+        dac_value += 10;
+
+        delay.delay_ms(1u32);
     }
 }

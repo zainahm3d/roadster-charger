@@ -131,6 +131,11 @@ fn main() -> ! {
     .unwrap();
     println!("ROLECTRL: 0b{:08b}", rolectrl[0]);
 
+    // look for connection?
+    i2c.write(fusb_address, &[fusb307b::Register::COMMAND as u8, 0b1001_1001]).unwrap();
+
+    delay.delay_ms(100u32);
+
     // Read cable orientation
     let mut ccstat: [u8; 1] = [0x00];
     i2c.write_read(
@@ -144,23 +149,22 @@ fn main() -> ! {
 
     println!("CC1: {:#b}\tCC2: {:#b}", cc1_stat, cc2_stat);
 
-    // Tell the TCPC which CC pin to use for comms
+    // Tell the TCPC which CC pin to use for comms and disable disconnected pin
     if cc1_stat != 0 {
         println!("CC1 connected!");
-        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x00])
-            .unwrap();
+        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x00]).unwrap();
+        i2c.write(fusb_address, &[fusb307b::Register::ROLECTRL as u8, 0b0000_1110]).unwrap();
     } else if cc2_stat != 0 {
         println!("CC2 connected!");
-        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x01])
-            .unwrap();
+        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x01]).unwrap();
+        i2c.write(fusb_address, &[fusb307b::Register::ROLECTRL as u8, 0b0000_1011]).unwrap();
     } else {
         println!("No CC connection!");
     }
-
-    // // Enable transmission as a sink with retry counter set to 3x
-    // let sink_tx_cfg: u8 = 0b00110000;
-    // println!("Enabling sink tx");
-    // i2c.write(fusb_address, &[fusb307b::Register::SINK_TRANSMIT as u8, sink_tx_cfg]).unwrap();
+    // Enable transmission as a sink with retry counter set to 3x
+    let sink_tx_cfg: u8 = 0b00110000;
+    println!("Enabling sink tx");
+    i2c.write(fusb_address, &[fusb307b::Register::SINK_TRANSMIT as u8, sink_tx_cfg]).unwrap();
 
     println!("Enabling SOP rx detection and auto goodcrc");
     i2c.write(fusb_address, &[fusb307b::Register::RXDETECT as u8, 0x01])

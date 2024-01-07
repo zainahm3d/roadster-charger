@@ -9,4 +9,6 @@ pub enum Register {
     TCPC_CTRL = 0x19,
     FAULTSTAT = 0x1F,
     ROLECTRL = 0x1A,
+    STD_OUT_CFG = 0x18,
+    COMMAND = 0x23,
 }

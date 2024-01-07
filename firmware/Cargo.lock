@@ -210,6 +210,7 @@ dependencies = [
 name = "firmware"
 version = "0.1.0"
 dependencies = [
+ "bitfield",
  "esp-alloc",
  "esp-backtrace",
  "esp-println",

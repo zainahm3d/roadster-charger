@@ -5,8 +5,8 @@ extern crate alloc;
 
 use esp_backtrace as _;
 use esp_println::println;
-use hal::{
-    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*, timer::TimerGroup, Delay,
+use esp32c3_hal::{
+    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*, timer::TimerGroup, Delay, interrupt,
     Rtc, IO,
 };
 use zerocopy::*;
@@ -72,12 +72,18 @@ fn main() -> ! {
         peripherals.I2C0,
         io.pins.gpio10,
         io.pins.gpio8,
-        100u32.kHz(),
+        400u32.kHz(),
         &mut system.peripheral_clock_control,
         &clocks,
     );
 
     println!("booted!");
+
+    // Shut off the boost converter
+    let mut ps_enable = io.pins.gpio21;
+    ps_enable.set_to_push_pull_output();
+    ps_enable.set_output_high(false);
+    println!("boost disabled");
 
     let fusb_address: u8 = 0x50;
 
@@ -130,9 +136,6 @@ fn main() -> ! {
     )
     .unwrap();
     println!("ROLECTRL: 0b{:08b}", rolectrl[0]);
-
-    // look for connection?
-    i2c.write(fusb_address, &[fusb307b::Register::COMMAND as u8, 0b1001_1001]).unwrap();
 
     delay.delay_ms(100u32);
 

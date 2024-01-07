@@ -1,3 +1,7 @@
+use bitfield::bitfield;
+
+const ADDRESS: u8 = 0x50;
+
 #[repr(u8)]
 pub enum Register {
     CCSTAT = 0x1D,
@@ -12,3 +16,16 @@ pub enum Register {
     STD_OUT_CFG = 0x18,
     COMMAND = 0x23,
 }
+
+// write read/write/modify register macros
+
+bitfield! {
+    pub struct RoleCtrl(u8);
+    reserved, _: 7;
+    drp, _: 6;
+    rp_val, _: 4, 5;
+    cc2_term, _: 3, 2;
+    cc1_term, _: 0, 1;
+}
+
+// use bitvec

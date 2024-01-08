@@ -6,7 +6,8 @@ extern crate alloc;
 use esp_backtrace as _;
 use esp_println::println;
 use esp32c3_hal::{
-    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*, timer::TimerGroup, Delay, interrupt,
+    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*,
+    timer::TimerGroup, Delay,
     Rtc, IO,
 };
 use zerocopy::*;
@@ -85,10 +86,8 @@ fn main() -> ! {
     ps_enable.set_output_high(false);
     println!("boost disabled");
 
-    let fusb_address: u8 = 0x50;
-
     // Reset the chip
-    i2c.write(fusb_address, &[fusb307b::Register::RESET as u8, 0x01])
+    i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::Reset as u8, 0x01])
         .unwrap();
 
     delay.delay_ms(10u32);
@@ -96,8 +95,8 @@ fn main() -> ! {
     // Check for "chip has reset fault"
     let mut faultstat: [u8; 1] = [0x00];
     i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::FAULTSTAT as u8],
+        fusb307b::ADDRESS,
+        &[fusb307b::Register::FaultStat as u8],
         &mut faultstat,
     )
     .unwrap();
@@ -106,15 +105,15 @@ fn main() -> ! {
     // Clear the "chip has reset" fault
     println!("Clearing faultstat");
     i2c.write(
-        fusb_address,
-        &[fusb307b::Register::FAULTSTAT as u8, 0b10000000],
+        fusb307b::ADDRESS,
+        &[fusb307b::Register::FaultStat as u8, 0b10000000],
     )
     .unwrap();
 
     // Read faultstat again
     i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::FAULTSTAT as u8],
+        fusb307b::ADDRESS,
+        &[fusb307b::Register::FaultStat as u8],
         &mut faultstat,
     )
     .unwrap();
@@ -122,16 +121,16 @@ fn main() -> ! {
 
     // Tell this thing it's not a dual role port
     i2c.write(
-        fusb_address,
-        &[fusb307b::Register::ROLECTRL as u8, 0b00001010],
+        fusb307b::ADDRESS,
+        &[fusb307b::Register::RoleCtrl as u8, 0b00001010],
     )
     .unwrap();
 
     // Print out rolectrl register
     let mut rolectrl: [u8; 1] = [0x00];
     i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::ROLECTRL as u8],
+        fusb307b::ADDRESS,
+        &[fusb307b::Register::RoleCtrl as u8],
         &mut rolectrl,
     )
     .unwrap();
@@ -142,8 +141,8 @@ fn main() -> ! {
     // Read cable orientation
     let mut ccstat: [u8; 1] = [0x00];
     i2c.write_read(
-        fusb_address,
-        &[fusb307b::Register::CCSTAT as u8],
+        fusb307b::ADDRESS,
+        &[fusb307b::Register::Ccstat as u8],
         &mut ccstat,
     )
     .unwrap();
@@ -155,27 +154,27 @@ fn main() -> ! {
     // Tell the TCPC which CC pin to use for comms and disable disconnected pin
     if cc1_stat != 0 {
         println!("CC1 connected!");
-        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x00]).unwrap();
-        i2c.write(fusb_address, &[fusb307b::Register::ROLECTRL as u8, 0b0000_1110]).unwrap();
+        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::TcpcCtrl as u8, 0x00]).unwrap();
+        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::RoleCtrl as u8, 0b0000_1110]).unwrap();
     } else if cc2_stat != 0 {
         println!("CC2 connected!");
-        i2c.write(fusb_address, &[fusb307b::Register::TCPC_CTRL as u8, 0x01]).unwrap();
-        i2c.write(fusb_address, &[fusb307b::Register::ROLECTRL as u8, 0b0000_1011]).unwrap();
+        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::TcpcCtrl as u8, 0x01]).unwrap();
+        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::RoleCtrl as u8, 0b0000_1011]).unwrap();
     } else {
         println!("No CC connection!");
     }
     // Enable transmission as a sink with retry counter set to 3x
     let sink_tx_cfg: u8 = 0b00110000;
     println!("Enabling sink tx");
-    i2c.write(fusb_address, &[fusb307b::Register::SINK_TRANSMIT as u8, sink_tx_cfg]).unwrap();
+    i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::SinkTransmit as u8, sink_tx_cfg]).unwrap();
 
     println!("Enabling SOP rx detection and auto goodcrc");
-    i2c.write(fusb_address, &[fusb307b::Register::RXDETECT as u8, 0x01])
+    i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::RxDetect as u8, 0x01])
         .unwrap();
 
     loop {
         // let mut rx_byte_count: [u8; 1] = [0x00];
-        // i2c.write_read(fusb_address, &[fusb307b::Register::RXBYTECNT as u8], &mut rx_byte_count).unwrap();
+        // i2c.write_read(fusb307b::ADDRESS, &[fusb307b::Register::RXBYTECNT as u8], &mut rx_byte_count).unwrap();
         // println!("rx byte count: {:?}", rx_byte_count);
 
         // if rx_byte_count[0] > 0 {

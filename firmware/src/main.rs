@@ -1,6 +1,5 @@
 #![no_std]
 #![no_main]
-
 extern crate alloc;
 
 use esp_backtrace as _;
@@ -67,7 +66,7 @@ fn main() -> ! {
     wdt0.disable();
     wdt1.disable();
 
-    let mut delay = Delay::new(&clocks);
+    let _ = Delay::new(&clocks);
 
     let mut i2c = I2C::new(
         peripherals.I2C0,
@@ -86,101 +85,8 @@ fn main() -> ! {
     ps_enable.set_output_high(false);
     println!("boost disabled");
 
-    // Reset the chip
-    i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::Reset as u8, 0x01])
-        .unwrap();
-
-    delay.delay_ms(10u32);
-
-    // Check for "chip has reset fault"
-    let mut faultstat: [u8; 1] = [0x00];
-    i2c.write_read(
-        fusb307b::ADDRESS,
-        &[fusb307b::Register::FaultStat as u8],
-        &mut faultstat,
-    )
-    .unwrap();
-    println!("FAULTSTAT: {:08b}", faultstat[0]);
-
-    // Clear the "chip has reset" fault
-    println!("Clearing faultstat");
-    i2c.write(
-        fusb307b::ADDRESS,
-        &[fusb307b::Register::FaultStat as u8, 0b10000000],
-    )
-    .unwrap();
-
-    // Read faultstat again
-    i2c.write_read(
-        fusb307b::ADDRESS,
-        &[fusb307b::Register::FaultStat as u8],
-        &mut faultstat,
-    )
-    .unwrap();
-    println!("FAULTSTAT: {:08b}", faultstat[0]);
-
-    // Tell this thing it's not a dual role port
-    i2c.write(
-        fusb307b::ADDRESS,
-        &[fusb307b::Register::RoleCtrl as u8, 0b00001010],
-    )
-    .unwrap();
-
-    // Print out rolectrl register
-    let mut rolectrl: [u8; 1] = [0x00];
-    i2c.write_read(
-        fusb307b::ADDRESS,
-        &[fusb307b::Register::RoleCtrl as u8],
-        &mut rolectrl,
-    )
-    .unwrap();
-    println!("ROLECTRL: 0b{:08b}", rolectrl[0]);
-
-    delay.delay_ms(100u32);
-
-    // Read cable orientation
-    let mut ccstat: [u8; 1] = [0x00];
-    i2c.write_read(
-        fusb307b::ADDRESS,
-        &[fusb307b::Register::Ccstat as u8],
-        &mut ccstat,
-    )
-    .unwrap();
-    let cc1_stat = ccstat[0] & 0b11;
-    let cc2_stat = (ccstat[0] & 0b1100) >> 2;
-
-    println!("CC1: {:#b}\tCC2: {:#b}", cc1_stat, cc2_stat);
-
-    // Tell the TCPC which CC pin to use for comms and disable disconnected pin
-    if cc1_stat != 0 {
-        println!("CC1 connected!");
-        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::TcpcCtrl as u8, 0x00]).unwrap();
-        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::RoleCtrl as u8, 0b0000_1110]).unwrap();
-    } else if cc2_stat != 0 {
-        println!("CC2 connected!");
-        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::TcpcCtrl as u8, 0x01]).unwrap();
-        i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::RoleCtrl as u8, 0b0000_1011]).unwrap();
-    } else {
-        println!("No CC connection!");
-    }
-    // Enable transmission as a sink with retry counter set to 3x
-    let sink_tx_cfg: u8 = 0b00110000;
-    println!("Enabling sink tx");
-    i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::SinkTransmit as u8, sink_tx_cfg]).unwrap();
-
-    println!("Enabling SOP rx detection and auto goodcrc");
-    i2c.write(fusb307b::ADDRESS, &[fusb307b::Register::RxDetect as u8, 0x01])
-        .unwrap();
+    fusb307b::init(&mut i2c);
 
     loop {
-        // let mut rx_byte_count: [u8; 1] = [0x00];
-        // i2c.write_read(fusb307b::ADDRESS, &[fusb307b::Register::RXBYTECNT as u8], &mut rx_byte_count).unwrap();
-        // println!("rx byte count: {:?}", rx_byte_count);
-
-        // if rx_byte_count[0] > 0 {
-        //     for _ in 0..rx_byte_count[0] {
-
-        //     }
-        // }
     }
 }

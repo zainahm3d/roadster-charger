@@ -4,8 +4,6 @@ use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp_println::println;
 
-pub const ADDRESS: u8 = 0x50;
-
 pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Reset the chip
     let mut reset = Reset(0x00);
@@ -16,22 +14,16 @@ pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Clear the "chip has reset" fault
     let mut fault_stat = FaultStat(0x00);
     fault_stat.set_all_regs_reset(true);
-    i2c.write(ADDRESS, &[Register::FaultStat as u8, fault_stat.0])
-        .unwrap();
+    write_reg(i2c, Register::FaultStat, &fault_stat.0);
 
     // Tell this thing it's not a dual role port
     let mut role_ctrl = RoleCtrl(0x00);
     role_ctrl.set_cc1_term(0b10); // Present Rd
     role_ctrl.set_cc2_term(0b10); // Present Rd
-    i2c.write(ADDRESS, &[Register::RoleCtrl as u8, role_ctrl.0])
-        .unwrap();
+    write_reg(i2c, Register::RoleCtrl, &role_ctrl.0);
 
     // Read orientation of connected USB-C cable
-    let mut cc_stat_buf: [u8; 1] = [0x00];
-    i2c.read(ADDRESS, &mut cc_stat_buf).unwrap();
-    let mut cc_stat = CCStat(0x00);
-    cc_stat.0 = cc_stat_buf[0];
-
+    let cc_stat = CCStat(read_reg(i2c, Register::CCStat));
     let mut role_ctrl = RoleCtrl(0x00);
     let mut tcpc_ctrl = TcpcCtrl(0x00);
 
@@ -51,25 +43,34 @@ pub fn init(i2c: &mut I2C<'_, I2C0>) {
         println!("Neither CC line is connected");
     }
 
-    i2c.write(ADDRESS, &[Register::TcpcCtrl as u8, tcpc_ctrl.0])
-        .unwrap();
-    i2c.write(ADDRESS, &[Register::RoleCtrl as u8, role_ctrl.0])
-        .unwrap();
+    write_reg(i2c, Register::TcpcCtrl, &tcpc_ctrl.0);
+    write_reg(i2c, Register::RoleCtrl, &role_ctrl.0);
 
     // Enable cc line transmissions as a sink
     let mut sink_transmit = SinkTransmit(0x00);
     sink_transmit.set_dis_sink_tx(false);
-    sink_transmit.set_retry_count(4);
-    i2c.write(ADDRESS, &[Register::SinkTransmit as u8, sink_transmit.0])
-        .unwrap();
+    sink_transmit.set_retry_count(0b11); // 3 retries (max)
+    write_reg(i2c, Register::SinkTransmit, &sink_transmit.0);
 
     // Enable SOP RX detection and auto goodcrc responses (if we get sourcecaps now we must respond
     // within 100ms or power will be cut by the source!)
     let mut rx_detect = RxDetect(0x00);
     rx_detect.set_en_sop(true);
-    i2c.write(ADDRESS, &[Register::RxDetect as u8, rx_detect.0])
-        .unwrap();
+    write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
+
+fn write_reg(i2c: &mut I2C<'_, I2C0>, register: Register, byte: &u8) {
+    i2c.write(ADDRESS, &[register as u8, *byte]).unwrap();
+}
+
+fn read_reg(i2c: &mut I2C<'_, I2C0>, register: Register) -> u8 {
+    let mut buffer: [u8; 1] = [0x00];
+    i2c.write_read(ADDRESS, &[register as u8], &mut buffer)
+        .unwrap();
+    buffer[0]
+}
+
+pub const ADDRESS: u8 = 0x50;
 
 #[repr(u8)]
 #[allow(dead_code)]

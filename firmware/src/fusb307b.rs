@@ -75,6 +75,8 @@ pub const ADDRESS: u8 = 0x50;
 #[repr(u8)]
 #[allow(dead_code)]
 pub enum Register {
+    AlertL = 0x10,
+    AlertH = 0x11,
     CCStat = 0x1D,
     Command = 0x23,
     FaultStat = 0x1F,
@@ -86,6 +88,29 @@ pub enum Register {
     StdOutCfg = 0x18,
     TcpcCtrl = 0x19,
     Transmit = 0x50,
+}
+
+bitfield! {
+    struct AlertL(u8);
+    impl Debug;
+    vbus_alarm_high, set_vbus_alarm_high: 7;
+    tx_success, set_tx_success: 6;
+    tx_discarded, set_tx_discarded: 5;
+    tx_failed, set_tx_failed: 4;
+    recieved_hard_reset, set_recieved_hard_reset: 3;
+    recieve_status, set_recieve_status: 2;
+    port_power, set_port_power: 1;
+    cc_stat_changed, set_cc_stat_changed: 0;
+}
+
+bitfield! {
+    struct AlertH(u8);
+    impl Debug;
+    vendor_defined_alert, set_vendor_defined_alert: 7;
+    vbus_sink_disconnect, set_vbus_sink_disconnect: 3;
+    rx_buffer_overflow, set_rx_buffer_overflow: 2;
+    fault_alarm, set_fault_alarm: 1;
+    voltage_alarm_low, set_voltage_alarm_low: 0;
 }
 
 bitfield! {

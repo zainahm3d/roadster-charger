@@ -1,5 +1,6 @@
 #![no_std]
 #![no_main]
+#![feature(concat_bytes)]
 extern crate alloc;
 
 use esp_backtrace as _;
@@ -9,8 +10,8 @@ use esp32c3_hal::{
     timer::TimerGroup, Delay,
     Rtc, IO,
 };
-use zerocopy::*;
 
+mod boost;
 mod tcpc;
 mod usb_pd;
 
@@ -25,18 +26,9 @@ fn init_heap() {
     }
 
     unsafe {
-        let heap_start = &_heap_start as *const _ as usize;
+        let heap_start = &core::ptr::addr_of!(_heap_start) as *const _ as usize;
         ALLOCATOR.init(heap_start as *mut u8, HEAP_SIZE);
     }
-}
-
-#[repr(C, packed)]
-#[derive(FromBytes, FromZeroes)]
-struct ShtData {
-    temperature: u16,
-    temperature_checksum: u8,
-    humidity: u16,
-    humidity_checksum: u8,
 }
 
 #[entry]
@@ -86,6 +78,7 @@ fn main() -> ! {
     println!("boost disabled");
 
     tcpc::init(&mut i2c);
+    boost::init(&mut i2c);
 
     loop {
     }

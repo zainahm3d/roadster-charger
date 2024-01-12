@@ -4,6 +4,8 @@ use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp_println::println;
 
+use crate::usb_pd;
+
 pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Reset the chip
     let mut reset = Reset(0x00);

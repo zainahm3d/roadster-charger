@@ -3,6 +3,18 @@
 use bitfield::bitfield;
 
 bitfield! {
+    pub struct MessageHeader(u16);
+    impl Debug;
+    pub extended, _: 15;
+    pub num_data_objects, _: 14, 12;
+    pub message_id, _: 11, 9;
+    pub port_power_role, _: 8;
+    pub pd_spec_revision, _: 7, 6;
+    pub port_data_role, _: 5;
+    pub message_type, _: 4, 0;
+}
+
+bitfield! {
     pub struct FixedSupplyPDO(u32);
     impl Debug;
     pub fixed_supply, _: 31, 30;
@@ -29,7 +41,7 @@ impl FixedSupplyPDO {
 }
 
 bitfield! {
-    pub struct FixedVariableRequest(u32);
+    pub struct FixedVariableRDO(u32);
     impl Debug;
     pub _, set_object_position: 31, 28;
     pub _, set_giveback_flag: 27;

@@ -1,3 +1,5 @@
+// Interface over i2c to the FUSB307B USB-PD type C port controller
+
 use bitfield::bitfield;
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;

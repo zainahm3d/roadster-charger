@@ -11,7 +11,7 @@ use esp32c3_hal::{
 };
 use zerocopy::*;
 
-mod fusb307b;
+mod tcpc;
 mod usb_pd;
 
 #[global_allocator]
@@ -85,7 +85,7 @@ fn main() -> ! {
     ps_enable.set_output_high(false);
     println!("boost disabled");
 
-    fusb307b::init(&mut i2c);
+    tcpc::init(&mut i2c);
 
     loop {
     }

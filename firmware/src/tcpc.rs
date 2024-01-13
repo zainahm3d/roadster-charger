@@ -1,14 +1,23 @@
 // Interface over i2c to the FUSB307B USB-PD type C port controller
 
 use bitfield::bitfield;
+use esp32c3_hal::gpio::{self, Floating};
 use esp32c3_hal::i2c::I2C;
-use esp32c3_hal::peripherals::I2C0;
+use esp32c3_hal::peripherals::{self, I2C0};
 use esp32c3_hal::prelude::*;
 use esp_println::println;
 
-use crate::usb_pd;
+// #[interrupt]
+// fn GPIO() {
+//     println!("test: you shouldn't print from an ISR");
+//     // clear gpio interrupt bit here
+// }
 
-pub fn init(i2c: &mut I2C<'_, I2C0>) {
+pub fn init(i2c: &mut I2C<'_, I2C0>, int_pin: &mut gpio::GpioPin<gpio::Input<Floating>, 7>) {
+    // // Wire up interrupt pin
+    // int_pin.listen(gpio::Event::FallingEdge);
+    // interrupt::enable(peripherals::Interrupt::GPIO, interrupt::Priority::Priority3).unwrap();
+
     // Reset the chip
     let mut reset = Reset(0x00);
     reset.set_sw_rst(true);

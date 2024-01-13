@@ -1,13 +1,16 @@
 // Inteface to i2c DAC and boost converter
 
 use bitfield::{bitfield, BitRange};
+use esp32c3_hal::gpio::*;
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 
 const ADDRESS: u8 = 0x48;
 
-pub fn init(i2c: &mut I2C<'_, I2C0>) {
+pub fn init(i2c: &mut I2C<'_, I2C0>, enable_pin: &mut GpioPin<Output<PushPull>, 21>) {
+    enable_pin.set_output_high(false);
+
     // Set internal reference to 1.25V
     let mut gain = Gain(0x00);
     gain.set_buf_gain(false);
@@ -22,20 +25,17 @@ pub fn init(i2c: &mut I2C<'_, I2C0>) {
     )
     .unwrap();
 
-    set_voltage_mv(i2c, 0);
+    set_voltage_mv(i2c, enable_pin, 0);
 }
 
 // Set the boost converter output voltage
-pub fn set_voltage_mv(i2c: &mut I2C<'_, I2C0>, voltage_mv: u32) {
+pub fn set_voltage_mv(
+    i2c: &mut I2C<'_, I2C0>,
+    enable_pin: &mut GpioPin<Output<PushPull>, 21>,
+    voltage_mv: u32,
+) {
     let mut data = Data(0x00);
-
-    if voltage_mv == 0 {
-        // todo!("flip off boost converter enable pin");
-        data.set_data(0);
-    } else {
-        // todo!("flip on boost enable pin");
-        data.set_data((voltage_mv as f32 / 38.4) as u16); // 48.0 / 1.25 = 38.4
-    }
+    data.set_data((voltage_mv as f32 / 38.4) as u16); // 48.0 / 1.25 = 38.4
 
     i2c.write(
         ADDRESS,
@@ -46,6 +46,8 @@ pub fn set_voltage_mv(i2c: &mut I2C<'_, I2C0>, voltage_mv: u32) {
         ],
     )
     .unwrap();
+
+    enable_pin.set_output_high(voltage_mv != 0);
 }
 
 #[repr(u8)]

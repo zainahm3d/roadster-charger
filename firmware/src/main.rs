@@ -1,15 +1,13 @@
 #![no_std]
 #![no_main]
-#![feature(concat_bytes)]
 extern crate alloc;
 
-use esp_backtrace as _;
-use esp_println::println;
 use esp32c3_hal::{
-    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*,
-    timer::TimerGroup, Delay,
+    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*, timer::TimerGroup, Delay,
     Rtc, IO,
 };
+use esp_backtrace as _;
+use esp_println::println;
 
 mod boost;
 mod tcpc;
@@ -71,15 +69,11 @@ fn main() -> ! {
 
     println!("booted!");
 
-    // Shut off the boost converter
-    let mut ps_enable = io.pins.gpio21;
-    ps_enable.set_to_push_pull_output();
-    ps_enable.set_output_high(false);
-    println!("boost disabled");
+    let mut boost_enable = io.pins.gpio21.into_push_pull_output();
+    boost::init(&mut i2c, &mut boost_enable);
 
-    tcpc::init(&mut i2c);
-    boost::init(&mut i2c);
+    let mut tcpc_int = io.pins.gpio7.into_floating_input();
+    tcpc::init(&mut i2c, &mut tcpc_int);
 
-    loop {
-    }
+    loop {}
 }

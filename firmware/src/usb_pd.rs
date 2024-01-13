@@ -2,16 +2,24 @@
 
 use bitfield::bitfield;
 
+// #[repr(u8)]
+// pub enum ControlMessage {
+//     GoodCrc = 0b0_0001,
+//     GetSourceCap = 0b0_0111,
+//     Accept = 0b0_0011,
+//     Reject = 0b0_0100,
+// }
+
 bitfield! {
     pub struct MessageHeader(u16);
     impl Debug;
-    pub extended, _: 15;
-    pub num_data_objects, _: 14, 12;
-    pub message_id, _: 11, 9;
-    pub port_power_role, _: 8;
-    pub pd_spec_revision, _: 7, 6;
-    pub port_data_role, _: 5;
-    pub message_type, _: 4, 0;
+    pub extended, set_extended: 15;
+    pub num_data_objects, set_num_data_objects: 14, 12;
+    pub message_id, set_message_id: 11, 9;
+    pub port_power_role, set_port_power_role: 8;
+    pub pd_spec_revision, set_pd_spec_revision: 7, 6;
+    pub port_data_role, set_port_data_role: 5;
+    pub message_type, set_message_type: 4, 0;
 }
 
 bitfield! {
@@ -49,7 +57,7 @@ bitfield! {
     pub _, set_usb_communications_capable: 25;
     pub _, set_no_usb_suspend: 24;
     pub _, set_unchunked_extended_messages_supported: 23;
-    pub _, set_epr_mode_capabge: 22;
+    pub _, set_epr_mode_capable: 22;
     pub _, set_operating_current_10ma_units: 19, 10;
     pub _, set_minimum_operating_current_10ma_units: 9, 0;
 }

@@ -1,23 +1,14 @@
 // Interface over i2c to the FUSB307B USB-PD type C port controller
 
-use bitfield::bitfield;
-use esp32c3_hal::gpio::{self, Floating};
+use bitfield::{bitfield, BitRangeMut};
 use esp32c3_hal::i2c::I2C;
-use esp32c3_hal::peripherals::{self, I2C0};
+use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp_println::println;
 
-// #[interrupt]
-// fn GPIO() {
-//     println!("test: you shouldn't print from an ISR");
-//     // clear gpio interrupt bit here
-// }
+use crate::usb_pd::{self, MessageHeader, FixedVariableRDO};
 
-pub fn init(i2c: &mut I2C<'_, I2C0>, int_pin: &mut gpio::GpioPin<gpio::Input<Floating>, 7>) {
-    // // Wire up interrupt pin
-    // int_pin.listen(gpio::Event::FallingEdge);
-    // interrupt::enable(peripherals::Interrupt::GPIO, interrupt::Priority::Priority3).unwrap();
-
+pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Reset the chip
     let mut reset = Reset(0x00);
     reset.set_sw_rst(true);
@@ -28,12 +19,6 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, int_pin: &mut gpio::GpioPin<gpio::Input<Flo
     let mut fault_stat = FaultStat(0x00);
     fault_stat.set_all_regs_reset(true);
     write_reg(i2c, Register::FaultStat, &fault_stat.0);
-
-    // Tell this thing it's not a dual role port
-    let mut role_ctrl = RoleCtrl(0x00);
-    role_ctrl.set_cc1_term(0b10); // Present Rd
-    role_ctrl.set_cc2_term(0b10); // Present Rd
-    write_reg(i2c, Register::RoleCtrl, &role_ctrl.0);
 
     // Read orientation of connected USB-C cable
     let cc_stat = CCStat(read_reg(i2c, Register::CCStat));
@@ -72,6 +57,99 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, int_pin: &mut gpio::GpioPin<gpio::Input<Flo
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
+pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
+    // Ask for source capabilities
+    // let mut source_cap_header = MessageHeader(0x00);
+    // source_cap_header.set_port_power_role(false); // Sink
+    // source_cap_header.set_num_data_objects(0);
+    // source_cap_header.set_message_type(0b111); // get source capabilities
+    // source_cap_header.set_message_id(0b000); // ?
+    // source_cap_header.set_pd_spec_revision(0b10); // PD 3.0
+
+    // println!("{:?}", source_cap_header);
+
+    // let high_byte: u8 = (source_cap_header.0 >> 8) as u8;
+    // let low_byte: u8 =  (source_cap_header.0 & 0xFF) as u8;
+
+    let mut transmit = Transmit(0x00);
+    transmit.set_retry_count(0b11);
+    transmit.set_transmit_sop_message(0b000); // SOP message
+
+    // let byte_count:  u8 = 2; // only send the header
+
+    // write_reg(i2c, Register::TxHeadH, &high_byte);
+    // write_reg(i2c, Register::TxHeadL, &low_byte);
+    // write_reg(i2c, Register::TxByteCnt, &byte_count);
+    // write_reg(i2c, Register::Transmit, &transmit.0);
+
+    // Wait for a message to come in
+    let mut alertl = AlertL(0x00);
+    while !(alertl.recieve_status()) {
+        alertl.0 = read_reg(i2c, Register::AlertL);
+    }
+
+    let num_rx_bytes;
+
+    // A message has been received
+    let rxstat = RxStat(read_reg(i2c, Register::RxStat));
+    if rxstat.recieved_sop_message() == 0b000 {
+        println!("Received SOP message");
+        num_rx_bytes = read_reg(i2c, Register::RxByteCnt);
+        println!("rxbytecnt: {:?}", num_rx_bytes);
+    }
+
+    // testing: assume we got a full header, why not
+    let mut header = usb_pd::MessageHeader(0x00);
+    header.set_bit_range(7, 0, read_reg(i2c, Register::RxHeadL));
+    header.set_bit_range(15, 8, read_reg(i2c, Register::RxHeadH));
+    println!("{:?}", header);
+
+    // Clear alert
+    let mut alertl = AlertL(0x00);
+    alertl.set_recieve_status(true);
+    write_reg(i2c, Register::AlertL, &alertl.0);
+
+    // Testing: blindly ask for the second PDO
+    let mut rdo = FixedVariableRDO(0x00);
+    rdo.set_minimum_operating_current_10ma_units(100); // 1 Amp
+    rdo.set_operating_current_10ma_units(100);
+    rdo.set_no_usb_suspend(true);
+    rdo.set_object_position(4); // Second PDO, 9V?
+
+    let mut rdo_header = MessageHeader(0x00);
+    rdo_header.set_port_power_role(false); // Sink
+    rdo_header.set_num_data_objects(1); // got 1 RDO
+    rdo_header.set_message_type(0b10); // request
+    rdo_header.set_message_id(0b001); // ?
+    rdo_header.set_pd_spec_revision(0b01); // PD 2.0
+
+    let rdo_message: [u8; 5] = [
+        0x54,
+        (rdo.0 & 0xFF) as u8,
+        ((rdo.0 >> 8) & 0xFF) as u8,
+        ((rdo.0 >> 16) & 0xFF) as u8,
+        ((rdo.0 >> 24) & 0xFF) as u8,
+    ];
+
+    let high_byte: u8 = (rdo_header.0 >> 8) as u8;
+    let low_byte: u8 =  (rdo_header.0 & 0xFF) as u8;
+
+    write_reg(i2c, Register::TxHeadH, &high_byte);
+    write_reg(i2c, Register::TxHeadL, &low_byte);
+
+    i2c.write(ADDRESS, &rdo_message).unwrap();
+    // i2c.write(ADDRESS, &[0x35, rdo_message[1]]).unwrap();
+    // i2c.write(ADDRESS, &[0x36, rdo_message[2]]).unwrap();
+    // i2c.write(ADDRESS, &[0x37, rdo_message[3]]).unwrap();
+
+    println!("{:?}", rdo);
+
+    let byte_count = 6; // 2 byte header plus 4 byte RDO
+    write_reg(i2c, Register::TxByteCnt, &byte_count);
+    write_reg(i2c, Register::Transmit, &transmit.0);
+
+}
+
 fn write_reg(i2c: &mut I2C<'_, I2C0>, register: Register, byte: &u8) {
     i2c.write(ADDRESS, &[register as u8, *byte]).unwrap();
 }
@@ -96,11 +174,21 @@ pub enum Register {
     Reset = 0xA2,
     RoleCtrl = 0x1A,
     RxByteCnt = 0x30,
+    RxStat = 0x31,
     RxDetect = 0x2F,
     SinkTransmit = 0x40,
     StdOutCfg = 0x18,
     TcpcCtrl = 0x19,
     Transmit = 0x50,
+    RxHeadL = 0x32,
+    RxHeadH = 0x33,
+    RxDataMin = 0x34, // start of fifo
+    RxDataMax = 0x4F, // end of fifo
+    TxByteCnt = 0x51,
+    TxHeadL = 0x52,
+    TxHeadH = 0x53,
+    TxDataMin = 0x54,
+    TxDataMax = 0x6F,
 }
 
 bitfield! {
@@ -197,7 +285,7 @@ bitfield! {
 bitfield! {
     struct Transmit(u8);
     impl Debug;
-    retry_count, _: 5, 4;
+    retry_count, set_retry_count: 5, 4;
     transmit_sop_message, set_transmit_sop_message: 2, 0;
 }
 

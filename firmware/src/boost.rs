@@ -29,13 +29,15 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, enable_pin: &mut GpioPin<Output<PushPull>, 
 }
 
 // Set the boost converter output voltage
+// TODO: no floats
 pub fn set_voltage_mv(
     i2c: &mut I2C<'_, I2C0>,
     enable_pin: &mut GpioPin<Output<PushPull>, 21>,
-    voltage_mv: u32,
+    voltage_mv: u16,
 ) {
+    const FULL_SCALE: u16 = 16384; // 1.25V @ DAC, 48V @ boost
     let mut data = Data(0x00);
-    data.set_data((voltage_mv as f32 / 38.4) as u16); // 48.0 / 1.25 = 38.4
+    data.set_data(((voltage_mv as f32 / 48000.0) * FULL_SCALE as f32) as u16);
 
     i2c.write(
         ADDRESS,

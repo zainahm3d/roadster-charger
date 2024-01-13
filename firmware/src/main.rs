@@ -56,7 +56,7 @@ fn main() -> ! {
     wdt0.disable();
     wdt1.disable();
 
-    let _ = Delay::new(&clocks);
+    let mut delay = Delay::new(&clocks);
 
     let mut i2c = I2C::new(
         peripherals.I2C0,
@@ -71,9 +71,10 @@ fn main() -> ! {
 
     let mut boost_enable = io.pins.gpio21.into_push_pull_output();
     boost::init(&mut i2c, &mut boost_enable);
+    delay.delay_ms(50u32);
+    tcpc::init(&mut i2c);
+    tcpc::establish_pd_contract(&mut i2c);
 
-    let mut tcpc_int = io.pins.gpio7.into_floating_input();
-    tcpc::init(&mut i2c, &mut tcpc_int);
-
-    loop {}
+    loop {
+    }
 }

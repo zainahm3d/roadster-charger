@@ -1,14 +1,13 @@
 // Minimum field definitions to sink current from a USB PD source
 
 use bitfield::bitfield;
-
-// #[repr(u8)]
-// pub enum ControlMessage {
-//     GoodCrc = 0b0_0001,
-//     GetSourceCap = 0b0_0111,
-//     Accept = 0b0_0011,
-//     Reject = 0b0_0100,
-// }
+#[repr(u8)]
+pub enum ControlMessage {
+    Request = 0b0_0010,
+    // Accept = 0b0_0011,
+    // Reject = 0b0_0100,
+    // GetSourceCap = 0b0_0111,
+}
 
 bitfield! {
     pub struct MessageHeader(u16);

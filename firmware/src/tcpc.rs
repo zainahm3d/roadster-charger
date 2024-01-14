@@ -1,12 +1,15 @@
 // Interface over i2c to the FUSB307B USB-PD type C port controller
 
+use core::panic;
+
 use bitfield::{bitfield, BitRangeMut};
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp_println::println;
+use zerocopy::AsBytes;
 
-use crate::usb_pd::{self, MessageHeader, FixedVariableRDO};
+use crate::usb_pd::{self, FixedVariableRDO, MessageHeader};
 
 pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Reset the chip
@@ -58,30 +61,6 @@ pub fn init(i2c: &mut I2C<'_, I2C0>) {
 }
 
 pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
-    // Ask for source capabilities
-    // let mut source_cap_header = MessageHeader(0x00);
-    // source_cap_header.set_port_power_role(false); // Sink
-    // source_cap_header.set_num_data_objects(0);
-    // source_cap_header.set_message_type(0b111); // get source capabilities
-    // source_cap_header.set_message_id(0b000); // ?
-    // source_cap_header.set_pd_spec_revision(0b10); // PD 3.0
-
-    // println!("{:?}", source_cap_header);
-
-    // let high_byte: u8 = (source_cap_header.0 >> 8) as u8;
-    // let low_byte: u8 =  (source_cap_header.0 & 0xFF) as u8;
-
-    let mut transmit = Transmit(0x00);
-    transmit.set_retry_count(0b11);
-    transmit.set_transmit_sop_message(0b000); // SOP message
-
-    // let byte_count:  u8 = 2; // only send the header
-
-    // write_reg(i2c, Register::TxHeadH, &high_byte);
-    // write_reg(i2c, Register::TxHeadL, &low_byte);
-    // write_reg(i2c, Register::TxByteCnt, &byte_count);
-    // write_reg(i2c, Register::Transmit, &transmit.0);
-
     // Wait for a message to come in
     let mut alertl = AlertL(0x00);
     while !(alertl.recieve_status()) {
@@ -99,10 +78,7 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     }
 
     // testing: assume we got a full header, why not
-    let mut header = usb_pd::MessageHeader(0x00);
-    header.set_bit_range(7, 0, read_reg(i2c, Register::RxHeadL));
-    header.set_bit_range(15, 8, read_reg(i2c, Register::RxHeadH));
-    println!("{:?}", header);
+    println!("{:?}", get_rx_header(i2c));
 
     // Clear alert
     let mut alertl = AlertL(0x00);
@@ -119,39 +95,52 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     let mut rdo_header = MessageHeader(0x00);
     rdo_header.set_port_power_role(false); // Sink
     rdo_header.set_num_data_objects(1); // got 1 RDO
-    rdo_header.set_message_type(0b10); // request
+    rdo_header.set_message_type(usb_pd::ControlMessage::Request as u16);
     rdo_header.set_message_id(0b001); // ?
     rdo_header.set_pd_spec_revision(0b01); // PD 2.0
 
-    let rdo_message: [u8; 5] = [
-        0x54,
-        (rdo.0 & 0xFF) as u8,
-        ((rdo.0 >> 8) & 0xFF) as u8,
-        ((rdo.0 >> 16) & 0xFF) as u8,
-        ((rdo.0 >> 24) & 0xFF) as u8,
-    ];
+    transmit_message(i2c, &rdo_header.0, rdo.0.as_bytes());
+}
 
-    let high_byte: u8 = (rdo_header.0 >> 8) as u8;
-    let low_byte: u8 =  (rdo_header.0 & 0xFF) as u8;
+fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
+    // Set header (flip endianness from as_bytes())
+    let header = tx_header.as_bytes();
+    write_reg(i2c, Register::TxHeadH, &header[1]);
+    write_reg(i2c, Register::TxHeadL, &header[0]);
 
-    write_reg(i2c, Register::TxHeadH, &high_byte);
-    write_reg(i2c, Register::TxHeadL, &low_byte);
+    if data.len() > 27 {
+        panic!("TX data count greater than buffer size!");
+    }
+    let tx_byte_count: u8 = 2 + data.len() as u8; // add 2 bytes for header
+    write_reg(i2c, Register::TxByteCnt, &tx_byte_count);
 
-    i2c.write(ADDRESS, &rdo_message).unwrap();
-    // i2c.write(ADDRESS, &[0x35, rdo_message[1]]).unwrap();
-    // i2c.write(ADDRESS, &[0x36, rdo_message[2]]).unwrap();
-    // i2c.write(ADDRESS, &[0x37, rdo_message[3]]).unwrap();
+    // Copy transmit buffer to TCPM
+    let mut tx_register_address = Register::TxDataMin as u8;
+    for byte in data.iter() {
+        write_reg_u8(i2c, tx_register_address, byte);
+        tx_register_address += 1;
+    }
 
-    println!("{:?}", rdo);
+    // Kick off transmission to SOP
+    let mut transmit = Transmit(0x00);
+    transmit.set_retry_count(0b11); // 3 retries
+    transmit.set_transmit_sop_message(0b000); // SOP message
+    write_reg(i2c, Register::Transmit, &transmit.0); // go!
+}
 
-    let byte_count = 6; // 2 byte header plus 4 byte RDO
-    write_reg(i2c, Register::TxByteCnt, &byte_count);
-    write_reg(i2c, Register::Transmit, &transmit.0);
-
+fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> MessageHeader {
+    let mut header = usb_pd::MessageHeader(0x00);
+    header.set_bit_range(7, 0, read_reg(i2c, Register::RxHeadL));
+    header.set_bit_range(15, 8, read_reg(i2c, Register::RxHeadH));
+    header
 }
 
 fn write_reg(i2c: &mut I2C<'_, I2C0>, register: Register, byte: &u8) {
     i2c.write(ADDRESS, &[register as u8, *byte]).unwrap();
+}
+
+fn write_reg_u8(i2c: &mut I2C<'_, I2C0>, register: u8, byte: &u8) {
+    i2c.write(ADDRESS, &[register, *byte]).unwrap();
 }
 
 fn read_reg(i2c: &mut I2C<'_, I2C0>, register: Register) -> u8 {

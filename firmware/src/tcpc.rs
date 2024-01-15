@@ -8,6 +8,7 @@ use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp_println::println;
 use zerocopy::AsBytes;
+use heapless;
 
 use crate::usb_pd::{self, FixedVariableRDO, MessageHeader};
 
@@ -15,8 +16,7 @@ pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Reset the chip
     let mut reset = Reset(0x00);
     reset.set_sw_rst(true);
-    i2c.write(ADDRESS, &[Register::Reset as u8, reset.0])
-        .unwrap();
+    write_reg(i2c, Register::Reset, &reset.0);
 
     // Clear the "chip has reset" fault
     let mut fault_stat = FaultStat(0x00);
@@ -67,18 +67,15 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
         alertl.0 = read_reg(i2c, Register::AlertL);
     }
 
-    let num_rx_bytes;
+    // if we get here a message has been received
+    let rx_byte_count = read_reg(i2c, Register::RxByteCnt);
+    println!("rx_byte_count: {:?}", rx_byte_count);
 
-    // A message has been received
-    let rxstat = RxStat(read_reg(i2c, Register::RxStat));
-    if rxstat.recieved_sop_message() == 0b000 {
-        println!("Received SOP message");
-        num_rx_bytes = read_reg(i2c, Register::RxByteCnt);
-        println!("rxbytecnt: {:?}", num_rx_bytes);
-    }
+    let rx_header = get_rx_header(i2c);
+    println!("rx_header {:?}", rx_header);
 
-    // testing: assume we got a full header, why not
-    println!("{:?}", get_rx_header(i2c));
+    let rx_buffer = get_rx_buffer(i2c, rx_byte_count);
+    println!("rx_buffer {:?}", rx_buffer);
 
     // Clear alert
     let mut alertl = AlertL(0x00);
@@ -100,6 +97,13 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     rdo_header.set_pd_spec_revision(0b01); // PD 2.0
 
     transmit_message(i2c, &rdo_header.0, rdo.0.as_bytes());
+
+    loop {
+        println!("rx_byte_count: {:?}", rx_byte_count);
+        println!("rx_header {:?}", rx_header);
+        println!("rx_buffer {:?}", rx_buffer);
+        println!();
+    }
 }
 
 fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
@@ -133,6 +137,23 @@ fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> MessageHeader {
     header.set_bit_range(7, 0, read_reg(i2c, Register::RxHeadL));
     header.set_bit_range(15, 8, read_reg(i2c, Register::RxHeadH));
     header
+}
+
+// Block read entire RX buffer but only return slice of size num_bytes
+fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>, num_bytes:  u8) -> heapless::Vec::<u8, 27> {
+    if num_bytes >= 27 {
+        panic!("RX data count greater than fifo size!");
+    }
+
+    let mut rx_buf: [u8; 27] = [0; 27];
+    let mut return_buf = heapless::Vec::<u8, 27>::new();
+    i2c.write_read(ADDRESS, &[Register::RxDataMin as u8], &mut rx_buf).unwrap();
+
+    for i in 0..num_bytes {
+        return_buf.push(rx_buf[i as usize]).unwrap();
+    }
+
+    return_buf
 }
 
 fn write_reg(i2c: &mut I2C<'_, I2C0>, register: Register, byte: &u8) {
@@ -171,8 +192,8 @@ pub enum Register {
     Transmit = 0x50,
     RxHeadL = 0x32,
     RxHeadH = 0x33,
-    RxDataMin = 0x34, // start of fifo
-    RxDataMax = 0x4F, // end of fifo
+    RxDataMin = 0x34,
+    RxDataMax = 0x4F,
     TxByteCnt = 0x51,
     TxHeadL = 0x52,
     TxHeadH = 0x53,

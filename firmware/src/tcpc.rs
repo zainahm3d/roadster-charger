@@ -13,6 +13,9 @@ use zerocopy::AsBytes;
 
 use crate::usb_pd;
 
+const ADDRESS: u8 = 0x50;
+const BUF_SIZE: usize = 28; // for both tx and rx buffers
+
 pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
     // Reset the chip
     let mut reset = Reset(0x00);
@@ -77,9 +80,8 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     }
 
     // if we get here a message has been received
-    let rx_byte_count = read_reg(i2c, Register::RxByteCnt);
     let rx_header = get_rx_header(i2c);
-    let rx_buffer = get_rx_buffer(i2c, rx_byte_count);
+    let rx_buffer = get_rx_buffer(i2c);
 
     // Clear alert
     let mut alertl = AlertL(0x00);
@@ -112,7 +114,6 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     }
 
     loop {
-        println!("rx_byte_count: {:?}", rx_byte_count);
         println!("rx_header {:?}", rx_header);
         println!("rx_bufer_len: {:?}", rx_buffer.len());
         println!("rx_buffer {:?}", rx_buffer);
@@ -136,7 +137,7 @@ fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
     write_reg(i2c, Register::TxHeadH, &header[1]);
     write_reg(i2c, Register::TxHeadL, &header[0]);
 
-    if data.len() > 28 {
+    if data.len() > BUF_SIZE {
         panic!("TX data count greater than buffer size!");
     }
 
@@ -165,16 +166,17 @@ fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> usb_pd::MessageHeader {
     header
 }
 
-// Block read entire RX buffer but only return slice of size num_bytes
-fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>, mut num_bytes: u8) -> heapless::Vec<u8, 28> {
+// Block read entire RX buffer
+fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>) -> heapless::Vec<u8, BUF_SIZE> {
     // rxbytecnt includes the two byte header and sop byte, ignore them.
-    num_bytes -= 3;
-    if num_bytes > 28 {
+    let num_bytes: usize = read_reg(i2c, Register::RxByteCnt) as usize - 3;
+
+    if num_bytes > BUF_SIZE {
         panic!("RX data count greater than fifo size!");
     }
 
-    let mut rx_buf: [u8; 28] = [0; 28];
-    let mut return_buf = heapless::Vec::<u8, 28>::new();
+    let mut rx_buf: [u8; BUF_SIZE] = [0; BUF_SIZE];
+    let mut return_buf = heapless::Vec::<u8, BUF_SIZE>::new();
     i2c.write_read(ADDRESS, &[Register::RxDataMin as u8], &mut rx_buf)
         .unwrap();
 
@@ -200,7 +202,6 @@ fn read_reg(i2c: &mut I2C<'_, I2C0>, register: Register) -> u8 {
     buffer[0]
 }
 
-pub const ADDRESS: u8 = 0x50;
 
 #[repr(u8)]
 #[allow(dead_code)]

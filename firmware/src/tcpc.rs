@@ -6,17 +6,20 @@ use bitfield::{bitfield, BitRangeMut};
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
+use esp32c3_hal::Delay;
 use esp_println::println;
 use heapless;
 use zerocopy::AsBytes;
 
 use crate::usb_pd;
 
-pub fn init(i2c: &mut I2C<'_, I2C0>) {
+pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
     // Reset the chip
     let mut reset = Reset(0x00);
     reset.set_sw_rst(true);
     write_reg(i2c, Register::Reset, &reset.0);
+
+    delay.delay_ms(20u32);
 
     // Clear the "chip has reset" fault
     let mut fault_stat = FaultStat(0x00);
@@ -116,7 +119,12 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
 
         println!("=== ALL PDOs ===");
         for pdo in all_pdos.iter() {
-            println!("mV: {:?}, mA: {:?}, mW: {:?}",  pdo.voltage_mv(), pdo.current_ma(), pdo.voltage_mv() * pdo.current_ma() / 1000);
+            println!(
+                "mV: {:?}, mA: {:?}, mW: {:?}",
+                pdo.voltage_mv(),
+                pdo.current_ma(),
+                pdo.voltage_mv() * pdo.current_ma() / 1000
+            );
         }
         println!()
     }
@@ -159,7 +167,7 @@ fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> usb_pd::MessageHeader {
 
 // Block read entire RX buffer but only return slice of size num_bytes
 fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>, mut num_bytes: u8) -> heapless::Vec<u8, 28> {
-    // rxbytecnt includes the two byte header and sop byte, ignore them. 
+    // rxbytecnt includes the two byte header and sop byte, ignore them.
     num_bytes -= 3;
     if num_bytes > 28 {
         panic!("RX data count greater than fifo size!");

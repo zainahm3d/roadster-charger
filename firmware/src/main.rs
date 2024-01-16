@@ -71,7 +71,7 @@ fn main() -> ! {
 
     let mut boost_enable = io.pins.gpio21.into_push_pull_output();
     boost::init(&mut i2c, &mut boost_enable);
-    tcpc::init(&mut i2c);
+    tcpc::init(&mut i2c, &mut delay);
     tcpc::establish_pd_contract(&mut i2c);
 
     loop {

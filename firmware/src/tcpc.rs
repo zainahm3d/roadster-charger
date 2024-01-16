@@ -159,8 +159,8 @@ fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> usb_pd::MessageHeader {
 
 // Block read entire RX buffer but only return slice of size num_bytes
 fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>, mut num_bytes: u8) -> heapless::Vec<u8, 28> {
-    // rxbytecnt includes the two byte header even though it's not stored in this buffer.
-    num_bytes -= 2;
+    // rxbytecnt includes the two byte header and sop byte, ignore them. 
+    num_bytes -= 3;
     if num_bytes > 28 {
         panic!("RX data count greater than fifo size!");
     }

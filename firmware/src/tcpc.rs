@@ -7,10 +7,10 @@ use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp_println::println;
-use zerocopy::AsBytes;
 use heapless;
+use zerocopy::AsBytes;
 
-use crate::usb_pd::{self, FixedVariableRDO, MessageHeader};
+use crate::usb_pd;
 
 pub fn init(i2c: &mut I2C<'_, I2C0>) {
     // Reset the chip
@@ -22,6 +22,12 @@ pub fn init(i2c: &mut I2C<'_, I2C0>) {
     let mut fault_stat = FaultStat(0x00);
     fault_stat.set_all_regs_reset(true);
     write_reg(i2c, Register::FaultStat, &fault_stat.0);
+
+    // Enable vbus voltage monitoring and auto discharge of vbus
+    let mut pwr_ctrl = PwrCtrl(0x60); // default
+    pwr_ctrl.set_vbus_mon(true);
+    pwr_ctrl.set_auto_disch(true);
+    write_reg(i2c, Register::PwrCtrl, &pwr_ctrl.0);
 
     // Read orientation of connected USB-C cable
     let cc_stat = CCStat(read_reg(i2c, Register::CCStat));
@@ -69,40 +75,50 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
 
     // if we get here a message has been received
     let rx_byte_count = read_reg(i2c, Register::RxByteCnt);
-    println!("rx_byte_count: {:?}", rx_byte_count);
-
     let rx_header = get_rx_header(i2c);
-    println!("rx_header {:?}", rx_header);
-
     let rx_buffer = get_rx_buffer(i2c, rx_byte_count);
-    println!("rx_buffer {:?}", rx_buffer);
 
     // Clear alert
     let mut alertl = AlertL(0x00);
     alertl.set_recieve_status(true);
     write_reg(i2c, Register::AlertL, &alertl.0);
 
-    // Testing: blindly ask for the second PDO
-    let mut rdo = FixedVariableRDO(0x00);
+    // Testing: blindly ask for PDO
+    let mut rdo = usb_pd::FixedVariableRDO(0x00);
     rdo.set_minimum_operating_current_10ma_units(100); // 1 Amp
     rdo.set_operating_current_10ma_units(100);
     rdo.set_no_usb_suspend(true);
-    rdo.set_object_position(4); // Second PDO, 9V?
+    rdo.set_object_position(2);
 
-    let mut rdo_header = MessageHeader(0x00);
+    let mut rdo_header = usb_pd::MessageHeader(0x00);
     rdo_header.set_port_power_role(false); // Sink
-    rdo_header.set_num_data_objects(1); // got 1 RDO
+    rdo_header.set_num_data_objects(1);
     rdo_header.set_message_type(usb_pd::ControlMessage::Request as u16);
     rdo_header.set_message_id(0b001); // ?
     rdo_header.set_pd_spec_revision(0b01); // PD 2.0
 
     transmit_message(i2c, &rdo_header.0, rdo.0.as_bytes());
 
+    let mut all_pdos = heapless::Vec::<usb_pd::FixedSupplyPDO, 10>::new();
+    for i in 0..rx_header.num_data_objects() {
+        let offset: usize = i as usize * 4usize;
+
+        let mut new_pdo = usb_pd::FixedSupplyPDO(0x00);
+        new_pdo.0 = u32::from_le_bytes(rx_buffer[offset..offset + 4].try_into().unwrap());
+        all_pdos.push(new_pdo).unwrap();
+    }
+
     loop {
         println!("rx_byte_count: {:?}", rx_byte_count);
         println!("rx_header {:?}", rx_header);
+        println!("rx_bufer_len: {:?}", rx_buffer.len());
         println!("rx_buffer {:?}", rx_buffer);
-        println!();
+
+        println!("=== ALL PDOs ===");
+        for pdo in all_pdos.iter() {
+            println!("mV: {:?}, mA: {:?}, mW: {:?}",  pdo.voltage_mv(), pdo.current_ma(), pdo.voltage_mv() * pdo.current_ma() / 1000);
+        }
+        println!()
     }
 }
 
@@ -112,9 +128,10 @@ fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
     write_reg(i2c, Register::TxHeadH, &header[1]);
     write_reg(i2c, Register::TxHeadL, &header[0]);
 
-    if data.len() > 27 {
+    if data.len() > 28 {
         panic!("TX data count greater than buffer size!");
     }
+
     let tx_byte_count: u8 = 2 + data.len() as u8; // add 2 bytes for header
     write_reg(i2c, Register::TxByteCnt, &tx_byte_count);
 
@@ -125,14 +142,15 @@ fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
         tx_register_address += 1;
     }
 
-    // Kick off transmission to SOP
-    let mut transmit = Transmit(0x00);
-    transmit.set_retry_count(0b11); // 3 retries
-    transmit.set_transmit_sop_message(0b000); // SOP message
-    write_reg(i2c, Register::Transmit, &transmit.0); // go!
+    // Kick off transmission to SOP, using sinkTransmit so that we only transmit
+    // when it is safe to do so.
+    let mut sink_transmit = SinkTransmit(0x00);
+    sink_transmit.set_retry_count(0b11); // 3 retries
+    sink_transmit.set_transmit_sop_message(0b000); // SOP message
+    write_reg(i2c, Register::Transmit, &sink_transmit.0); // go!
 }
 
-fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> MessageHeader {
+fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> usb_pd::MessageHeader {
     let mut header = usb_pd::MessageHeader(0x00);
     header.set_bit_range(7, 0, read_reg(i2c, Register::RxHeadL));
     header.set_bit_range(15, 8, read_reg(i2c, Register::RxHeadH));
@@ -140,14 +158,17 @@ fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> MessageHeader {
 }
 
 // Block read entire RX buffer but only return slice of size num_bytes
-fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>, num_bytes:  u8) -> heapless::Vec::<u8, 27> {
-    if num_bytes >= 27 {
+fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>, mut num_bytes: u8) -> heapless::Vec<u8, 28> {
+    // rxbytecnt includes the two byte header even though it's not stored in this buffer.
+    num_bytes -= 2;
+    if num_bytes > 28 {
         panic!("RX data count greater than fifo size!");
     }
 
-    let mut rx_buf: [u8; 27] = [0; 27];
-    let mut return_buf = heapless::Vec::<u8, 27>::new();
-    i2c.write_read(ADDRESS, &[Register::RxDataMin as u8], &mut rx_buf).unwrap();
+    let mut rx_buf: [u8; 28] = [0; 28];
+    let mut return_buf = heapless::Vec::<u8, 28>::new();
+    i2c.write_read(ADDRESS, &[Register::RxDataMin as u8], &mut rx_buf)
+        .unwrap();
 
     for i in 0..num_bytes {
         return_buf.push(rx_buf[i as usize]).unwrap();
@@ -199,6 +220,9 @@ pub enum Register {
     TxHeadH = 0x53,
     TxDataMin = 0x54,
     TxDataMax = 0x6F,
+    PwrCtrl = 0x1C,
+    VbusVoltageL = 0x70,
+    VbusVoltageH = 0x71,
 }
 
 bitfield! {

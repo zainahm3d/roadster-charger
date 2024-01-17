@@ -2,7 +2,7 @@
 
 use core::panic;
 
-use bitfield::{bitfield, BitRangeMut};
+use bitfield::bitfield;
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
@@ -104,7 +104,8 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
 
     transmit_message(i2c, &rdo_header.0, rdo.0.as_bytes());
 
-    let mut all_pdos = heapless::Vec::<usb_pd::FixedSupplyPDO, 10>::new();
+    // 28 byte buffer / 4 bytes per PDO = 7 PDOs max
+    let mut all_pdos = heapless::Vec::<usb_pd::FixedSupplyPDO, 7>::new();
     for i in 0..rx_header.num_data_objects() {
         let offset: usize = i as usize * 4usize;
 
@@ -144,7 +145,7 @@ fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
     let tx_byte_count: u8 = 2 + data.len() as u8; // add 2 bytes for header
     write_reg(i2c, Register::TxByteCnt, &tx_byte_count);
 
-    // Copy transmit buffer to TCPM
+    // Copy transmit buffer to TCPC
     let mut tx_register_address = Register::TxDataMin as u8;
     for byte in data.iter() {
         write_reg_u8(i2c, tx_register_address, byte);
@@ -161,8 +162,10 @@ fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
 
 fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> usb_pd::MessageHeader {
     let mut header = usb_pd::MessageHeader(0x00);
-    header.set_bit_range(7, 0, read_reg(i2c, Register::RxHeadL));
-    header.set_bit_range(15, 8, read_reg(i2c, Register::RxHeadH));
+
+    header.0.as_bytes_mut()[0] = read_reg(i2c, Register::RxHeadL);
+    header.0.as_bytes_mut()[1] = read_reg(i2c, Register::RxHeadH);
+
     header
 }
 

@@ -116,10 +116,10 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
 
     loop {
         println!("rx_header {:?}", rx_header);
-        println!("rx_bufer_len: {:?}", rx_buffer.len());
+        println!("rx_buffer_len: {:?}", rx_buffer.len());
         println!("rx_buffer {:?}", rx_buffer);
 
-        println!("=== ALL PDOs ===");
+        println!(">===< ALL PDOs >===<");
         for pdo in all_pdos.iter() {
             println!(
                 "mV: {:?}, mA: {:?}, mW: {:?}",

@@ -3,8 +3,12 @@
 extern crate alloc;
 
 use esp32c3_hal::{
-    clock::ClockControl, i2c::I2C, peripherals::Peripherals, prelude::*, timer::TimerGroup, Delay,
-    Rtc, IO,
+    clock::{ClockControl, CpuClock},
+    i2c::I2C,
+    peripherals::Peripherals,
+    prelude::*,
+    timer::TimerGroup,
+    Delay, Rtc, IO,
 };
 use esp_backtrace as _;
 use esp_println::println;
@@ -34,7 +38,7 @@ fn main() -> ! {
     init_heap();
     let peripherals = Peripherals::take();
     let mut system = peripherals.SYSTEM.split();
-    let clocks = ClockControl::boot_defaults(system.clock_control).freeze();
+    let clocks = ClockControl::configure(system.clock_control, CpuClock::Clock160MHz).freeze();
     let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
 
     // Disable the RTC and TIMG watchdog timers
@@ -74,6 +78,5 @@ fn main() -> ! {
     tcpc::init(&mut i2c, &mut delay);
     tcpc::establish_pd_contract(&mut i2c);
 
-    loop {
-    }
+    loop {}
 }

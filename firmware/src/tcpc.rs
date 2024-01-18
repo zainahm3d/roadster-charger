@@ -179,15 +179,10 @@ fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>) -> heapless::Vec<u8, BUF_SIZE> {
     }
 
     let mut rx_buf: [u8; BUF_SIZE] = [0; BUF_SIZE];
-    let mut return_buf = heapless::Vec::<u8, BUF_SIZE>::new();
     i2c.write_read(ADDRESS, &[Register::RxDataMin as u8], &mut rx_buf)
         .unwrap();
 
-    for i in 0..num_bytes {
-        return_buf.push(rx_buf[i as usize]).unwrap();
-    }
-
-    return_buf
+    heapless::Vec::<u8, BUF_SIZE>::from_slice(&rx_buf[0..num_bytes]).unwrap()
 }
 
 fn write_reg(i2c: &mut I2C<'_, I2C0>, register: Register, byte: &u8) {

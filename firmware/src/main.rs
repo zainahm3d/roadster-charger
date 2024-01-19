@@ -66,7 +66,7 @@ fn main() -> ! {
         peripherals.I2C0,
         io.pins.gpio10,
         io.pins.gpio8,
-        400u32.kHz(),
+        100u32.kHz(), // TODO: why doesn't 400khz work?
         &mut system.peripheral_clock_control,
         &clocks,
     );

@@ -31,7 +31,7 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
 
     // Enable vbus voltage monitoring and auto discharge of vbus
     let mut pwr_ctrl = PwrCtrl(0x60); // default
-    pwr_ctrl.set_vbus_mon(true);
+    pwr_ctrl.set_dis_vbus_mon(false);
     pwr_ctrl.set_auto_disch(true);
     write_reg(i2c, Register::PwrCtrl, &pwr_ctrl.0);
 
@@ -88,12 +88,15 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     alertl.set_recieve_status(true);
     write_reg(i2c, Register::AlertL, &alertl.0);
 
-    // Testing: blindly ask for PDO
+    let all_pdos = parse_pdos(&rx_header, &rx_buffer);
     let mut rdo = usb_pd::FixedVariableRDO(0x00);
-    rdo.set_minimum_operating_current_10ma_units(100); // 1 Amp
-    rdo.set_operating_current_10ma_units(100);
+    // TODO: don't wanna unwrap here
+    let pdo_index = select_pdo_index(&all_pdos).unwrap() as u32;
+    let pdo_current = all_pdos[pdo_index as usize].current_10ma_units();
+    rdo.set_object_position(pdo_index + 1);
+    rdo.set_minimum_operating_current_10ma_units(pdo_current);
+    rdo.set_operating_current_10ma_units(pdo_current);
     rdo.set_no_usb_suspend(true);
-    rdo.set_object_position(2);
 
     let mut rdo_header = usb_pd::MessageHeader(0x00);
     rdo_header.set_port_power_role(false); // Sink
@@ -101,24 +104,14 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
     rdo_header.set_message_type(usb_pd::ControlMessage::Request as u16);
     rdo_header.set_message_id(0b001); // ?
     rdo_header.set_pd_spec_revision(0b01); // PD 2.0
-
     transmit_message(i2c, &rdo_header.0, rdo.0.as_bytes());
 
-    // 28 byte buffer / 4 bytes per PDO = 7 PDOs max
-    let mut all_pdos = heapless::Vec::<usb_pd::FixedSupplyPDO, 7>::new();
-    for i in 0..rx_header.num_data_objects() {
-        let offset: usize = i as usize * 4usize;
-
-        let mut new_pdo = usb_pd::FixedSupplyPDO(0x00);
-        new_pdo.0 = u32::from_le_bytes(rx_buffer[offset..offset + 4].try_into().unwrap());
-        all_pdos.push(new_pdo).unwrap();
-    }
-
     loop {
+        println!("voltage_mv: {:?}", get_vbus_mv(i2c));
+        println!("pdo_index: {:?}", pdo_index);
         println!("rx_header {:?}", rx_header);
         println!("rx_buffer_len: {:?}", rx_buffer.len());
         println!("rx_buffer {:?}", rx_buffer);
-
         println!(">===< ALL PDOs >===<");
         for pdo in all_pdos.iter() {
             println!(
@@ -129,6 +122,64 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
             );
         }
         println!()
+    }
+}
+
+fn get_vbus_mv(i2c: &mut I2C<'_, I2C0>) -> u32 {
+    let mut vbus: u16 = 0;
+    vbus.as_bytes_mut()[0] = read_reg(i2c, Register::VbusVoltageL);
+    vbus.as_bytes_mut()[1] = read_reg(i2c, Register::VbusVoltageH);
+    vbus as u32 * 25 // LSB = 25mV
+}
+
+fn parse_pdos(
+    rx_header: &usb_pd::MessageHeader,
+    rx_buffer: &heapless::Vec<u8, BUF_SIZE>,
+) -> heapless::Vec<usb_pd::FixedSupplyPDO, 7> {
+    // 28 byte buffer / 4 bytes per PDO = 7 PDOs max
+    let mut all_pdos = heapless::Vec::<usb_pd::FixedSupplyPDO, 7>::new();
+    for i in 0..rx_header.num_data_objects() {
+        let offset: usize = i as usize * 4usize;
+
+        let mut new_pdo = usb_pd::FixedSupplyPDO(0x00);
+        new_pdo.0 = u32::from_le_bytes(rx_buffer[offset..offset + 4].try_into().unwrap());
+        all_pdos.push(new_pdo).unwrap();
+    }
+
+    all_pdos
+}
+
+// Pick which PDO we want. No PPS for now, only fixed PDOs.
+// Add one before requesting
+fn select_pdo_index(pdos: &heapless::Vec<usb_pd::FixedSupplyPDO, 7>) -> Option<u8> {
+    let mut max_voltage_mv = 0;
+    let mut max_power_mw = 0;
+    let mut max_power_index: i32 = -1;
+
+    for (i, pdo) in pdos.iter().enumerate() {
+        // boost converter current throughput is lower below 13V
+        if pdo.fixed_supply() == 0b00 && pdo.voltage_mv() > 13_000 {
+            if pdo.voltage_mv() > 22_000 {
+                // hardware can only handle 22V on the input
+                continue;
+            }
+
+            // Prefer a higher voltage PDO even if it's at the same power level
+            let power_mw = pdo.voltage_mv() * pdo.current_ma() / 1000;
+            if power_mw > max_power_mw
+                || (pdo.voltage_mv() > max_voltage_mv && power_mw >= max_power_mw)
+            {
+                max_voltage_mv = pdo.voltage_mv();
+                max_power_mw = power_mw;
+                max_power_index = i as i32;
+            }
+        }
+    }
+
+    if max_power_index == -1 {
+        None
+    } else {
+        Some(max_power_index as u8)
     }
 }
 
@@ -200,7 +251,6 @@ fn read_reg(i2c: &mut I2C<'_, I2C0>, register: Register) -> u8 {
     buffer[0]
 }
 
-
 #[repr(u8)]
 #[allow(dead_code)]
 pub enum Register {
@@ -265,7 +315,7 @@ bitfield! {
 bitfield! {
     struct PwrCtrl(u8);
     impl Debug;
-    vbus_mon, set_vbus_mon : 6;
+    dis_vbus_mon, set_dis_vbus_mon : 6;
     dis_valrm, set_dis_valrm: 5;
     auto_disch, set_auto_disch: 4;
     en_bleed_disch, set_en_bleed_disch: 3;

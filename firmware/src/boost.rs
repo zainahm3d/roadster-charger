@@ -35,7 +35,8 @@ pub fn set_voltage_mv(
     enable_pin: &mut GpioPin<Output<PushPull>, 21>,
     voltage_mv: u16,
 ) {
-    const FULL_SCALE: u16 = 16384; // 1.25V @ DAC, 48V @ boost
+    // 2^14 * (1.20 / 1.25) (DAC full scale output is 1.25V)
+    const FULL_SCALE: u16 = 15729; // 1.20V @ DAC, 48V @ boost
     let mut data = Data(0x00);
     data.set_data(((voltage_mv as f32 / 48000.0) * FULL_SCALE as f32) as u16);
 

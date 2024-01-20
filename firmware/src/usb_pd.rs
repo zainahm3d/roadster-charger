@@ -21,6 +21,8 @@ bitfield! {
     pub message_type, set_message_type: 4, 0;
 }
 
+// TODO: Make this generic for any type of PDO, and build
+// another bitfield for fixed supply PDOs
 bitfield! {
     pub struct FixedSupplyPDO(u32);
     impl Debug;
@@ -35,6 +37,8 @@ bitfield! {
     pub peak_current, _: 21, 20;
     pub voltage_50mv_units, _: 19, 10;
     pub current_10ma_units, _: 9, 0;
+
+    pub spr_pps, _: 29, 28; // only when this is an apdo
 }
 
 impl FixedSupplyPDO {
@@ -44,6 +48,45 @@ impl FixedSupplyPDO {
 
     pub fn current_ma(&self) -> u32 {
         self.current_10ma_units() * 10
+    }
+
+    pub fn is_fixed_pdo(&self) -> bool {
+        self.fixed_supply() == 0b00
+    }
+
+    pub fn is_augmented_pdo(&self) -> bool {
+        self.fixed_supply() == 0b11
+    }
+
+    pub fn is_spr_pps_apdo(&self) -> bool {
+        self.is_augmented_pdo() && self.spr_pps() == 0b00
+    }
+}
+
+bitfield! {
+    // Standard power range programmable power supply
+    // Augmented power data object (0b11)
+    pub struct SprPpsApdo(u32);
+    impl Debug;
+    pub apdo, _: 31, 30;
+    pub spr_pps, _: 29, 28;
+    pub pps_power_limited, _: 27;
+    pub max_voltage_100mv_units, _: 24, 17;
+    pub min_voltage_100mv_units, _: 15, 8;
+    pub max_current_50ma_units, _: 6, 0;
+}
+
+impl SprPpsApdo {
+    pub fn max_voltage_mv(&self) -> u32 {
+        self.max_voltage_100mv_units() * 100
+    }
+
+    pub fn min_voltage_mv(&self) -> u32 {
+        self.min_voltage_100mv_units() * 100
+    }
+
+    pub fn max_current_ma(&self) -> u32 {
+        self.max_current_50ma_units() * 50
     }
 }
 

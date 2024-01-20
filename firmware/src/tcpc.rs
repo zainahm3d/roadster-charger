@@ -114,12 +114,24 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
         println!("rx_buffer {:?}", rx_buffer);
         println!(">===< ALL PDOs >===<");
         for pdo in all_pdos.iter() {
-            println!(
-                "mV: {:?}, mA: {:?}, mW: {:?}",
-                pdo.voltage_mv(),
-                pdo.current_ma(),
-                pdo.voltage_mv() * pdo.current_ma() / 1000
-            );
+            if pdo.is_fixed_pdo() {
+                println!(
+                    "mV: {:?}, mA: {:?}, mW: {:?}",
+                    pdo.voltage_mv(),
+                    pdo.current_ma(),
+                    pdo.voltage_mv() * pdo.current_ma() / 1000
+                );
+            } else if pdo.is_spr_pps_apdo() {
+                let pps_pdo = usb_pd::SprPpsApdo(pdo.0);
+                println!(
+                    "PPS! mV: {:?}-{:?}, mA: {:?}, mW: {:?}",
+                    pps_pdo.min_voltage_mv(),
+                    pps_pdo.max_voltage_mv(),
+                    pps_pdo.max_current_ma(),
+                    pps_pdo.max_current_ma() * pps_pdo.max_voltage_mv() / 1000
+                );
+            }
+
         }
         println!()
     }
@@ -158,7 +170,7 @@ fn select_pdo_index(pdos: &heapless::Vec<usb_pd::FixedSupplyPDO, 7>) -> Option<u
 
     for (i, pdo) in pdos.iter().enumerate() {
         // boost converter current throughput is lower below 13V
-        if pdo.fixed_supply() == 0b00 && pdo.voltage_mv() > 13_000 {
+        if pdo.is_fixed_pdo() && pdo.voltage_mv() > 13_000 {
             if pdo.voltage_mv() > 22_000 {
                 // hardware can only handle 22V on the input
                 continue;

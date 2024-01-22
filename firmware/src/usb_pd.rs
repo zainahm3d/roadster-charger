@@ -1,12 +1,21 @@
 // Minimum field definitions to sink current from a USB PD source
 
 use bitfield::bitfield;
+#[allow(dead_code)]
 #[repr(u8)]
 pub enum ControlMessage {
     Request = 0b0_0010,
-    // Accept = 0b0_0011,
-    // Reject = 0b0_0100,
-    // GetSourceCap = 0b0_0111,
+    Accept = 0b0_0011,
+    Reject = 0b0_0100,
+    PsRdy = 0b0_0110,
+    GetSourceCap = 0b0_0111,
+}
+
+#[allow(dead_code)]
+pub enum DataMessage {
+    SourceCaps = 0b0_0001,
+    Request = 0b0_0010,
+    VendorDefined = 0b0_1111,
 }
 
 bitfield! {
@@ -41,6 +50,7 @@ bitfield! {
     pub spr_pps, _: 29, 28; // only when this is an apdo
 }
 
+#[allow(dead_code)]
 impl FixedSupplyPDO {
     pub fn voltage_mv(&self) -> u32 {
         self.voltage_50mv_units() * 50
@@ -76,6 +86,7 @@ bitfield! {
     pub max_current_50ma_units, _: 6, 0;
 }
 
+#[allow(dead_code)]
 impl SprPpsApdo {
     pub fn max_voltage_mv(&self) -> u32 {
         self.max_voltage_100mv_units() * 100

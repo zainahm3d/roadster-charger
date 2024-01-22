@@ -16,6 +16,58 @@ use crate::usb_pd;
 const ADDRESS: u8 = 0x50;
 const BUF_SIZE: usize = 28; // for both tx and rx buffers
 
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum PDState {
+    // Port partner (SOURCE) is expected to blast source capabilities on cable plug
+    WaitingForSourceCaps,
+    // Hopefully the source accepts our request
+    WaitingForPsAccept,
+    // Source should notify us when the power rail has stabilized at target voltage
+    WaitingForPsRdy,
+    // We're done with the important bits.
+    NegotiationComplete,
+}
+
+// TODO: find a way to clean up the unsafe - this never runs from interrupt context
+pub fn run_state_machine(
+    i2c: &mut I2C<'_, I2C0>,
+    rx_header: &usb_pd::MessageHeader,
+    rx_buffer: &heapless::Vec<u8, BUF_SIZE>,
+) -> PDState {
+    static mut STATE: PDState = PDState::WaitingForSourceCaps;
+    let msg_type = rx_header.message_type();
+    let is_ctrl_msg = rx_header.num_data_objects() == 0;
+    unsafe {
+        match STATE {
+            PDState::WaitingForSourceCaps => {
+                if !is_ctrl_msg && msg_type == usb_pd::DataMessage::SourceCaps as u16 {
+                    let pdos = parse_pdos(rx_header, rx_buffer);
+                    let index = select_pdo_index(&pdos).unwrap() as u32;
+                    request_pdo_index(i2c, index, &pdos);
+                    STATE = PDState::WaitingForPsAccept
+                }
+            }
+
+            PDState::WaitingForPsAccept => {
+                if is_ctrl_msg && msg_type == usb_pd::ControlMessage::Accept as u16 {
+                    STATE = PDState::WaitingForPsRdy;
+                }
+            }
+
+            PDState::WaitingForPsRdy => {
+                if is_ctrl_msg && msg_type == usb_pd::ControlMessage::PsRdy as u16 {
+                    STATE = PDState::NegotiationComplete;
+                }
+            }
+
+            PDState::NegotiationComplete => {
+                // TODO
+            }
+        }
+        STATE
+    }
+}
+
 pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
     // Reset the chip
     let mut reset = Reset(0x00);
@@ -73,71 +125,31 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
 }
 
 pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
-    // Wait for a message to come in
-    let mut alertl = AlertL(0x00);
-    while !(alertl.recieve_status()) {
-        alertl.0 = read_reg(i2c, Register::AlertL);
-    }
-
-    // if we get here a message has been received
-    let rx_header = get_rx_header(i2c);
-    let rx_buffer = get_rx_buffer(i2c);
-
-    // Clear alert
-    let mut alertl = AlertL(0x00);
-    alertl.set_recieve_status(true);
-    write_reg(i2c, Register::AlertL, &alertl.0);
-
-    let all_pdos = parse_pdos(&rx_header, &rx_buffer);
-    let mut rdo = usb_pd::FixedVariableRDO(0x00);
-    // TODO: don't wanna unwrap here
-    let pdo_index = select_pdo_index(&all_pdos).unwrap() as u32;
-    let pdo_current = all_pdos[pdo_index as usize].current_10ma_units();
-    rdo.set_object_position(pdo_index + 1);
-    rdo.set_minimum_operating_current_10ma_units(pdo_current);
-    rdo.set_operating_current_10ma_units(pdo_current);
-    rdo.set_no_usb_suspend(true);
-
-    let mut rdo_header = usb_pd::MessageHeader(0x00);
-    rdo_header.set_port_power_role(false); // Sink
-    rdo_header.set_num_data_objects(1);
-    rdo_header.set_message_type(usb_pd::ControlMessage::Request as u16);
-    rdo_header.set_message_id(0b001); // ?
-    rdo_header.set_pd_spec_revision(0b01); // PD 2.0
-    transmit_message(i2c, &rdo_header.0, rdo.0.as_bytes());
-
     loop {
-        println!("voltage_mv: {:?}", get_vbus_mv(i2c));
-        println!("pdo_index: {:?}", pdo_index);
-        println!("rx_header {:?}", rx_header);
-        println!("rx_buffer_len: {:?}", rx_buffer.len());
-        println!("rx_buffer {:?}", rx_buffer);
-        println!(">===< ALL PDOs >===<");
-        for pdo in all_pdos.iter() {
-            if pdo.is_fixed_pdo() {
-                println!(
-                    "mV: {:?}, mA: {:?}, mW: {:?}",
-                    pdo.voltage_mv(),
-                    pdo.current_ma(),
-                    pdo.voltage_mv() * pdo.current_ma() / 1000
-                );
-            } else if pdo.is_spr_pps_apdo() {
-                let pps_pdo = usb_pd::SprPpsApdo(pdo.0);
-                println!(
-                    "PPS! mV: {:?}-{:?}, mA: {:?}, mW: {:?}",
-                    pps_pdo.min_voltage_mv(),
-                    pps_pdo.max_voltage_mv(),
-                    pps_pdo.max_current_ma(),
-                    pps_pdo.max_current_ma() * pps_pdo.max_voltage_mv() / 1000
-                );
-            }
-
+        // Wait for a message to come in
+        let mut alertl = AlertL(0x00);
+        while !(alertl.recieve_status()) {
+            alertl.0 = read_reg(i2c, Register::AlertL);
         }
-        println!()
+
+        // if we get here a message has been received
+        let rx_header = get_rx_header(i2c);
+        let rx_buffer = get_rx_buffer(i2c);
+
+        // Clear alert
+        let mut alertl = AlertL(0x00);
+        alertl.set_recieve_status(true);
+        write_reg(i2c, Register::AlertL, &alertl.0);
+
+        let state = run_state_machine(i2c, &rx_header, &rx_buffer);
+
+        if state == PDState::NegotiationComplete {
+            return;
+        }
     }
 }
 
-fn get_vbus_mv(i2c: &mut I2C<'_, I2C0>) -> u32 {
+fn _get_vbus_mv(i2c: &mut I2C<'_, I2C0>) -> u32 {
     let mut vbus: u16 = 0;
     vbus.as_bytes_mut()[0] = read_reg(i2c, Register::VbusVoltageL);
     vbus.as_bytes_mut()[1] = read_reg(i2c, Register::VbusVoltageH);
@@ -195,32 +207,67 @@ fn select_pdo_index(pdos: &heapless::Vec<usb_pd::FixedSupplyPDO, 7>) -> Option<u
     }
 }
 
-fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &u16, data: &[u8]) {
-    // Set header (flip endianness from as_bytes())
-    let header = tx_header.as_bytes();
-    write_reg(i2c, Register::TxHeadH, &header[1]);
-    write_reg(i2c, Register::TxHeadL, &header[0]);
+pub fn request_pdo_index(
+    i2c: &mut I2C<'_, I2C0>,
+    pdo_index: u32,
+    all_pdos: &heapless::Vec<usb_pd::FixedSupplyPDO, 7>,
+) {
+    let mut rdo = usb_pd::FixedVariableRDO(0x00);
+    let pdo_current = all_pdos[pdo_index as usize].current_10ma_units();
+    rdo.set_object_position(pdo_index + 1);
+    rdo.set_minimum_operating_current_10ma_units(pdo_current);
+    rdo.set_operating_current_10ma_units(pdo_current);
+    rdo.set_no_usb_suspend(true);
+
+    let mut rdo_header = usb_pd::MessageHeader(0x00);
+    rdo_header.set_port_power_role(false); // Sink
+    rdo_header.set_num_data_objects(1);
+    rdo_header.set_message_type(usb_pd::ControlMessage::Request as u16);
+    rdo_header.set_message_id(0b001); // ?
+    rdo_header.set_pd_spec_revision(0b01); // PD 2.0
+    transmit_message(i2c, &mut rdo_header, rdo.0.as_bytes());
+}
+
+// Take a mutable pointer to the message header so we can fill in the message ID
+// Block write the entire 28 byte TX buffer in one i2c transaction
+fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &mut usb_pd::MessageHeader, data: &[u8]) {
+    // 3 bit, needs to roll over @ 0b111
+    static mut MESSAGE_ID: u16 = 0;
 
     if data.len() > BUF_SIZE {
         panic!("TX data count greater than buffer size!");
     }
 
-    let tx_byte_count: u8 = 2 + data.len() as u8; // add 2 bytes for header
-    write_reg(i2c, Register::TxByteCnt, &tx_byte_count);
-
-    // Copy transmit buffer to TCPC
-    let mut tx_register_address = Register::TxDataMin as u8;
-    for byte in data.iter() {
-        write_reg_u8(i2c, tx_register_address, byte);
-        tx_register_address += 1;
+    // Safety: this function is never called from interrupt context
+    unsafe {
+        tx_header.set_message_id(MESSAGE_ID);
+        MESSAGE_ID += 1;
+        if MESSAGE_ID > 0b111 {
+            MESSAGE_ID = 0;
+        }
     }
 
-    // Kick off transmission to SOP, using sinkTransmit so that we only transmit
-    // when it is safe to do so.
-    let mut sink_transmit = SinkTransmit(0x00);
-    sink_transmit.set_retry_count(0b11); // 3 retries
-    sink_transmit.set_transmit_sop_message(0b000); // SOP message
-    write_reg(i2c, Register::Transmit, &sink_transmit.0); // go!
+    // Copy tx header to tcpc
+    let header = tx_header.0.as_bytes();
+    write_reg(i2c, Register::TxHeadH, &header[1]);
+    write_reg(i2c, Register::TxHeadL, &header[0]);
+
+    // Write tx byte count, add 2 bytes for header
+    let tx_byte_count: u8 = 2 + data.len() as u8;
+    write_reg(i2c, Register::TxByteCnt, &tx_byte_count);
+
+    let mut tx_buf: [u8; BUF_SIZE + 1] = [0; BUF_SIZE + 1];
+    tx_buf[0] = Register::TxDataMin as u8;
+    for (i, byte) in data.iter().enumerate() {
+        tx_buf[i + 1] = *byte;
+    }
+    i2c.write(ADDRESS, &tx_buf).unwrap();
+
+    // Kick off transmission to SOP
+    let mut transmit = Transmit(0x00);
+    transmit.set_retry_count(0b11); // 3 retries
+    transmit.set_transmit_sop_message(0b000); // SOP message
+    write_reg(i2c, Register::Transmit, &transmit.0); // go!
 }
 
 fn get_rx_header(i2c: &mut I2C<'_, I2C0>) -> usb_pd::MessageHeader {
@@ -250,10 +297,6 @@ fn get_rx_buffer(i2c: &mut I2C<'_, I2C0>) -> heapless::Vec<u8, BUF_SIZE> {
 
 fn write_reg(i2c: &mut I2C<'_, I2C0>, register: Register, byte: &u8) {
     i2c.write(ADDRESS, &[register as u8, *byte]).unwrap();
-}
-
-fn write_reg_u8(i2c: &mut I2C<'_, I2C0>, register: u8, byte: &u8) {
-    i2c.write(ADDRESS, &[register, *byte]).unwrap();
 }
 
 fn read_reg(i2c: &mut I2C<'_, I2C0>, register: Register) -> u8 {

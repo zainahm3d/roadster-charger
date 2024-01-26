@@ -5,7 +5,7 @@
   (paper "B")
 
   (title_block
-    (rev "1")
+    (rev "2")
   )
 
   (lib_symbols
@@ -2540,7 +2540,6 @@
   (no_connect (at 179.07 63.5) (uuid 86a4247d-a9a5-49b0-832c-4fdb5029daed))
   (no_connect (at 179.07 57.15) (uuid 90ccc1e2-bde2-443c-855c-1a3de1a86b49))
   (no_connect (at 58.42 59.69) (uuid ad2408c8-11fd-49e0-b0c1-9defcbc76ca9))
-  (no_connect (at 143.51 40.64) (uuid b6bb4827-4784-44cf-ba89-18dd24e77a13))
   (no_connect (at 58.42 63.5) (uuid b95c61a8-f968-4b3c-9a4b-9e14c1ab9feb))
   (no_connect (at 58.42 66.04) (uuid cafc9870-1905-4dc2-8bba-32775ccd6b17))
   (no_connect (at 49.53 140.97) (uuid f3bc554b-f087-4486-8fa7-498f5c388f91))
@@ -2599,6 +2598,10 @@
   (wire (pts (xy 214.63 25.4) (xy 214.63 26.67))
     (stroke (width 0) (type default))
     (uuid 0e64b9f3-f4fe-42d7-81cb-555df155b2fa)
+  )
+  (wire (pts (xy 133.35 40.64) (xy 143.51 40.64))
+    (stroke (width 0) (type default))
+    (uuid 1074bbb9-7de6-40be-a62c-196ebe9d639f)
   )
   (wire (pts (xy 46.99 125.73) (xy 46.99 128.27))
     (stroke (width 0) (type default))
@@ -3085,6 +3088,10 @@
   (wire (pts (xy 207.01 25.4) (xy 214.63 25.4))
     (stroke (width 0) (type default))
     (uuid 9ccdd295-738b-4375-b700-d43be31c5656)
+  )
+  (wire (pts (xy 133.35 35.56) (xy 133.35 40.64))
+    (stroke (width 0) (type default))
+    (uuid 9da91e56-a030-4176-bac7-5c9eb3220ddc)
   )
   (wire (pts (xy 340.36 171.45) (xy 340.36 177.8))
     (stroke (width 0) (type default))
@@ -3696,6 +3703,31 @@
   (label "I_SENSE" (at 328.93 163.83 180) (fields_autoplaced)
     (effects (font (size 1.27 1.27)) (justify right bottom))
     (uuid f70e667c-7c6b-452d-9af3-f818a355df92)
+  )
+
+  (symbol (lib_id "power:VBUS") (at 133.35 35.56 0) (mirror y) (unit 1)
+    (in_bom yes) (on_board yes) (dnp no)
+    (uuid 0462aa90-a7d3-4f83-abfa-e4d9297e89dc)
+    (property "Reference" "#PWR085" (at 133.35 39.37 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Value" "VBUS" (at 133.35 30.48 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 133.35 35.56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (property "Datasheet" "" (at 133.35 35.56 0)
+      (effects (font (size 1.27 1.27)) hide)
+    )
+    (pin "1" (uuid 47b978d9-a185-4b42-b42c-0c166e640441))
+    (instances
+      (project "roadster-charger"
+        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
+          (reference "#PWR085") (unit 1)
+        )
+      )
+    )
   )
 
   (symbol (lib_id "power:+3.3V") (at 33.02 182.88 0) (unit 1)
@@ -4340,9 +4372,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR062") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -4396,9 +4425,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R7") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
         )
       )
     )
@@ -4454,9 +4480,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R18") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
-        )
       )
     )
   )
@@ -4507,9 +4530,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR023") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -4534,9 +4554,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR069") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -4639,9 +4656,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR020") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -4671,9 +4685,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R20") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
-        )
       )
     )
   )
@@ -4698,9 +4709,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR068") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -4789,9 +4797,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R13") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
-        )
       )
     )
   )
@@ -4866,9 +4871,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR053") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -5028,9 +5030,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "U7") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "U?") (unit 1)
-        )
       )
     )
   )
@@ -5081,9 +5080,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR051") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -5108,9 +5104,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR066") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -5198,9 +5191,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR016") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -5261,22 +5251,22 @@
     )
   )
 
-  (symbol (lib_id "Device:C_Small") (at 127 33.02 0) (mirror y) (unit 1)
+  (symbol (lib_id "Device:C_Small") (at 120.65 33.02 0) (mirror y) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 77b666a0-85ad-4c5a-aeee-62c2414107a2)
-    (property "Reference" "C8" (at 129.54 31.7563 0)
+    (property "Reference" "C8" (at 123.19 31.7563 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Value" "0.1uF" (at 129.54 34.2963 0)
+    (property "Value" "0.1uF" (at 123.19 34.2963 0)
       (effects (font (size 1.27 1.27)) (justify right))
     )
-    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 127 33.02 0)
+    (property "Footprint" "Capacitor_SMD:C_0603_1608Metric" (at 120.65 33.02 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "~" (at 127 33.02 0)
+    (property "Datasheet" "~" (at 120.65 33.02 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "MPN" "CL10B104KB8NNNC" (at 127 33.02 0)
+    (property "MPN" "CL10B104KB8NNNC" (at 120.65 33.02 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 07313282-cbbe-4dfc-9cfd-1172f40dd3b7))
@@ -5310,9 +5300,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR046") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -5537,19 +5524,19 @@
     )
   )
 
-  (symbol (lib_id "power:GND") (at 127 35.56 0) (unit 1)
+  (symbol (lib_id "power:GND") (at 120.65 35.56 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no)
     (uuid 81f551e6-ec73-4134-9a8c-97f7a118ec97)
-    (property "Reference" "#PWR025" (at 127 41.91 0)
+    (property "Reference" "#PWR025" (at 120.65 41.91 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "GND" (at 127 40.64 0)
+    (property "Value" "GND" (at 120.65 40.64 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Footprint" "" (at 127 35.56 0)
+    (property "Footprint" "" (at 120.65 35.56 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "" (at 127 35.56 0)
+    (property "Datasheet" "" (at 120.65 35.56 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid 2206a934-6491-4b78-b5c2-df917e63c2b5))
@@ -5612,19 +5599,19 @@
     )
   )
 
-  (symbol (lib_id "power:+3.3V") (at 127 30.48 0) (unit 1)
+  (symbol (lib_id "power:+3.3V") (at 120.65 30.48 0) (unit 1)
     (in_bom yes) (on_board yes) (dnp no) (fields_autoplaced)
     (uuid 8b726fd2-8f43-47c9-9028-36f4d885214a)
-    (property "Reference" "#PWR024" (at 127 34.29 0)
+    (property "Reference" "#PWR024" (at 120.65 34.29 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Value" "+3.3V" (at 127 25.4 0)
+    (property "Value" "+3.3V" (at 120.65 25.4 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "" (at 127 30.48 0)
+    (property "Footprint" "" (at 120.65 30.48 0)
       (effects (font (size 1.27 1.27)) hide)
     )
-    (property "Datasheet" "" (at 127 30.48 0)
+    (property "Datasheet" "" (at 120.65 30.48 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (pin "1" (uuid bb4f5f7f-bf60-4c89-bf95-adcc27e2ba00))
@@ -5739,9 +5726,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR067") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -5827,9 +5811,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR064") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -5854,9 +5835,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR019") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -6114,9 +6092,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R15") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
         )
       )
     )
@@ -6412,9 +6387,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R19") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
-        )
       )
     )
   )
@@ -6473,9 +6445,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "R21") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "R?") (unit 1)
-        )
       )
     )
   )
@@ -6500,9 +6469,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR070") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -6529,9 +6495,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR045") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -6556,9 +6519,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR050") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )
@@ -7136,9 +7096,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR044") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -7407,9 +7364,6 @@
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR061") (unit 1)
         )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
-        )
       )
     )
   )
@@ -7459,9 +7413,6 @@
       (project "roadster-charger"
         (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
           (reference "#PWR056") (unit 1)
-        )
-        (path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-          (reference "#PWR?") (unit 1)
         )
       )
     )

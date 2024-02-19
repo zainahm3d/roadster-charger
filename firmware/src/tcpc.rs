@@ -7,6 +7,7 @@ use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp32c3_hal::Delay;
+use esp32c3_hal::systimer::SystemTimer;
 use esp_println::println;
 use zerocopy::AsBytes;
 
@@ -23,8 +24,6 @@ pub enum PDState {
     WaitingForPsAccept,
     // Source should notify us when the power rail has stabilized at target voltage
     WaitingForPsRdy,
-    // Apple devices want us to goodCRC the VDM messages for couple more seconds
-    WaitingForVDMs,
     // We're done with the important bits.
     NegotiationComplete,
 }
@@ -53,19 +52,16 @@ pub fn run_state_machine(
 
             PDState::WaitingForPsAccept => {
                 if is_ctrl_msg && msg_type == usb_pd::ControlMessage::Accept as u16 {
-                    STATE = PDState::WaitingForPsRdy;
                     println!("pd: psu accepted pd contract");
+                    STATE = PDState::WaitingForPsRdy;
                 }
             }
 
             PDState::WaitingForPsRdy => {
                 if is_ctrl_msg && msg_type == usb_pd::ControlMessage::PsRdy as u16 {
                     println!("pd: psu ready");
+                    STATE = PDState::NegotiationComplete;
                 }
-            }
-
-            PDState::WaitingForVDMs => {
-                STATE = PDState::NegotiationComplete;
             }
 
             PDState::NegotiationComplete => {
@@ -133,11 +129,23 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
 }
 
 pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
+    let timeout = 5 * SystemTimer::TICKS_PER_SECOND;
+    let mut last_message_tick = SystemTimer::now();
+
     loop {
         // Wait for a message to come in
-        let mut alertl = AlertL(0x00);
-        while !(alertl.recieve_status()) {
+        loop {
+            let mut alertl = AlertL(0x00);
             alertl.0 = read_reg(i2c, Register::AlertL);
+            if alertl.recieve_status() {
+                last_message_tick = SystemTimer::now();
+                break; // got a message
+            } else {
+                if SystemTimer::now() > last_message_tick + timeout {
+                    println!("pd: negotiation timed out");
+                    return;
+                }
+            }
         }
 
         // if we get here a message has been received
@@ -152,8 +160,7 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
         let state = run_state_machine(i2c, &rx_header, &rx_buffer);
 
         if state == PDState::NegotiationComplete {
-            // Wait a couple more seconds here so that we can GoodCRC VDMs from Apple bricks
-            // return;
+            // TODO: switch to interrupt mode for FUSB307
         }
     }
 }

@@ -9,6 +9,7 @@ pub enum ControlMessage {
     Reject = 0b0_0100,
     PsRdy = 0b0_0110,
     GetSourceCap = 0b0_0111,
+    VendorDefined = 0b0_1111,
 }
 
 #[allow(dead_code)]
@@ -112,5 +113,5 @@ bitfield! {
     pub _, set_unchunked_extended_messages_supported: 23;
     pub _, set_epr_mode_capable: 22;
     pub _, set_operating_current_10ma_units: 19, 10;
-    pub _, set_minimum_operating_current_10ma_units: 9, 0;
+    pub _, set_maximum_operating_current_10ma_units: 9, 0;
 }

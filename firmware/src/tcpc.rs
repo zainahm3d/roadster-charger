@@ -8,7 +8,6 @@ use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
 use esp32c3_hal::Delay;
 use esp_println::println;
-use heapless;
 use zerocopy::AsBytes;
 
 use crate::usb_pd;
@@ -24,11 +23,12 @@ pub enum PDState {
     WaitingForPsAccept,
     // Source should notify us when the power rail has stabilized at target voltage
     WaitingForPsRdy,
+    // Apple devices want us to goodCRC the VDM messages for couple more seconds
+    WaitingForVDMs,
     // We're done with the important bits.
     NegotiationComplete,
 }
 
-// TODO: find a way to clean up the unsafe - this never runs from interrupt context
 pub fn run_state_machine(
     i2c: &mut I2C<'_, I2C0>,
     rx_header: &usb_pd::MessageHeader,
@@ -41,27 +41,35 @@ pub fn run_state_machine(
         match STATE {
             PDState::WaitingForSourceCaps => {
                 if !is_ctrl_msg && msg_type == usb_pd::DataMessage::SourceCaps as u16 {
+                    println!("pd: source capabilities recieved");
                     let pdos = parse_pdos(rx_header, rx_buffer);
                     let index = select_pdo_index(&pdos).unwrap() as u32;
+                    let pdo = &pdos[index as usize];
                     request_pdo_index(i2c, index, &pdos);
-                    STATE = PDState::WaitingForPsAccept
+                    println!("pd: requested {:?}mV @ {:?}mA", pdo.voltage_mv(), pdo.current_ma());
+                    STATE = PDState::WaitingForPsAccept;
                 }
             }
 
             PDState::WaitingForPsAccept => {
                 if is_ctrl_msg && msg_type == usb_pd::ControlMessage::Accept as u16 {
                     STATE = PDState::WaitingForPsRdy;
+                    println!("pd: psu accepted pd contract");
                 }
             }
 
             PDState::WaitingForPsRdy => {
                 if is_ctrl_msg && msg_type == usb_pd::ControlMessage::PsRdy as u16 {
-                    STATE = PDState::NegotiationComplete;
+                    println!("pd: psu ready");
                 }
             }
 
+            PDState::WaitingForVDMs => {
+                STATE = PDState::NegotiationComplete;
+            }
+
             PDState::NegotiationComplete => {
-                // TODO
+                println!("pd: negotiation complete");
             }
         }
         STATE
@@ -96,16 +104,16 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
         tcpc_ctrl.set_orient(false);
         role_ctrl.set_cc1_term(0b10); // present Rd
         role_ctrl.set_cc2_term(0b11); // open
-        println!("CC1 connected");
+        println!("pd: cc1 connected");
     } else if cc_stat.cc2_stat() != 0 {
         tcpc_ctrl.set_orient(true);
         role_ctrl.set_cc1_term(0b11); // open
         role_ctrl.set_cc2_term(0b10); // present Rd
-        println!("CC2 connected");
+        println!("pd: cc2 connected");
     } else {
         role_ctrl.set_cc1_term(0b10); // Rd
         role_ctrl.set_cc2_term(0b10); // Rd
-        println!("Neither CC line is connected");
+        println!("pd: neither CC line is connected");
     }
 
     write_reg(i2c, Register::TcpcCtrl, &tcpc_ctrl.0);
@@ -144,7 +152,8 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
         let state = run_state_machine(i2c, &rx_header, &rx_buffer);
 
         if state == PDState::NegotiationComplete {
-            return;
+            // Wait a couple more seconds here so that we can GoodCRC VDMs from Apple bricks
+            // return;
         }
     }
 }
@@ -215,20 +224,17 @@ pub fn request_pdo_index(
     let mut rdo = usb_pd::FixedVariableRDO(0x00);
     let pdo_current = all_pdos[pdo_index as usize].current_10ma_units();
     rdo.set_object_position(pdo_index + 1);
-    rdo.set_minimum_operating_current_10ma_units(pdo_current);
+    rdo.set_maximum_operating_current_10ma_units(pdo_current);
     rdo.set_operating_current_10ma_units(pdo_current);
-    rdo.set_no_usb_suspend(true);
 
     let mut rdo_header = usb_pd::MessageHeader(0x00);
     rdo_header.set_port_power_role(false); // Sink
     rdo_header.set_num_data_objects(1);
     rdo_header.set_message_type(usb_pd::ControlMessage::Request as u16);
-    rdo_header.set_message_id(0b001); // ?
-    rdo_header.set_pd_spec_revision(0b01); // PD 2.0
     transmit_message(i2c, &mut rdo_header, rdo.0.as_bytes());
 }
 
-// Take a mutable pointer to the message header so we can fill in the message ID
+// Take a mutable pointer to the message header so we can fill in the message ID and PD rev
 // Block write the entire 28 byte TX buffer in one i2c transaction
 fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &mut usb_pd::MessageHeader, data: &[u8]) {
     // 3 bit, needs to roll over @ 0b111
@@ -246,6 +252,7 @@ fn transmit_message(i2c: &mut I2C<'_, I2C0>, tx_header: &mut usb_pd::MessageHead
             MESSAGE_ID = 0;
         }
     }
+    tx_header.set_pd_spec_revision(0b01); // PD 2.0
 
     // Copy tx header to tcpc
     let header = tx_header.0.as_bytes();

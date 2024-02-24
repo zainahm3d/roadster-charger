@@ -8,8 +8,8 @@ use esp32c3_hal::gpio::*;
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
-use esp32c3_hal::Delay;
 use esp32c3_hal::systimer::SystemTimer;
+use esp32c3_hal::Delay;
 use esp_println::println;
 use zerocopy::AsBytes;
 
@@ -49,7 +49,11 @@ pub fn run_state_machine(
                     let index = select_pdo_index(&pdos).unwrap() as u32;
                     let pdo = &pdos[index as usize];
                     request_pdo_index(i2c, index, &pdos);
-                    println!("pd: requested {:?}mV @ {:?}mA", pdo.voltage_mv(), pdo.current_ma());
+                    println!(
+                        "pd: requested {:?}mV @ {:?}mA",
+                        pdo.voltage_mv(),
+                        pdo.current_ma()
+                    );
                     STATE = PDState::WaitingForPsAccept;
                 }
             }
@@ -68,7 +72,7 @@ pub fn run_state_machine(
                 }
             }
 
-            _ => {},
+            _ => {}
         }
         STATE
     }
@@ -130,7 +134,6 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-
 pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Input<Floating>, 7>) {
     let timeout = 5 * SystemTimer::TICKS_PER_SECOND;
     let mut last_message_tick = SystemTimer::now();
@@ -143,11 +146,9 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Inp
             if alertl.recieve_status() {
                 last_message_tick = SystemTimer::now();
                 break; // got a message
-            } else {
-                if SystemTimer::now() > last_message_tick + timeout {
-                    println!("pd: negotiation timed out");
-                    return;
-                }
+            } else if SystemTimer::now() > last_message_tick + timeout {
+                println!("pd: negotiation timed out");
+                return;
             }
         }
 

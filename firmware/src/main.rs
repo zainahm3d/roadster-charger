@@ -3,27 +3,28 @@
 extern crate alloc;
 
 use esp32c3_hal::{
-    prelude::*,
     clock::{ClockControl, CpuClock},
+    gpio::{Floating, GpioPin, Input},
     i2c::I2C,
     interrupt,
-    peripherals::{Peripherals, Interrupt},
+    peripherals::{Interrupt, Peripherals},
+    prelude::*,
     timer::TimerGroup,
-    gpio::{GpioPin, Input, Floating},
     Delay, Rtc, IO,
 };
 use esp_backtrace as _;
 use esp_println::println;
 
-use critical_section::Mutex;
 use core::cell::RefCell;
+use critical_section::Mutex;
 
 mod boost;
 mod tcpc;
 mod usb_pd;
 
 // global reference for int pin so we can clear interrupt
-static FUSB_INTERRUPT_PIN: Mutex<RefCell<Option<GpioPin<Input<Floating>, 7>>>> = Mutex::new(RefCell::new(None));
+static FUSB_INTERRUPT_PIN: Mutex<RefCell<Option<GpioPin<Input<Floating>, 7>>>> =
+    Mutex::new(RefCell::new(None));
 
 #[global_allocator]
 static ALLOCATOR: esp_alloc::EspHeap = esp_alloc::EspHeap::empty();

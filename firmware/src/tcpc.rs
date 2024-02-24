@@ -1,8 +1,10 @@
 // Interface over i2c to the FUSB307B USB-PD type C port controller
 
 use core::panic;
+use core::sync::atomic::{AtomicBool, Ordering};
 
 use bitfield::bitfield;
+use esp32c3_hal::gpio::*;
 use esp32c3_hal::i2c::I2C;
 use esp32c3_hal::peripherals::I2C0;
 use esp32c3_hal::prelude::*;
@@ -15,6 +17,8 @@ use crate::usb_pd;
 
 const ADDRESS: u8 = 0x50;
 const BUF_SIZE: usize = 28; // for both tx and rx buffers
+
+pub static INTERRUPT_PENDING: AtomicBool = AtomicBool::new(false);
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum PDState {
@@ -64,9 +68,7 @@ pub fn run_state_machine(
                 }
             }
 
-            PDState::NegotiationComplete => {
-                println!("pd: negotiation complete");
-            }
+            _ => {},
         }
         STATE
     }
@@ -128,7 +130,8 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
+
+pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Input<Floating>, 7>) {
     let timeout = 5 * SystemTimer::TICKS_PER_SECOND;
     let mut last_message_tick = SystemTimer::now();
 
@@ -160,12 +163,32 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>) {
         let state = run_state_machine(i2c, &rx_header, &rx_buffer);
 
         if state == PDState::NegotiationComplete {
-            // TODO: switch to interrupt mode for FUSB307
+            println!("pd: negotiation complete");
+            println!("pd: vbus: {:?}mV", get_vbus_mv(i2c));
+
+            // Negotiation is done but some bricks will cut power (Apple) if we don't continue
+            // GoodCRC-ing messages. In order to do that we must continue to clear the TCPC's
+            // interrupts so it can keep reading in data into its buffer.
+
+            // Wipe out any pending alerts just in case
+            write_reg(i2c, Register::AlertL, &0xFF);
+
+            fusb_int.clear_interrupt();
+            fusb_int.listen(Event::FallingEdge);
+            return;
         }
     }
 }
 
-fn _get_vbus_mv(i2c: &mut I2C<'_, I2C0>) -> u32 {
+// See blurb in establish_pd_contract()
+pub fn run(i2c: &mut I2C<'_, I2C0>) {
+    if INTERRUPT_PENDING.load(Ordering::Relaxed) {
+        write_reg(i2c, Register::AlertL, &0xFF);
+        INTERRUPT_PENDING.store(false, Ordering::Relaxed);
+    }
+}
+
+fn get_vbus_mv(i2c: &mut I2C<'_, I2C0>) -> u32 {
     let mut vbus: u16 = 0;
     vbus.as_bytes_mut()[0] = read_reg(i2c, Register::VbusVoltageL);
     vbus.as_bytes_mut()[1] = read_reg(i2c, Register::VbusVoltageH);

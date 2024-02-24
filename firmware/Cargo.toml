@@ -13,3 +13,12 @@ esp-alloc = { version = "0.3.0" }
 zerocopy = { version = "0.7", features = ["derive"] }
 bitfield = "0.14.0"
 heapless = "0.8.0"
+critical-section = "1.1.2"
+
+[profile.dev]
+opt-level = 0
+debug = "full"
+
+[profile.release]
+opt-level = 0
+debug = "full"

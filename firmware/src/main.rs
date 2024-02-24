@@ -3,19 +3,27 @@
 extern crate alloc;
 
 use esp32c3_hal::{
+    prelude::*,
     clock::{ClockControl, CpuClock},
     i2c::I2C,
-    peripherals::Peripherals,
-    prelude::*,
+    interrupt,
+    peripherals::{Peripherals, Interrupt},
     timer::TimerGroup,
+    gpio::{GpioPin, Input, Floating},
     Delay, Rtc, IO,
 };
 use esp_backtrace as _;
 use esp_println::println;
 
+use critical_section::Mutex;
+use core::cell::RefCell;
+
 mod boost;
 mod tcpc;
 mod usb_pd;
+
+// global reference for int pin so we can clear interrupt
+static FUSB_INTERRUPT_PIN: Mutex<RefCell<Option<GpioPin<Input<Floating>, 7>>>> = Mutex::new(RefCell::new(None));
 
 #[global_allocator]
 static ALLOCATOR: esp_alloc::EspHeap = esp_alloc::EspHeap::empty();
@@ -74,9 +82,32 @@ fn main() -> ! {
     println!("booted!");
 
     let mut boost_enable = io.pins.gpio21.into_push_pull_output();
+    let mut fusb_int = io.pins.gpio7.into_floating_input();
+
+    interrupt::enable(Interrupt::GPIO, interrupt::Priority::Priority3).unwrap();
+
     boost::init(&mut i2c, &mut boost_enable);
     tcpc::init(&mut i2c, &mut delay);
-    tcpc::establish_pd_contract(&mut i2c);
+    tcpc::establish_pd_contract(&mut i2c, &mut fusb_int);
 
-    loop {}
+    // move fusb interrupt pin to global scope
+    critical_section::with(|cs| FUSB_INTERRUPT_PIN.borrow_ref_mut(cs).replace(fusb_int));
+
+    loop {
+        tcpc::run(&mut i2c);
+        // boost::run(&mut i2c);
+    }
+}
+
+#[interrupt]
+fn GPIO() {
+    tcpc::INTERRUPT_PENDING.store(true, core::sync::atomic::Ordering::Relaxed);
+
+    critical_section::with(|cs| {
+        FUSB_INTERRUPT_PIN
+            .borrow_ref_mut(cs)
+            .as_mut()
+            .unwrap()
+            .clear_interrupt();
+    });
 }

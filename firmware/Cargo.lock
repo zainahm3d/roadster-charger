@@ -211,6 +211,7 @@ name = "firmware"
 version = "0.1.0"
 dependencies = [
  "bitfield",
+ "critical-section",
  "esp-alloc",
  "esp-backtrace",
  "esp-println",

@@ -80,7 +80,6 @@ fn main() -> ! {
         &clocks,
     );
 
-    println!("booted!");
 
     let mut boost_enable = io.pins.gpio21.into_push_pull_output();
     let mut fusb_int = io.pins.gpio7.into_floating_input();

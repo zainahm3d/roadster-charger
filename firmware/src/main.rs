@@ -9,16 +9,17 @@ use esp32c3_hal::{
     interrupt,
     peripherals::{Interrupt, Peripherals},
     prelude::*,
+    rmt::TxChannelCreator,
     timer::TimerGroup,
     Delay, Rtc, IO,
 };
 use esp_backtrace as _;
-use esp_println::println;
 
 use core::cell::RefCell;
 use critical_section::Mutex;
 
 mod boost;
+mod led;
 mod tcpc;
 mod usb_pd;
 
@@ -80,6 +81,29 @@ fn main() -> ! {
         &clocks,
     );
 
+    let rmt = esp32c3_hal::rmt::Rmt::new(
+        peripherals.RMT,
+        80u32.MHz(),
+        &mut system.peripheral_clock_control,
+        &clocks,
+    )
+    .unwrap();
+
+    let mut rgb = rmt
+        .channel0
+        .configure(
+            io.pins.gpio3.into_push_pull_output(),
+            esp32c3_hal::rmt::TxChannelConfig {
+                clk_divider: 2,
+                idle_output_level: false,
+                idle_output: true,
+                carrier_modulation: false,
+                carrier_high: 1,
+                carrier_low: 1,
+                carrier_level: false,
+            },
+        )
+        .unwrap();
 
     let mut boost_enable = io.pins.gpio21.into_push_pull_output();
     let mut fusb_int = io.pins.gpio7.into_floating_input();
@@ -88,13 +112,21 @@ fn main() -> ! {
 
     boost::init(&mut i2c, &mut boost_enable);
     tcpc::init(&mut i2c, &mut delay);
-    tcpc::establish_pd_contract(&mut i2c, &mut fusb_int);
+
+    // set PD LED to yellow while attempting to negotiate, red if failed, green if we have a contract
+    rgb = led::set_pixel(rgb, 0, 10, 10, 0);
+    if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int) {
+        _ = led::set_pixel(rgb, 0, 0, 10, 0);
+    } else {
+        _ = led::set_pixel(rgb, 0, 10, 0, 0);
+    }
 
     // move fusb interrupt pin to global scope
     critical_section::with(|cs| FUSB_INTERRUPT_PIN.borrow_ref_mut(cs).replace(fusb_int));
 
     loop {
         tcpc::run(&mut i2c);
+        // delay.delay_ms(5u32);
         // boost::run(&mut i2c);
     }
 }

@@ -216,6 +216,7 @@ dependencies = [
  "esp-backtrace",
  "esp-println",
  "esp32c3-hal",
+ "fugit",
  "heapless",
  "zerocopy",
 ]

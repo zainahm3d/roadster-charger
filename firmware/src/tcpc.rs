@@ -134,7 +134,7 @@ pub fn init(i2c: &mut I2C<'_, I2C0>, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Input<Floating>, 7>) {
+pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Input<Floating>, 7>) -> bool {
     let timeout = 5 * SystemTimer::TICKS_PER_SECOND;
     let mut last_message_tick = SystemTimer::now();
 
@@ -148,7 +148,7 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Inp
                 break; // got a message
             } else if SystemTimer::now() > last_message_tick + timeout {
                 println!("pd: negotiation timed out");
-                return;
+                return false;
             }
         }
 
@@ -176,7 +176,7 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0>, fusb_int: &mut GpioPin<Inp
 
             fusb_int.clear_interrupt();
             fusb_int.listen(Event::FallingEdge);
-            return;
+            return true;
         }
     }
 }

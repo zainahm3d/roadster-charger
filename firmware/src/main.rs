@@ -114,11 +114,15 @@ fn main() -> ! {
     tcpc::init(&mut i2c, &mut delay);
 
     // set PD LED to yellow while attempting to negotiate, red if failed, green if we have a contract
-    rgb = led::set_pixel(rgb, 0, 10, 10, 0);
+    rgb = led::set_pixel(rgb, 0, 20, 20, 0);
+    rgb = led::set_pixel(rgb, 1, 20, 20, 0);
+
     if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int) {
-        _ = led::set_pixel(rgb, 0, 0, 10, 0);
+        rgb = led::set_pixel(rgb, 0, 0, 20, 5);
+        _ = led::set_pixel(rgb, 1, 0, 20, 5);
     } else {
-        _ = led::set_pixel(rgb, 0, 10, 0, 0);
+        rgb = led::set_pixel(rgb, 0, 20, 0, 0);
+        _ = led::set_pixel(rgb, 1, 20, 0, 0);
     }
 
     // move fusb interrupt pin to global scope
@@ -126,7 +130,6 @@ fn main() -> ! {
 
     loop {
         tcpc::run(&mut i2c);
-        // delay.delay_ms(5u32);
         // boost::run(&mut i2c);
     }
 }

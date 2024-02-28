@@ -1,7 +1,7 @@
 // Interface over i2c to the FUSB307B USB-PD type C port controller
 
 use core::panic;
-use core::sync::atomic::{AtomicBool, Ordering};
+use core::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 
 use bitfield::bitfield;
 use esp32c3_hal::gpio::*;
@@ -19,6 +19,9 @@ const ADDRESS: u8 = 0x50;
 const BUF_SIZE: usize = 28; // for both tx and rx buffers
 
 pub static INTERRUPT_PENDING: AtomicBool = AtomicBool::new(false);
+
+pub static PDO_CURRENT_MA: AtomicU32 = AtomicU32::new(0);
+pub static PDO_VOLTAGE_MV: AtomicU32 = AtomicU32::new(0);
 
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum PDState {
@@ -40,6 +43,8 @@ pub fn run_state_machine(
     static mut STATE: PDState = PDState::WaitingForSourceCaps;
     let msg_type = rx_header.message_type();
     let is_ctrl_msg = rx_header.num_data_objects() == 0;
+    let mut pdo: &usb_pd::FixedSupplyPDO= &usb_pd::FixedSupplyPDO(0);
+
     unsafe {
         match STATE {
             PDState::WaitingForSourceCaps => {
@@ -47,7 +52,7 @@ pub fn run_state_machine(
                     println!("pd: source capabilities recieved");
                     let pdos = parse_pdos(rx_header, rx_buffer);
                     let index = select_pdo_index(&pdos).unwrap() as u32;
-                    let pdo = &pdos[index as usize];
+                    pdo = &pdos[index as usize];
                     request_pdo_index(i2c, index, &pdos);
                     println!(
                         "pd: requested {:?}mV @ {:?}mA",
@@ -67,6 +72,9 @@ pub fn run_state_machine(
 
             PDState::WaitingForPsRdy => {
                 if is_ctrl_msg && msg_type == usb_pd::ControlMessage::PsRdy as u16 {
+                    PDO_CURRENT_MA.store(pdo.current_ma(), Ordering::Relaxed);
+                    PDO_VOLTAGE_MV.store(pdo.voltage_mv(), Ordering::Relaxed);
+
                     println!("pd: psu ready");
                     STATE = PDState::NegotiationComplete;
                 }

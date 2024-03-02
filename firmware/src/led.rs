@@ -25,7 +25,7 @@ pub fn set_pixel(channel: Channel0<0>, pixel: u8, r: u8, g: u8, b: u8) -> Channe
 
 fn update(channel: Channel0<0>) -> Channel0<0> {
     // We need to wait >50us between updates to trigger a new "frame"
-    const MIN_UPDATE_INTERVAL: u64 = 50 * SystemTimer::TICKS_PER_SECOND / 1_000_000;
+    const MIN_UPDATE_INTERVAL: u64 = 70 * SystemTimer::TICKS_PER_SECOND / 1_000_000;
     static mut LAST_UPDATE_TIME: u64 = 0;
 
     // todo: use fugit for this
@@ -70,7 +70,6 @@ fn update(channel: Channel0<0>) -> Channel0<0> {
     pulse_train.last_mut().unwrap().length2 = 0; // signal end of transaction
 
     unsafe {
-        // delay up to 50us if we've recently updated the pixels
         while SystemTimer::now() - LAST_UPDATE_TIME < MIN_UPDATE_INTERVAL {}
     }
 

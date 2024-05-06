@@ -1,19 +1,17 @@
 #![no_std]
 #![no_main]
-extern crate alloc;
 
-use esp32c3_hal::{
+use esp_backtrace as _;
+use esp_hal::{
     clock::{ClockControl, CpuClock},
-    gpio::{Floating, GpioPin, Input},
+    delay::Delay,
+    gpio::{Floating, GpioPin, Input, IO},
     i2c::I2C,
-    interrupt,
-    peripherals::{Interrupt, Peripherals},
+    interrupt::Priority,
+    peripherals::Peripherals,
     prelude::*,
     rmt::TxChannelCreator,
-    timer::TimerGroup,
-    Delay, Rtc, IO,
 };
-use esp_backtrace as _;
 
 use core::cell::RefCell;
 use critical_section::Mutex;
@@ -27,73 +25,31 @@ mod usb_pd;
 static FUSB_INTERRUPT_PIN: Mutex<RefCell<Option<GpioPin<Input<Floating>, 7>>>> =
     Mutex::new(RefCell::new(None));
 
-#[global_allocator]
-static ALLOCATOR: esp_alloc::EspHeap = esp_alloc::EspHeap::empty();
-
-fn init_heap() {
-    const HEAP_SIZE: usize = 32 * 1024;
-
-    extern "C" {
-        static mut _heap_start: u32;
-    }
-
-    unsafe {
-        let heap_start = &core::ptr::addr_of!(_heap_start) as *const _ as usize;
-        ALLOCATOR.init(heap_start as *mut u8, HEAP_SIZE);
-    }
-}
-
 #[entry]
 fn main() -> ! {
-    init_heap();
     let peripherals = Peripherals::take();
-    let mut system = peripherals.SYSTEM.split();
+    let system = peripherals.SYSTEM.split();
     let clocks = ClockControl::configure(system.clock_control, CpuClock::Clock160MHz).freeze();
-    let io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
-
-    // Disable the RTC and TIMG watchdog timers
-    let mut rtc = Rtc::new(peripherals.RTC_CNTL);
-    let timer_group0 = TimerGroup::new(
-        peripherals.TIMG0,
-        &clocks,
-        &mut system.peripheral_clock_control,
-    );
-    let mut wdt0 = timer_group0.wdt;
-    let timer_group1 = TimerGroup::new(
-        peripherals.TIMG1,
-        &clocks,
-        &mut system.peripheral_clock_control,
-    );
-    let mut wdt1 = timer_group1.wdt;
-    rtc.swd.disable();
-    rtc.rwdt.disable();
-    wdt0.disable();
-    wdt1.disable();
-
     let mut delay = Delay::new(&clocks);
+    let mut io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
+    io.set_interrupt_handler(gpio_interrupt_handler);
 
     let mut i2c = I2C::new(
         peripherals.I2C0,
         io.pins.gpio10,
         io.pins.gpio8,
         100u32.kHz(), // TODO: why doesn't 400khz work?
-        &mut system.peripheral_clock_control,
         &clocks,
+        None,
     );
 
-    let rmt = esp32c3_hal::rmt::Rmt::new(
-        peripherals.RMT,
-        80u32.MHz(),
-        &mut system.peripheral_clock_control,
-        &clocks,
-    )
-    .unwrap();
+    let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, 80u32.MHz(), &clocks, None).unwrap();
 
     let mut rgb = rmt
         .channel0
         .configure(
             io.pins.gpio3.into_push_pull_output(),
-            esp32c3_hal::rmt::TxChannelConfig {
+            esp_hal::rmt::TxChannelConfig {
                 clk_divider: 2,
                 idle_output_level: false,
                 idle_output: true,
@@ -107,8 +63,6 @@ fn main() -> ! {
 
     let mut boost_enable = io.pins.gpio21.into_push_pull_output();
     let mut fusb_int = io.pins.gpio7.into_floating_input();
-
-    interrupt::enable(Interrupt::GPIO, interrupt::Priority::Priority3).unwrap();
 
     boost::init(&mut i2c, &mut boost_enable);
     tcpc::init(&mut i2c, &mut delay);
@@ -134,8 +88,8 @@ fn main() -> ! {
     }
 }
 
-#[interrupt]
-fn GPIO() {
+#[handler(priority = "Priority::Priority3")]
+fn gpio_interrupt_handler() {
     tcpc::INTERRUPT_PENDING.store(true, core::sync::atomic::Ordering::Relaxed);
 
     critical_section::with(|cs| {

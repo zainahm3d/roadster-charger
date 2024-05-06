@@ -1,7 +1,8 @@
 // Remote Control Peripheral (RMT) based WS2812b RGB LED driver
 use bitfield::Bit;
-use esp32c3_hal::rmt::{Channel0, PulseCode, TxChannel};
-use esp32c3_hal::systimer::SystemTimer;
+use esp_hal::rmt::{Channel, PulseCode, TxChannel};
+use esp_hal::systimer::SystemTimer;
+use esp_hal::Blocking;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Rgb {
@@ -14,7 +15,13 @@ static mut PIXEL_BUFFER: [Rgb; 2] = [Rgb { r: 0, g: 0, b: 0 }, Rgb { r: 0, g: 0,
 
 // RMT HAL driver consumes RMT instance provided to it and gives it back, we
 // do the same here (til I come up with something better)
-pub fn set_pixel(channel: Channel0<0>, pixel: u8, r: u8, g: u8, b: u8) -> Channel0<0> {
+pub fn set_pixel(
+    channel: Channel<Blocking, 0>,
+    pixel: u8,
+    r: u8,
+    g: u8,
+    b: u8,
+) -> Channel<Blocking, 0> {
     unsafe {
         PIXEL_BUFFER[pixel as usize].r = r as u32;
         PIXEL_BUFFER[pixel as usize].g = g as u32;
@@ -23,7 +30,7 @@ pub fn set_pixel(channel: Channel0<0>, pixel: u8, r: u8, g: u8, b: u8) -> Channe
     update(channel)
 }
 
-fn update(channel: Channel0<0>) -> Channel0<0> {
+fn update(channel: Channel<Blocking, 0>) -> Channel<Blocking, 0> {
     // We need to wait >50us between updates to trigger a new "frame"
     const MIN_UPDATE_INTERVAL: u64 = 70 * SystemTimer::TICKS_PER_SECOND / 1_000_000;
     static mut LAST_UPDATE_TIME: u64 = 0;
@@ -69,9 +76,7 @@ fn update(channel: Channel0<0>) -> Channel0<0> {
 
     pulse_train.last_mut().unwrap().length2 = 0; // signal end of transaction
 
-    unsafe {
-        while SystemTimer::now() - LAST_UPDATE_TIME < MIN_UPDATE_INTERVAL {}
-    }
+    unsafe { while SystemTimer::now() - LAST_UPDATE_TIME < MIN_UPDATE_INTERVAL {} }
 
     let channel = channel.transmit(&pulse_train).wait().unwrap();
     unsafe { LAST_UPDATE_TIME = SystemTimer::now() }

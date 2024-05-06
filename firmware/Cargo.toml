@@ -6,15 +6,22 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-esp32c3-hal = { package = "esp32c3-hal", version = "0.11.0" }
-esp-backtrace = { version = "0.11.0", features = ["esp32c3", "panic-handler", "exception-handler", "println"] }
-esp-println       = { version = "0.9.0", features = ["esp32c3"] }
-esp-alloc = { version = "0.3.0" }
+esp-hal = { version = "0.17.0", features = ["esp32c3"] }
+esp-backtrace = { version = "0.11", features = [
+    "esp32c3",
+    "panic-handler",
+    "exception-handler",
+    "println",
+] }
+esp-println = { version = "0.9.0", features = ["esp32c3"] }
 zerocopy = { version = "0.7", features = ["derive"] }
 bitfield = "0.14.0"
 heapless = "0.8.0"
 critical-section = "1.1.2"
 fugit = "0.3.7"
+portable-atomic = { version = "1.6.0", default-features = false, features = [
+    "require-cas",
+] }
 
 [profile.dev]
 opt-level = 3

@@ -1,8 +1,8 @@
 // Simple LM75B digital temperature sensor interface
 
-use esp32c3_hal::i2c::I2C;
-use esp32c3_hal::peripherals::I2C0;
-use esp32c3_hal::prelude::*;
+use esp_hal::i2c::I2C;
+use esp_hal::peripherals::I2C0;
+use esp_hal::prelude::*;
 use zerocopy::AsBytes;
 
 const ADDRESS: u8 = 0x4F;

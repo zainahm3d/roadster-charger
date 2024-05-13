@@ -173,7 +173,7 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0, Blocking>, fusb_int: &mut G
 
         if state == PDState::NegotiationComplete {
             println!("pd: negotiation complete");
-            println!("pd: vbus: {:?}mV", get_vbus_mv(i2c));
+            println!("pd: vbus: {:?}mV", vbus_mv(i2c));
 
             // Negotiation is done but some bricks will cut power (Apple) if we don't continue
             // GoodCRC-ing messages. In order to do that we must continue to clear the TCPC's
@@ -197,7 +197,7 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>) {
     }
 }
 
-fn get_vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
+fn vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
     let mut vbus: u16 = 0;
     vbus.as_bytes_mut()[0] = read_reg(i2c, Register::VbusVoltageL);
     vbus.as_bytes_mut()[1] = read_reg(i2c, Register::VbusVoltageH);

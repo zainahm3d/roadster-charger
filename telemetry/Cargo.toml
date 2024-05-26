@@ -1,0 +1,10 @@
+[package]
+name = "telemetry"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+chrono = "0.4.38"
+influxdb = { version = "0.7.2", features = ["derive"] }
+serialport = "4.3.0"
+tokio = { version = "1.37.0", features = ["full"] }

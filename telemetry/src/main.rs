@@ -54,6 +54,8 @@ async fn main() {
             let frame = parse_status_line(&line);
             dbg!(&frame);
             frames.push(frame.into_query("roadster"));
+        } else {
+            print!("{}", line); // pass through normal print statements
         }
 
         if frames.len() >= 20 {

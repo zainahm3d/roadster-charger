@@ -2,14 +2,14 @@
 
 use esp_hal::i2c::I2C;
 use esp_hal::peripherals::I2C0;
-use esp_hal::prelude::*;
+use esp_hal::Blocking;
 use zerocopy::AsBytes;
 
 const ADDRESS: u8 = 0x4F;
 
 // Sensor gives us an LSB of 0.5C, throw it away
 // and return 1C precision. -25C to +125C
-pub fn get_board_temp(i2c: &mut I2C<'_, I2C0>) -> i16 {
+pub fn board_temp_c(i2c: &mut I2C<'_, I2C0, Blocking>) -> i16 {
     let mut data: i16 = 0;
     i2c.read(ADDRESS, data.as_bytes_mut()).unwrap();
     data = data.to_be();

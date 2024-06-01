@@ -197,7 +197,7 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>) {
     }
 }
 
-fn vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
+pub fn vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
     let mut vbus: u16 = 0;
     vbus.as_bytes_mut()[0] = read_reg(i2c, Register::VbusVoltageL);
     vbus.as_bytes_mut()[1] = read_reg(i2c, Register::VbusVoltageH);

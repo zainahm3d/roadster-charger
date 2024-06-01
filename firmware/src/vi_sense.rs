@@ -23,15 +23,26 @@ pub fn run(
     input_i_sense: &mut AdcPin<GpioPin<Analog, 4>, ADC1, AdcCalCurve<ADC1>>,
 ) {
     // since ADC channels have been calibrated, the HAL returns readings in mV
-    let v_mv: u16 = nb::block!(adc1_instance.read_oneshot(v_sense)).unwrap();
-    let i_mv: u16 = nb::block!(adc1_instance.read_oneshot(i_sense)).unwrap();
-    let input_i_mv: u16 = nb::block!(adc1_instance.read_oneshot(input_i_sense)).unwrap();
+    let mut v_mv: u32 = 0;
+    let mut i_mv: u32 = 0;
+    let mut input_i_mv: u32 = 0;
+
+    let num_samples = 50;
+    for _ in 0..num_samples {
+        v_mv += nb::block!(adc1_instance.read_oneshot(v_sense)).unwrap() as u32;
+        i_mv += nb::block!(adc1_instance.read_oneshot(i_sense)).unwrap() as u32;
+        input_i_mv += nb::block!(adc1_instance.read_oneshot(input_i_sense)).unwrap() as u32;
+    }
+
+    v_mv /= num_samples;
+    i_mv /= num_samples;
+    input_i_mv /= num_samples;
 
     // safety: this is the only place we write to VI_DATA
     unsafe {
-        VI_DATA.input_current_ma = input_i_mv as u32 / 2; // 0.5mV per mA
+        VI_DATA.input_current_ma = input_i_mv as u32 * 2; // 0.5mV per mA
         VI_DATA.output_current_ma = i_mv as u32; // 1 mV per mA
-        VI_DATA.battery_voltage_mv = v_mv as u32 * 50; // 50mV / V
+        VI_DATA.battery_voltage_mv = v_mv as u32 * 16;
     }
 }
 

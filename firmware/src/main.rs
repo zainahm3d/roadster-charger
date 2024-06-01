@@ -20,8 +20,10 @@ use core::cell::RefCell;
 use critical_section::Mutex;
 
 mod boost;
+mod charger;
 mod led;
 mod tcpc;
+mod temp_sense;
 mod usb_pd;
 mod vi_sense;
 
@@ -107,6 +109,8 @@ fn main() -> ! {
     loop {
         vi_sense::run(&mut adc1, &mut v_sense, &mut i_sense, &mut input_i_sense);
         tcpc::run(&mut i2c);
+        boost::run();
+        charger::run(&mut i2c, &mut boost_enable);
     }
 }
 

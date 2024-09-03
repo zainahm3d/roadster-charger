@@ -1,7 +1,7 @@
 use esp_hal::gpio::*;
 use esp_hal::i2c::I2C;
 use esp_hal::peripherals::I2C0;
-use esp_hal::systimer::SystemTimer;
+use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::Blocking;
 use esp_println::println;
 
@@ -10,7 +10,6 @@ use crate::tcpc;
 use crate::vi_sense;
 use crate::temp_sense;
 
-const UPDATE_INTERVAL: u64 = SystemTimer::TICKS_PER_SECOND / 10;
 const CHARGING_TARGET_MV: u32 = 41_500;
 const CHARGING_CURRENT_MA: u32 = 500;
 
@@ -75,14 +74,14 @@ static mut CONTROLLER: ChargeController = ChargeController {
 };
 
 // todo: LED control
-pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut GpioPin<Output<PushPull>, 21>) {
+pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
     static mut LAST_UPDATE_TIME: u64 = 0;
 
     // Safety: none of the statics here are touched by any interrupts,
     // and run() is only called from the main loop + not reentrant.
     unsafe {
         let now = SystemTimer::now();
-        if now - LAST_UPDATE_TIME >= UPDATE_INTERVAL {
+        if now - LAST_UPDATE_TIME >= SystemTimer::ticks_per_second() / 10 {
             LAST_UPDATE_TIME = now;
 
             match CONTROLLER.system_state {
@@ -133,7 +132,7 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut GpioPin<Output<Pu
 
 fn update_output(
     i2c: &mut I2C<'_, I2C0, Blocking>,
-    enable_pin: &mut GpioPin<Output<PushPull>, 21>,
+    enable_pin: &mut AnyOutput,
 ) {
     // todo: better access to controller so we can remove this huge unsafe block
     unsafe {

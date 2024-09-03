@@ -13,8 +13,8 @@ static TARGET_MV: AtomicU16 = AtomicU16::new(0);
 
 use crate::{tcpc, vi_sense};
 
-pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut GpioPin<Output<PushPull>, 21>) {
-    enable_pin.set_output_high(false);
+pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
+    enable_pin.set_low();
 
     // Set internal reference to 1.25V
     let mut gain = Gain(0x00);
@@ -37,7 +37,7 @@ pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut GpioPin<Output<P
 // TODO: no floats
 pub fn set_voltage_mv(
     i2c: &mut I2C<'_, I2C0, Blocking>,
-    enable_pin: &mut GpioPin<Output<PushPull>, 21>,
+    enable_pin: &mut AnyOutput,
     mut voltage_mv: u16,
 ) {
     voltage_mv = voltage_mv.clamp(0, 42_000);
@@ -45,7 +45,7 @@ pub fn set_voltage_mv(
 
     // If we're turning the output off, make sure it turns off by flipping the pin
     if voltage_mv == 0 {
-        enable_pin.set_output_high(false);
+        enable_pin.set_low();
     }
 
     // 2^14 * (1.20 / 1.25) (DAC full scale output is 1.25V)
@@ -63,7 +63,11 @@ pub fn set_voltage_mv(
     )
     .unwrap();
 
-    enable_pin.set_output_high(voltage_mv != 0);
+    if voltage_mv == 0 {
+        enable_pin.set_low();
+    } else {
+        enable_pin.set_high();
+    }
 }
 
 pub fn run() {

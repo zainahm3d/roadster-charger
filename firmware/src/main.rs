@@ -3,20 +3,19 @@
 
 use esp_backtrace as _;
 use esp_hal::{
-    analog::adc::Attenuation::*,
-    analog::adc::*,
+    analog::adc::{Attenuation::*, *},
     clock::{ClockControl, CpuClock},
     delay::Delay,
-    gpio::{Analog, Floating, GpioPin, Input, IO},
+    gpio::{self, AnyInput, GpioPin, Io},
     i2c::I2C,
     interrupt::Priority,
-    peripherals::Peripherals,
-    peripherals::ADC1,
+    peripherals::{Peripherals, ADC1},
     prelude::*,
     rmt::TxChannelCreator,
+    system::SystemControl,
 };
 
-use core::cell::RefCell;
+use core::{cell::RefCell, panic};
 use critical_section::Mutex;
 
 mod boost;
@@ -28,15 +27,14 @@ mod usb_pd;
 mod vi_sense;
 
 // global reference for int pin so we can clear interrupt
-static FUSB_INTERRUPT_PIN: Mutex<RefCell<Option<GpioPin<Input<Floating>, 7>>>> =
-    Mutex::new(RefCell::new(None));
+static FUSB_INTERRUPT_PIN: Mutex<RefCell<Option<AnyInput>>> = Mutex::new(RefCell::new(None));
 
 #[entry]
 fn main() -> ! {
     let peripherals = Peripherals::take();
-    let system = peripherals.SYSTEM.split();
+    let system = SystemControl::new(peripherals.SYSTEM);
     let clocks = ClockControl::configure(system.clock_control, CpuClock::Clock160MHz).freeze();
-    let mut io = IO::new(peripherals.GPIO, peripherals.IO_MUX);
+    let mut io = Io::new(peripherals.GPIO, peripherals.IO_MUX);
     let mut delay = Delay::new(&clocks);
     io.set_interrupt_handler(gpio_interrupt_handler);
 
@@ -46,15 +44,14 @@ fn main() -> ! {
         io.pins.gpio8,
         100u32.kHz(), // TODO: why doesn't 400khz work?
         &clocks,
-        None,
     );
 
-    let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, 80u32.MHz(), &clocks, None).unwrap();
+    let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, 80u32.MHz(), &clocks).unwrap();
 
     let mut rgb = rmt
         .channel0
         .configure(
-            io.pins.gpio3.into_push_pull_output(),
+            io.pins.gpio3,
             esp_hal::rmt::TxChannelConfig {
                 clk_divider: 2,
                 idle_output_level: false,
@@ -69,23 +66,16 @@ fn main() -> ! {
 
     // voltage and current sense // todo: cleanup / move into another file?
     let mut adc1_config = AdcConfig::new();
-    let mut v_sense = adc1_config.enable_pin_with_cal::<GpioPin<Analog, 1>, AdcCalCurve<ADC1>>(
-        io.pins.gpio1.into_analog(),
-        Attenuation11dB,
-    );
-    let mut i_sense = adc1_config.enable_pin_with_cal::<GpioPin<Analog, 0>, AdcCalCurve<ADC1>>(
-        io.pins.gpio0.into_analog(),
-        Attenuation11dB,
-    );
+    let mut v_sense = adc1_config
+        .enable_pin_with_cal::<GpioPin<1>, AdcCalCurve<ADC1>>(io.pins.gpio1, Attenuation11dB);
+    let mut i_sense = adc1_config
+        .enable_pin_with_cal::<GpioPin<0>, AdcCalCurve<ADC1>>(io.pins.gpio0, Attenuation11dB);
     let mut input_i_sense = adc1_config
-        .enable_pin_with_cal::<GpioPin<Analog, 4>, AdcCalCurve<ADC1>>(
-            io.pins.gpio4.into_analog(),
-            Attenuation11dB,
-        );
-    let mut adc1 = ADC::<ADC1>::new(peripherals.ADC1, adc1_config);
+        .enable_pin_with_cal::<GpioPin<4>, AdcCalCurve<ADC1>>(io.pins.gpio4, Attenuation11dB);
+    let mut adc1 = Adc::<ADC1>::new(peripherals.ADC1, adc1_config);
 
-    let mut boost_enable = io.pins.gpio21.into_push_pull_output();
-    let mut fusb_int = io.pins.gpio7.into_floating_input();
+    let mut boost_enable = gpio::AnyOutput::new(io.pins.gpio21, gpio::Level::Low);
+    let mut fusb_int = gpio::AnyInput::new(io.pins.gpio7, gpio::Pull::None);
 
     boost::init(&mut i2c, &mut boost_enable);
     tcpc::init(&mut i2c, &mut delay);
@@ -100,7 +90,7 @@ fn main() -> ! {
     } else {
         rgb = led::set_pixel(rgb, 0, 20, 0, 0);
         _ = led::set_pixel(rgb, 1, 20, 0, 0);
-        loop {} // no pd no charging
+        panic!("failed to establish PD contract");
     }
 
     // move fusb interrupt pin to global scope

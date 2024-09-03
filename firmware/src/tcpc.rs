@@ -8,7 +8,7 @@ use esp_hal::gpio::*;
 use esp_hal::i2c::I2C;
 use esp_hal::Blocking;
 use esp_hal::peripherals::I2C0;
-use esp_hal::systimer::SystemTimer;
+use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::delay::Delay;
 use esp_println::println;
 use zerocopy::AsBytes;
@@ -142,8 +142,8 @@ pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0, Blocking>, fusb_int: &mut GpioPin<Input<Floating>, 7>) -> bool {
-    let timeout = 5 * SystemTimer::TICKS_PER_SECOND;
+pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0, Blocking>, fusb_int: &mut AnyInput) -> bool {
+    let timeout = 5 * SystemTimer::ticks_per_second();
     let mut last_message_tick = SystemTimer::now();
 
     loop {

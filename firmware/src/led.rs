@@ -1,7 +1,7 @@
 // Remote Control Peripheral (RMT) based WS2812b RGB LED driver
 use bitfield::Bit;
 use esp_hal::rmt::{Channel, PulseCode, TxChannel};
-use esp_hal::systimer::SystemTimer;
+use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::Blocking;
 
 #[derive(Debug, Clone, Copy)]
@@ -31,8 +31,8 @@ pub fn set_pixel(
 }
 
 fn update(channel: Channel<Blocking, 0>) -> Channel<Blocking, 0> {
-    // We need to wait >50us between updates to trigger a new "frame"
-    const MIN_UPDATE_INTERVAL: u64 = 70 * SystemTimer::TICKS_PER_SECOND / 1_000_000;
+    // We need to wait >70us between updates to trigger a new "frame"
+    let min_update_interval: u64 = 70 * SystemTimer::ticks_per_second() / 1_000_000;
     static mut LAST_UPDATE_TIME: u64 = 0;
 
     // todo: use fugit for this
@@ -76,7 +76,7 @@ fn update(channel: Channel<Blocking, 0>) -> Channel<Blocking, 0> {
 
     pulse_train.last_mut().unwrap().length2 = 0; // signal end of transaction
 
-    unsafe { while SystemTimer::now() - LAST_UPDATE_TIME < MIN_UPDATE_INTERVAL {} }
+    unsafe { while SystemTimer::now() - LAST_UPDATE_TIME < min_update_interval {} }
 
     let channel = channel.transmit(&pulse_train).wait().unwrap();
     unsafe { LAST_UPDATE_TIME = SystemTimer::now() }

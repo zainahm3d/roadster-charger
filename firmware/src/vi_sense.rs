@@ -17,10 +17,10 @@ static mut VI_DATA: ViData = ViData {
 };
 
 pub fn run(
-    adc1_instance: &mut ADC<ADC1>,
-    v_sense: &mut AdcPin<GpioPin<Analog, 1>, ADC1, AdcCalCurve<ADC1>>,
-    i_sense: &mut AdcPin<GpioPin<Analog, 0>, ADC1, AdcCalCurve<ADC1>>,
-    input_i_sense: &mut AdcPin<GpioPin<Analog, 4>, ADC1, AdcCalCurve<ADC1>>,
+    adc1_instance: &mut Adc<ADC1>,
+    v_sense: &mut AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
+    i_sense: &mut AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
+    input_i_sense: &mut AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
 ) {
     // since ADC channels have been calibrated, the HAL returns readings in mV
     let mut v_mv: u32 = 0;
@@ -40,9 +40,9 @@ pub fn run(
 
     // safety: this is the only place we write to VI_DATA
     unsafe {
-        VI_DATA.input_current_ma = input_i_mv as u32 * 2; // 0.5mV per mA
-        VI_DATA.output_current_ma = i_mv as u32; // 1 mV per mA
-        VI_DATA.battery_voltage_mv = v_mv as u32 * 16;
+        VI_DATA.input_current_ma = input_i_mv * 2; // 0.5mV per mA
+        VI_DATA.output_current_ma = i_mv; // 1 mV per mA
+        VI_DATA.battery_voltage_mv = v_mv * 16;
     }
 }
 

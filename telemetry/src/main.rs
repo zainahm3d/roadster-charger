@@ -16,10 +16,6 @@ struct ChargeController {
     target_ma: u32,
     target_mv: u32,
 
-    p_gain: i32,
-    p_error: i32,
-    p_term: i32,
-
     input_mv: u32,
     input_ma: u32,
 
@@ -91,7 +87,7 @@ fn find_port() -> Option<String> {
 }
 
 // This parser is temporary- future works includes sending the bare struct from the charger
-// instead of a stringified form like this.
+// instead of a stringified form like this. Readable info is good for debugging right now.
 fn parse_status_line(line: &str) -> ChargeController {
     let mut status = ChargeController {
         time: chrono::Utc::now(),
@@ -105,10 +101,6 @@ fn parse_status_line(line: &str) -> ChargeController {
 
         target_ma: 0,
         target_mv: 0,
-
-        p_gain: 0,
-        p_error: 0,
-        p_term: 0,
 
         input_mv: 0,
         input_ma: 0,
@@ -133,9 +125,6 @@ fn parse_status_line(line: &str) -> ChargeController {
             "tick" => status.tick = value.parse().unwrap(),
             "target_ma" => status.target_ma = value.parse().unwrap(),
             "target_mv" => status.target_mv = value.parse().unwrap(),
-            "p_gain" => status.p_gain = value.parse().unwrap(),
-            "p_error" => status.p_error = value.parse().unwrap(),
-            "p_term" => status.p_term = value.parse().unwrap(),
             "input_mv" => status.input_mv = value.parse().unwrap(),
             "input_ma" => status.input_ma = value.parse().unwrap(),
             "output_mv" => status.output_mv = value.parse().unwrap(),

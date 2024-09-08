@@ -86,12 +86,15 @@ pub fn run() {
     {
         println!("Boost inactive, disconnect load!");
         // TODO: set LEDs flashing red
-    } else if target_mv.abs_diff(actual_mv) >= 1_000 {
-        // Ensure the actual output voltage is within 1 volt of target during normal operation
+    } else if target_mv.abs_diff(actual_mv) >= 1_000
+        && target_mv < tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed)
+    {
+        // We expect output voltage to equal VBUS voltage minus ~1V even when the boost is disabled
+        // when no battery is connected.
         println!(
             "Boost voltage strayed from target! Target: {}mv, Actual: {}mv",
             target_mv, actual_mv
-        );
+        )
     }
 }
 

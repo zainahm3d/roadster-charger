@@ -35,7 +35,6 @@ fn update(channel: Channel<Blocking, 0>) -> Channel<Blocking, 0> {
     let min_update_interval: u64 = 70 * SystemTimer::ticks_per_second() / 1_000_000;
     static mut LAST_UPDATE_TIME: u64 = 0;
 
-    // todo: use fugit for this
     let ns_per_tick = 25;
     let t0 = PulseCode {
         level1: true,

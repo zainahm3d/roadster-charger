@@ -80,10 +80,7 @@ fn main() -> ! {
     boost::init(&mut i2c, &mut boost_enable);
     tcpc::init(&mut i2c, &mut delay);
 
-    // set PD LED to yellow while attempting to negotiate, red if failed, cyan if we have a contract
-    rgb = led::set_pixel(rgb, 0, 20, 20, 0);
-    rgb = led::set_pixel(rgb, 1, 20, 20, 0);
-
+    // set PD LED to cyan if we have a contract, red if failed
     if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int) {
         rgb = led::set_pixel(rgb, 0, 0, 20, 5);
         _ = led::set_pixel(rgb, 1, 0, 20, 5);

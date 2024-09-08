@@ -7,11 +7,15 @@ use esp_println::println;
 
 use crate::boost;
 use crate::tcpc;
-use crate::vi_sense;
 use crate::temp_sense;
+use crate::vi_sense;
 
 const CHARGING_TARGET_MV: u32 = 41_500;
-const CHARGING_CURRENT_MA: u32 = 500;
+const CHARGING_CURRENT_MA: u32 = 750;
+
+// 75mA per parallel string
+const CHARGING_CUTOFF_CV_MA: u32 = 150;
+const MIN_BATTERY_VOLTAGE_MV: u32 = 28_000;
 
 #[derive(Debug)]
 enum State {
@@ -41,10 +45,6 @@ struct ChargeController {
     target_ma: u32,
     target_mv: u32,
 
-    p_gain: i32,
-    p_error: i32,
-    p_term: i32,
-
     input_mv: u32,
     input_ma: u32,
 
@@ -62,10 +62,6 @@ static mut CONTROLLER: ChargeController = ChargeController {
 
     target_ma: 0,
     target_mv: 0,
-
-    p_gain: 10, // 1mV / 10mA
-    p_error: 0,
-    p_term: 0,
 
     input_mv: 0,
     input_ma: 0,
@@ -88,7 +84,9 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
                 State::NoBattery => {
                     println!("charger: no battery");
                     let battery_voltage = vi_sense::battery_voltage_mv();
-                    if battery_voltage > 28_000 && battery_voltage < CHARGING_TARGET_MV {
+                    if battery_voltage > MIN_BATTERY_VOLTAGE_MV
+                        && battery_voltage < CHARGING_TARGET_MV
+                    {
                         // battery is connected and not under/over voltage
                         // todo: decide charge current based on PD source caps
                         CONTROLLER.system_state = State::ChargingCC;
@@ -107,10 +105,9 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
 
                 State::ChargingCV => {
                     println!("charger: charging cv");
-                    if vi_sense::output_current_ma() <= 150 {
+                    if vi_sense::output_current_ma() <= CHARGING_CUTOFF_CV_MA {
                         CONTROLLER.system_state = State::ChargingComplete;
                     } else {
-                        // todo: configurable charge voltage target
                         CONTROLLER.target_mv = CHARGING_TARGET_MV;
                         CONTROLLER.charger_mode = ChargerMode::ConstantVoltage;
                     }
@@ -118,23 +115,19 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
 
                 State::ChargingComplete => {
                     println!("charger: charging complete");
-                    if vi_sense::battery_voltage_mv() < 10_000 {
+                    if vi_sense::battery_voltage_mv() < MIN_BATTERY_VOLTAGE_MV {
                         CONTROLLER.system_state = State::NoBattery;
                     } else {
                         CONTROLLER.charger_mode = ChargerMode::Disabled;
                     }
                 }
             }
-            update_output(i2c, enable_pin); // todo: make this safe
+            update_output(i2c, enable_pin);
         }
     }
 }
 
-fn update_output(
-    i2c: &mut I2C<'_, I2C0, Blocking>,
-    enable_pin: &mut AnyOutput,
-) {
-    // todo: better access to controller so we can remove this huge unsafe block
+fn update_output(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
     unsafe {
         CONTROLLER.board_temp_c = temp_sense::board_temp_c(i2c);
         CONTROLLER.input_mv = tcpc::vbus_mv(i2c);
@@ -146,31 +139,27 @@ fn update_output(
         CONTROLLER.tick = CONTROLLER.tick.wrapping_add(1);
 
         match CONTROLLER.charger_mode {
-            // todo: there's too much typecasting here
+            // integrating controller
             ChargerMode::ConstantCurrent => {
-                CONTROLLER.p_error = CONTROLLER.target_ma as i32 - CONTROLLER.output_ma as i32;
-                CONTROLLER.p_term = CONTROLLER.p_error * CONTROLLER.p_gain;
-
-                // Cap the P term so that it can't drive target voltage below 0v or above charging target
-                if (CONTROLLER.p_term + CONTROLLER.target_mv as i32) < 0 {
-                    CONTROLLER.p_term = -(CONTROLLER.target_mv as i32);
-                } else if CHARGING_TARGET_MV as i32 - CONTROLLER.p_term < 0 {
-                    // CONTROLLER.p_term = CONTROLLER.target_mv as i32 - CHARGING_TARGET_MV as i32; // wrong
+                // positive error_ma means we need more current
+                let error_ma: i32 = CONTROLLER.target_ma as i32 - CONTROLLER.output_ma as i32;
+                if error_ma > 100 {
+                    CONTROLLER.target_mv += 100;
+                } else if error_ma < -100 {
+                    CONTROLLER.target_mv -= 100;
+                } else if error_ma > 1 {
+                    CONTROLLER.target_mv += 1;
+                } else if error_ma < 1 {
+                    CONTROLLER.target_mv -= 1;
                 }
-
-                // The above checks guarentee that this value is between [0, CHARGING_TARGET_MV]
-                let new_target = CONTROLLER.target_mv as i32 + CONTROLLER.p_term;
-                assert!(new_target >= 0, "controller target less than 0mV");
-                assert!(
-                    new_target <= CHARGING_TARGET_MV as i32,
-                    "controller target greater than charge target voltage"
-                );
-                CONTROLLER.target_mv = new_target as u32;
+                CONTROLLER.target_mv = CONTROLLER
+                    .target_mv
+                    .clamp(MIN_BATTERY_VOLTAGE_MV, CHARGING_TARGET_MV);
                 boost::set_voltage_mv(i2c, enable_pin, CONTROLLER.target_mv as u16);
             }
 
             ChargerMode::ConstantVoltage => {
-                // todo: we likely need to also look at the measured voltage at the battery
+                // todo: need to look at the measured voltage at the battery
                 boost::set_voltage_mv(i2c, enable_pin, CONTROLLER.target_mv as u16);
             }
 

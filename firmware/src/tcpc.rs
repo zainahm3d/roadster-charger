@@ -4,12 +4,12 @@ use core::panic;
 use core::sync::atomic::{AtomicBool, AtomicU32, Ordering};
 
 use bitfield::bitfield;
+use esp_hal::delay::Delay;
 use esp_hal::gpio::*;
 use esp_hal::i2c::I2C;
-use esp_hal::Blocking;
 use esp_hal::peripherals::I2C0;
 use esp_hal::timer::systimer::SystemTimer;
-use esp_hal::delay::Delay;
+use esp_hal::Blocking;
 use esp_println::println;
 use zerocopy::AsBytes;
 
@@ -43,7 +43,7 @@ pub fn run_state_machine(
     static mut STATE: PDState = PDState::WaitingForSourceCaps;
     let msg_type = rx_header.message_type();
     let is_ctrl_msg = rx_header.num_data_objects() == 0;
-    let mut pdo: &usb_pd::FixedSupplyPDO= &usb_pd::FixedSupplyPDO(0);
+    let mut pdo: &usb_pd::FixedSupplyPDO = &usb_pd::FixedSupplyPDO(0);
 
     unsafe {
         match STATE {
@@ -275,7 +275,11 @@ pub fn request_pdo_index(
 
 // Take a mutable pointer to the message header so we can fill in the message ID and PD rev
 // Block write the entire 28 byte TX buffer in one i2c transaction
-fn transmit_message(i2c: &mut I2C<'_, I2C0, Blocking>, tx_header: &mut usb_pd::MessageHeader, data: &[u8]) {
+fn transmit_message(
+    i2c: &mut I2C<'_, I2C0, Blocking>,
+    tx_header: &mut usb_pd::MessageHeader,
+    data: &[u8],
+) {
     // 3 bit, needs to roll over @ 0b111
     static mut MESSAGE_ID: u16 = 0;
 

@@ -13,11 +13,11 @@ jobs:
 
     steps:
       - name: Check out repository code  # needs to be first for working-directory to succeed
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install KiCad
         run: |
-          sudo add-apt-repository --yes ppa:kicad/kicad-7.0-releases
+          sudo add-apt-repository --yes ppa:kicad/kicad-8.0-releases
           sudo apt update
           sudo apt install --install-recommends kicad
 
@@ -40,12 +40,10 @@ jobs:
           for file in *.kicad_pcb; do kicad-cli pcb export pdf --layers F.Cu,In1.Cu,In2.Cu,B.Cu,B.SilkS,B.SilkS,Edge.Cuts --output output/pcb-pdf/$(basename "$file" .kicad_pcb).pdf "$file"; done
           for file in *.kicad_pcb; do kicad-cli pcb export pdf --layers F.Fab,B.Fab,Edge.Cuts --output output/pcb-pdf/$(basename "$file" .kicad_pcb)-fab.pdf "$file"; done
 
-      # --board-plot-params doesn't seem to work, should work after:
-      #  https://gitlab.com/kicad/code/kicad/-/issues/15634
       - name: Export gerbers
         run: |
           mkdir -p output/gerbers
-          kicad-cli pcb export gerbers --board-plot-params --output output/gerbers --layers F.Cu,In1.Cu,In2.Cu,B.Cu,B.Paste,F.Paste,B.SilkS,F.SilkS,B.Mask,F.Mask,Edge.Cuts,B.Fab,F.Fab --precision 6 *.kicad_pcb
+          kicad-cli pcb export gerbers --board-plot-params --output output/gerbers --precision 6 *.kicad_pcb
 
       # This task includes a trailing slash on the output directory due to a kicad-cli bug.
       - name: Export drill
@@ -65,7 +63,7 @@ jobs:
 
       # This step does not respect working-directory
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: artifacts
           path: ./hardware/roadster-charger/output

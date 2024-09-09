@@ -1,6 +1,8 @@
 name: KiCad Export
 run-name: KiCad Export 🚀
-on: [push]
+on:
+  push:
+    paths: ['hardware/**']
 
 defaults:
   run:
@@ -65,5 +67,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: artifacts
+          name: hardware
           path: ./hardware/roadster-charger/output

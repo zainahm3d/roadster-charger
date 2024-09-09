@@ -1,0 +1,31 @@
+name: Build Firmware
+run-name: Build Firmware 🏎️
+on:
+  push:
+    paths: ['firmware/**']
+
+defaults:
+  run:
+    working-directory:
+      ./firmware/
+
+jobs:
+  build-firmware:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository code  # needs to be first for working-directory to succeed
+        uses: actions/checkout@v4
+
+      - name: Setup rust
+        run: rustup toolchain install nightly --profile minimal --target riscv32imc-unknown-none-elf
+
+      - name: Build firmware
+        run: cargo build --release
+
+      # This step does not respect working-directory
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: ./firmware/target/riscv32imc-unknown-none-elf/release/firmware

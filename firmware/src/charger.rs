@@ -108,7 +108,6 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
                     if vi_sense::output_current_ma() <= CHARGING_CUTOFF_CV_MA {
                         CONTROLLER.system_state = State::ChargingComplete;
                     } else {
-                        CONTROLLER.target_mv = CHARGING_TARGET_MV;
                         CONTROLLER.charger_mode = ChargerMode::ConstantVoltage;
                     }
                 }
@@ -159,7 +158,22 @@ fn update_output(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) 
             }
 
             ChargerMode::ConstantVoltage => {
-                // todo: need to look at the measured voltage at the battery
+                // treat the output_mv measurement as source of truth, target is not as accurate.
+                // positive error_mv means we need more voltage
+                let error_mv: i32 = CHARGING_TARGET_MV as i32 - CONTROLLER.output_mv as i32;
+                if error_mv >= 100 {
+                    CONTROLLER.target_mv += 100;
+                } else if error_mv <= -100 {
+                    CONTROLLER.target_mv -= 100;
+                } else if error_mv > 1 {
+                    CONTROLLER.target_mv += 1;
+                } else if error_mv < 1 {
+                    CONTROLLER.target_mv -= 1;
+                }
+                // allow 1V of slop in boost controller
+                CONTROLLER.target_mv = CONTROLLER
+                    .target_mv
+                    .clamp(MIN_BATTERY_VOLTAGE_MV, CHARGING_TARGET_MV + 1_000);
                 boost::set_voltage_mv(i2c, enable_pin, CONTROLLER.target_mv as u16);
             }
 

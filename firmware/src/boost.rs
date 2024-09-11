@@ -81,14 +81,11 @@ pub fn run() {
     // active when charging a 36V nominal battery w/ a 20V PD source. Unfortunately,
     // there is no hardware solution to save us from this scenario other than the fact
     // that any 36V nominal battery should never be below the input voltage of this charger.
-    if target_mv < tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed)
-        && vi_sense::output_current_ma() >= 100
-    {
+    let pdo_mv = tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed);
+    if target_mv < pdo_mv && vi_sense::output_current_ma() >= 100 {
         println!("Boost inactive, disconnect load!");
         // TODO: set LEDs flashing red
-    } else if target_mv.abs_diff(actual_mv) >= 1_000
-        && target_mv < tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed)
-    {
+    } else if u32::abs_diff(target_mv, actual_mv) >= 1_000 && target_mv > pdo_mv {
         // We expect output voltage to equal VBUS voltage minus ~1V even when the boost is disabled
         // when no battery is connected.
         println!(

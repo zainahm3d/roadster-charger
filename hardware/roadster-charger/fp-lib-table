@@ -7,4 +7,6 @@
   (lib (name "PA2050.193NL")(type "KiCad")(uri "${KIPRJMOD}/components/PA2050.193NL")(options "")(descr ""))
   (lib (name "MPM3606A")(type "KiCad")(uri "${KIPRJMOD}/components/ul_MPM3606AGQV-P/KiCADv6/footprints.pretty")(options "")(descr ""))
   (lib (name "RCU-0C")(type "KiCad")(uri "${KIPRJMOD}/components/RCU-0C")(options "")(descr ""))
+  (lib (name "PI3740-00-LGIZ")(type "KiCad")(uri "${KIPRJMOD}/components/PI3740-00-LGIZ")(options "")(descr ""))
+  (lib (name "footprints")(type "KiCad")(uri "${KIPRJMOD}/components/PA5119_421NLT/footprints.pretty")(options "")(descr ""))
 )

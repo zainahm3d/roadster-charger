@@ -7029,8 +7029,8 @@
 		(uuid "3414ba7c-37ad-446e-a4b9-924ba52bc142")
 	)
 	(no_connect
-		(at 96.52 227.33)
-		(uuid "462e420b-a25c-46f4-b463-d7108542514b")
+		(at 96.52 196.85)
+		(uuid "3540e717-f371-4b39-88cd-9ef7b250f4b4")
 	)
 	(no_connect
 		(at 289.56 45.72)
@@ -7811,16 +7811,6 @@
 			(type default)
 		)
 		(uuid "4c86672c-3235-4faf-88aa-a75db3665d2e")
-	)
-	(wire
-		(pts
-			(xy 96.52 196.85) (xy 109.22 196.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "50f1ba00-3fc4-42cd-8b34-7913e4602ee3")
 	)
 	(wire
 		(pts
@@ -9404,6 +9394,16 @@
 	)
 	(wire
 		(pts
+			(xy 96.52 227.33) (xy 109.22 227.33)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f09bc3cd-8cc1-477c-8854-61a9e1af1b10")
+	)
+	(wire
+		(pts
 			(xy 36.83 241.3) (xy 36.83 238.76)
 		)
 		(stroke
@@ -9707,7 +9707,7 @@
 		(uuid "0754f48b-ed45-4b5f-b7ee-9b694f91ab8d")
 	)
 	(label "BOOST_RUN"
-		(at 109.22 196.85 180)
+		(at 109.22 227.33 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -18313,7 +18313,7 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "\nConnector, dc jack 5.5x2.1 mm, PCB mount, 90 degrees, nickel plated, PBT, thru hole\n"
+		(property "Description" "Connector, dc jack 5.5x2.1 mm, PCB mount, 90 degrees, nickel plated, PBT, thru hole"
 			(at 393.7 140.97 0)
 			(effects
 				(font

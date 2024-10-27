@@ -6,4 +6,6 @@
   (lib (name "54-00166")(type "KiCad")(uri "${KIPRJMOD}/components/54-00166/54-00166.kicad_sym")(options "")(descr ""))
   (lib (name "PA2050.193NL")(type "KiCad")(uri "${KIPRJMOD}/components/PA2050.193NL/PA2050.193NL.kicad_sym")(options "")(descr ""))
   (lib (name "MPM3606A")(type "KiCad")(uri "${KIPRJMOD}/components/ul_MPM3606AGQV-P/KiCADv6/2023-10-01_20-54-10.kicad_sym")(options "")(descr ""))
+  (lib (name "PI3740-00-LGIZ")(type "KiCad")(uri "${KIPRJMOD}/components/PI3740-00-LGIZ/PI3740-00-LGIZ.kicad_sym")(options "")(descr ""))
+  (lib (name "PA5119_421NLT")(type "KiCad")(uri "${KIPRJMOD}/components/PA5119_421NLT/PA5119_421NLT.kicad_sym")(options "")(descr ""))
 )

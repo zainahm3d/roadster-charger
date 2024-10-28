@@ -780,7 +780,7 @@
 				)
 			)
 		)
-		(symbol "Jumper:SolderJumper_2_Bridged"
+		(symbol "Jumper:SolderJumper_2_Open"
 			(pin_numbers hide)
 			(pin_names
 				(offset 0) hide)
@@ -795,7 +795,7 @@
 					)
 				)
 			)
-			(property "Value" "SolderJumper_2_Bridged"
+			(property "Value" "SolderJumper_2_Open"
 				(at 0 -2.54 0)
 				(effects
 					(font
@@ -821,7 +821,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Solder Jumper, 2-pole, closed/bridged"
+			(property "Description" "Solder Jumper, 2-pole, open"
 				(at 0 0 0)
 				(effects
 					(font
@@ -839,7 +839,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_fp_filters" "SolderJumper*Bridged*"
+			(property "ki_fp_filters" "SolderJumper*Open*"
 				(at 0 0 0)
 				(effects
 					(font
@@ -848,18 +848,7 @@
 					(hide yes)
 				)
 			)
-			(symbol "SolderJumper_2_Bridged_0_1"
-				(rectangle
-					(start -0.508 0.508)
-					(end 0.508 -0.508)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type outline)
-					)
-				)
+			(symbol "SolderJumper_2_Open_0_1"
 				(arc
 					(start -0.254 1.016)
 					(mid -1.2656 0)
@@ -933,7 +922,7 @@
 					)
 				)
 			)
-			(symbol "SolderJumper_2_Bridged_1_1"
+			(symbol "SolderJumper_2_Open_1_1"
 				(pin passive line
 					(at -3.81 0 0)
 					(length 2.54)
@@ -5415,74 +5404,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Jumper:SolderJumper_2_Bridged")
-		(at 175.26 138.43 0)
-		(unit 1)
-		(exclude_from_sim yes)
-		(in_bom no)
-		(on_board yes)
-		(dnp no)
-		(uuid "0954cf0f-c075-4da3-a201-f8ca96989393")
-		(property "Reference" "JP1"
-			(at 175.26 141.224 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SolderJumper_2_Bridged"
-			(at 175.26 141.732 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Bridged2Bar_RoundedPad1.0x1.5mm"
-			(at 175.26 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 175.26 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Solder Jumper, 2-pole, closed/bridged"
-			(at 175.26 138.43 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "ca517c75-0635-4e34-b615-933dc5af5ffa")
-		)
-		(pin "2"
-			(uuid "13973140-4e65-4cf8-989e-c78169aac3b3")
-		)
-		(instances
-			(project ""
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "JP1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 151.13 107.95 0)
 		(unit 1)
@@ -5623,6 +5544,85 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "#PWR083")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R_Small")
+		(at 175.26 134.62 90)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "1252704a-02c6-4254-b39d-ba99aa3601c9")
+		(property "Reference" "R25"
+			(at 171.704 132.334 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Value" "1K"
+			(at 176.276 132.334 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify right)
+			)
+		)
+		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+			(at 175.26 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 175.26 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 175.26 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RT0603BRD071KL"
+			(at 175.26 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "20cc008d-3219-4476-bf95-1db2e68caba9")
+		)
+		(pin "2"
+			(uuid "ee603606-6023-4fe3-be9e-75c544ed44ca")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "R25")
 					(unit 1)
 				)
 			)
@@ -7014,7 +7014,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "RC0603FR-071KL"
+		(property "MPN" "RT0603BRD071KL"
 			(at 242.57 116.84 0)
 			(effects
 				(font
@@ -7112,6 +7112,74 @@
 			(project ""
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "C19")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Jumper:SolderJumper_2_Open")
+		(at 175.26 138.43 180)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(uuid "9f8ebb27-9175-4a18-a221-f668a950325a")
+		(property "Reference" "JP1"
+			(at 175.26 141.224 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SolderJumper_2_Open"
+			(at 175.26 142.24 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "Jumper:SolderJumper-2_P1.3mm_Open_RoundedPad1.0x1.5mm"
+			(at 175.26 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 175.26 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 175.26 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5a172863-48f8-420b-9419-bc102297d578")
+		)
+		(pin "2"
+			(uuid "4e8faec5-b4c0-4901-b4a2-1602700e918a")
+		)
+		(instances
+			(project ""
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "JP1")
 					(unit 1)
 				)
 			)
@@ -8217,84 +8285,6 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "C26")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R_Small")
-		(at 175.26 134.62 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp yes)
-		(uuid "e78dfcf2-b6ef-4f81-86a7-7eace0c30488")
-		(property "Reference" "R25"
-			(at 179.07 131.826 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Value" "1K"
-			(at 173.736 131.826 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify right)
-			)
-		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 175.26 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 175.26 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 175.26 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "MPN" "DNP"
-			(at 175.26 134.62 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9669ab86-35ef-403c-80ad-bd97e93b07f9")
-		)
-		(pin "2"
-			(uuid "1277d736-0977-4a5e-bbb7-cb3c3de03d46")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "R25")
 					(unit 1)
 				)
 			)

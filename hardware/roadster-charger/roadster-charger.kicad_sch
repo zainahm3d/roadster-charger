@@ -12820,7 +12820,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "RC0603FR-071KL"
+		(property "MPN" "RT0603BRD071KL"
 			(at 360.68 36.83 0)
 			(effects
 				(font
@@ -17543,7 +17543,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "RC0603FR-071KL"
+		(property "MPN" "RT0603BRD071KL"
 			(at 340.36 168.91 0)
 			(effects
 				(font
@@ -17701,7 +17701,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "RC0603FR-071KL"
+		(property "MPN" "RT0603BRD071KL"
 			(at 360.68 44.45 0)
 			(effects
 				(font

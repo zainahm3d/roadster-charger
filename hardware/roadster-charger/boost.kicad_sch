@@ -5038,16 +5038,6 @@
 		)
 		(uuid "3e4a0ee9-edd3-43ea-a6c4-9f52ffb887b3")
 	)
-	(text "TODO: make sure we can beat the track pin"
-		(exclude_from_sim no)
-		(at 213.614 69.342 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "8284b3b9-b738-4e13-9fb0-c266c7fb829c")
-	)
 	(text "420nH 3.15mOhm"
 		(exclude_from_sim no)
 		(at 215.392 94.996 0)

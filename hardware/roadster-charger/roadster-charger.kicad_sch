@@ -7206,10 +7206,6 @@
 		(uuid "3414ba7c-37ad-446e-a4b9-924ba52bc142")
 	)
 	(no_connect
-		(at 96.52 196.85)
-		(uuid "3540e717-f371-4b39-88cd-9ef7b250f4b4")
-	)
-	(no_connect
 		(at 289.56 45.72)
 		(uuid "4f07811b-cd37-459f-ab4f-22daf8299814")
 	)
@@ -7260,10 +7256,6 @@
 	(no_connect
 		(at 49.53 140.97)
 		(uuid "f3bc554b-f087-4486-8fa7-498f5c388f91")
-	)
-	(no_connect
-		(at 96.52 199.39)
-		(uuid "fa87ba9c-15e4-44b3-8fd6-40098aacd229")
 	)
 	(no_connect
 		(at 58.42 53.34)
@@ -9131,6 +9123,16 @@
 	)
 	(wire
 		(pts
+			(xy 96.52 199.39) (xy 105.41 199.39)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c9f3fc9b-1506-47cb-95be-4a4bc698961a")
+	)
+	(wire
+		(pts
 			(xy 261.62 163.83) (xy 261.62 138.43)
 		)
 		(stroke
@@ -9588,6 +9590,16 @@
 			(type default)
 		)
 		(uuid "ef96af07-bcc5-411e-8180-cb3ff48c228f")
+	)
+	(wire
+		(pts
+			(xy 96.52 196.85) (xy 105.41 196.85)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "eff15312-13ff-44d9-8c12-7aaa3cfdd615")
 	)
 	(wire
 		(pts
@@ -10055,6 +10067,17 @@
 		)
 		(uuid "7f90bea0-eb4f-4859-8228-c67b1c395df9")
 	)
+	(label "U0_RX"
+		(at 97.79 199.39 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "859e4de6-36cf-45fc-83ec-338f723500eb")
+	)
 	(label "USB_DM"
 		(at 335.28 58.42 180)
 		(fields_autoplaced yes)
@@ -10209,6 +10232,17 @@
 		)
 		(uuid "f70e667c-7c6b-452d-9af3-f818a355df92")
 	)
+	(label "U0_TX"
+		(at 97.79 196.85 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "fd9f22ae-39d4-41cd-9993-1ecf56a5377d")
+	)
 	(symbol
 		(lib_id "power:VBUS")
 		(at 133.35 35.56 0)
@@ -10219,7 +10253,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "0462aa90-a7d3-4f83-abfa-e4d9297e89dc")
-		(property "Reference" "#PWR085"
+		(property "Reference" "#PWR027"
 			(at 133.35 39.37 0)
 			(effects
 				(font
@@ -10269,7 +10303,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR085")
+					(reference "#PWR027")
 					(unit 1)
 				)
 			)
@@ -10740,7 +10774,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "171cff46-cb68-4ecd-8438-d718c21fa1d1")
-		(property "Reference" "#PWR038"
+		(property "Reference" "#PWR039"
 			(at 182.88 59.69 0)
 			(effects
 				(font
@@ -10791,7 +10825,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR038")
+					(reference "#PWR039")
 					(unit 1)
 				)
 			)
@@ -10872,7 +10906,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1ac35ece-cefa-4aee-82c4-7cbaa8528465")
-		(property "Reference" "#PWR049"
+		(property "Reference" "#PWR050"
 			(at 274.32 157.48 0)
 			(effects
 				(font
@@ -10922,7 +10956,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR049")
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -10937,7 +10971,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "1fe573e4-bea0-47cd-99ce-4ccb83459a2a")
-		(property "Reference" "#PWR035"
+		(property "Reference" "#PWR036"
 			(at 158.75 217.17 0)
 			(effects
 				(font
@@ -10988,7 +11022,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR035")
+					(reference "#PWR036")
 					(unit 1)
 				)
 			)
@@ -11003,7 +11037,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2403ce26-2466-4b8e-b9ec-393d55668460")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR031"
 			(at 137.16 217.17 0)
 			(effects
 				(font
@@ -11054,7 +11088,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR030")
+					(reference "#PWR031")
 					(unit 1)
 				)
 			)
@@ -11149,7 +11183,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2a59437d-5599-4181-9010-2345cfe4900a")
-		(property "Reference" "#PWR039"
+		(property "Reference" "#PWR040"
 			(at 189.23 171.45 0)
 			(effects
 				(font
@@ -11199,7 +11233,83 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR039")
+					(reference "#PWR040")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 105.41 199.39 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "2be8217f-e787-4a1b-9488-7368428e0b42")
+		(property "Reference" "TP2"
+			(at 111.506 199.39 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "RCU-0C"
+			(at 107.442 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "RCU-0C:TP+195X110"
+			(at 105.41 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 105.41 204.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 105.41 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RCU-0C"
+			(at 105.41 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "1ae8533b-8c4c-41ba-ac0e-f4353b3cce37")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
+					(reference "TP2")
 					(unit 1)
 				)
 			)
@@ -11371,7 +11481,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "32a5dd4a-9f2f-4213-8a17-e4d25d477ad2")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR041"
 			(at 189.23 199.39 0)
 			(effects
 				(font
@@ -11422,7 +11532,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR040")
+					(reference "#PWR041")
 					(unit 1)
 				)
 			)
@@ -11523,7 +11633,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "35d806d3-f30e-4c35-ac2f-a8961233ce9a")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR056"
 			(at 307.34 160.02 0)
 			(effects
 				(font
@@ -11573,7 +11683,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR055")
+					(reference "#PWR056")
 					(unit 1)
 				)
 			)
@@ -11813,7 +11923,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3a1aa6f2-69e5-451c-ba19-4fdaeb69140d")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR035"
 			(at 158.75 205.74 0)
 			(effects
 				(font
@@ -11863,7 +11973,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR034")
+					(reference "#PWR035")
 					(unit 1)
 				)
 			)
@@ -11879,7 +11989,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "3bb68c9b-2349-4f69-baa2-d5622a332b49")
-		(property "Reference" "#PWR027"
+		(property "Reference" "#PWR028"
 			(at 137.16 90.17 0)
 			(effects
 				(font
@@ -11929,7 +12039,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR027")
+					(reference "#PWR028")
 					(unit 1)
 				)
 			)
@@ -11944,7 +12054,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "3f7c6585-7be9-4d31-8d68-9b5159863585")
-		(property "Reference" "#PWR062"
+		(property "Reference" "#PWR064"
 			(at 360.68 54.61 0)
 			(effects
 				(font
@@ -11995,7 +12105,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR062")
+					(reference "#PWR064")
 					(unit 1)
 				)
 			)
@@ -12011,7 +12121,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "40129294-f84b-4c6d-a1ce-e86895b67eca")
-		(property "Reference" "#PWR029"
+		(property "Reference" "#PWR030"
 			(at 137.16 205.74 0)
 			(effects
 				(font
@@ -12061,7 +12171,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR029")
+					(reference "#PWR030")
 					(unit 1)
 				)
 			)
@@ -12154,7 +12264,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "44b87c34-e9a8-4f41-ae19-05e3bf6cf2ae")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR033"
 			(at 142.24 71.12 0)
 			(effects
 				(font
@@ -12205,7 +12315,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR032")
+					(reference "#PWR033")
 					(unit 1)
 				)
 			)
@@ -12298,7 +12408,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "467b16ba-8a16-413d-8ad3-eda385cf89fd")
-		(property "Reference" "#PWR048"
+		(property "Reference" "#PWR049"
 			(at 256.54 182.88 0)
 			(effects
 				(font
@@ -12349,7 +12459,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR048")
+					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -12364,7 +12474,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4a1913ad-1c64-4873-b0ea-deb90ca77ea8")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR025"
 			(at 120.65 91.44 0)
 			(effects
 				(font
@@ -12415,7 +12525,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR023")
+					(reference "#PWR025")
 					(unit 1)
 				)
 			)
@@ -12430,7 +12540,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "4b3fb051-6df1-4bc9-9a55-4113f3c99892")
-		(property "Reference" "#PWR069"
+		(property "Reference" "#PWR071"
 			(at 396.24 243.84 0)
 			(effects
 				(font
@@ -12481,7 +12591,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR069")
+					(reference "#PWR071")
 					(unit 1)
 				)
 			)
@@ -12775,7 +12885,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "50fbb309-23f4-4ee0-bce9-16e7935b6dea")
-		(property "Reference" "R20"
+		(property "Reference" "R21"
 			(at 362.458 34.29 0)
 			(effects
 				(font
@@ -12838,7 +12948,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "R20")
+					(reference "R21")
 					(unit 1)
 				)
 			)
@@ -13155,7 +13265,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5be8bb36-7bd3-4f49-bef1-753eb3d7b5bc")
-		(property "Reference" "#PWR028"
+		(property "Reference" "#PWR029"
 			(at 137.16 97.79 0)
 			(effects
 				(font
@@ -13206,7 +13316,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR028")
+					(reference "#PWR029")
 					(unit 1)
 				)
 			)
@@ -13221,7 +13331,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5eb119ca-b363-4835-9a1a-addd6bba3787")
-		(property "Reference" "#PWR052"
+		(property "Reference" "#PWR053"
 			(at 292.1 76.2 0)
 			(effects
 				(font
@@ -13272,7 +13382,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR052")
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -13287,7 +13397,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "5ffa8c35-304a-4e6f-9e9a-65a5c1565718")
-		(property "Reference" "#PWR053"
+		(property "Reference" "#PWR054"
 			(at 292.1 176.53 0)
 			(effects
 				(font
@@ -13338,7 +13448,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR053")
+					(reference "#PWR054")
 					(unit 1)
 				)
 			)
@@ -13419,7 +13529,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "607c66d3-9de2-4cdc-858e-c7397d4e6adc")
-		(property "Reference" "#PWR060"
+		(property "Reference" "#PWR061"
 			(at 323.85 182.88 0)
 			(effects
 				(font
@@ -13470,7 +13580,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR060")
+					(reference "#PWR061")
 					(unit 1)
 				)
 			)
@@ -13485,7 +13595,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6114bcbc-ba8b-4bdc-b54c-34febef3b995")
-		(property "Reference" "#PWR042"
+		(property "Reference" "#PWR043"
 			(at 201.93 38.1 0)
 			(effects
 				(font
@@ -13536,7 +13646,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR042")
+					(reference "#PWR043")
 					(unit 1)
 				)
 			)
@@ -13840,7 +13950,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "688aba11-8cea-402d-ba89-e866effa7fa6")
-		(property "Reference" "#PWR051"
+		(property "Reference" "#PWR052"
 			(at 287.02 176.53 0)
 			(effects
 				(font
@@ -13891,7 +14001,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR051")
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -13906,7 +14016,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "6a376cb8-ae02-4b4e-a1ef-e0d6156cf9f7")
-		(property "Reference" "#PWR066"
+		(property "Reference" "#PWR070"
 			(at 391.16 59.69 0)
 			(effects
 				(font
@@ -13957,7 +14067,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR066")
+					(reference "#PWR070")
 					(unit 1)
 				)
 			)
@@ -14203,7 +14313,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "71a34c7c-c9c7-4da1-85a3-4cfcd1633881")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR034"
 			(at 153.67 234.95 0)
 			(effects
 				(font
@@ -14254,7 +14364,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR033")
+					(reference "#PWR034")
 					(unit 1)
 				)
 			)
@@ -14431,7 +14541,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7a1e4c86-14c5-4875-9da5-fd75792c6f4a")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR047"
 			(at 242.57 172.72 0)
 			(effects
 				(font
@@ -14482,7 +14592,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR046")
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -14866,7 +14976,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "7e52b396-de72-4206-bd34-fa31f18b9e9c")
-		(property "Reference" "#PWR088"
+		(property "Reference" "#PWR063"
 			(at 345.44 54.61 0)
 			(effects
 				(font
@@ -14917,7 +15027,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR088")
+					(reference "#PWR063")
 					(unit 1)
 				)
 			)
@@ -14998,7 +15108,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8076eea9-27f3-41c1-8aaf-5ca04614c965")
-		(property "Reference" "TP1"
+		(property "Reference" "TP3"
 			(at 113.03 232.41 90)
 			(effects
 				(font
@@ -15059,7 +15169,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "TP1")
+					(reference "TP3")
 					(unit 1)
 				)
 			)
@@ -15152,7 +15262,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "81f551e6-ec73-4134-9a8c-97f7a118ec97")
-		(property "Reference" "#PWR025"
+		(property "Reference" "#PWR023"
 			(at 120.65 41.91 0)
 			(effects
 				(font
@@ -15203,7 +15313,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR025")
+					(reference "#PWR023")
 					(unit 1)
 				)
 			)
@@ -15219,7 +15329,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "85a8f99a-b4f3-491f-a936-2a038e4d17b1")
-		(property "Reference" "#PWR065"
+		(property "Reference" "#PWR069"
 			(at 391.16 31.75 0)
 			(effects
 				(font
@@ -15269,7 +15379,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR065")
+					(reference "#PWR069")
 					(unit 1)
 				)
 			)
@@ -15284,7 +15394,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8adcd3ae-a553-4880-9d2e-5211a441bf33")
-		(property "Reference" "#PWR037"
+		(property "Reference" "#PWR038"
 			(at 170.18 180.34 0)
 			(effects
 				(font
@@ -15335,7 +15445,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR037")
+					(reference "#PWR038")
 					(unit 1)
 				)
 			)
@@ -15351,7 +15461,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8b726fd2-8f43-47c9-9028-36f4d885214a")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR022"
 			(at 120.65 34.29 0)
 			(effects
 				(font
@@ -15401,7 +15511,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR024")
+					(reference "#PWR022")
 					(unit 1)
 				)
 			)
@@ -15417,7 +15527,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8cd3864d-b566-4717-9e18-b58fb3a316c9")
-		(property "Reference" "R22"
+		(property "Reference" "R20"
 			(at 347.98 35.5599 0)
 			(effects
 				(font
@@ -15480,7 +15590,7 @@
 		(instances
 			(project ""
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "R22")
+					(reference "R20")
 					(unit 1)
 				)
 			)
@@ -15580,7 +15690,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "8e33a07a-9796-4476-998e-3d03082a7b1d")
-		(property "Reference" "#PWR054"
+		(property "Reference" "#PWR055"
 			(at 300.99 53.34 0)
 			(effects
 				(font
@@ -15631,7 +15741,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR054")
+					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -15647,7 +15757,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8ee9e5bd-b71b-40cb-89f3-d9b6f3b18c62")
-		(property "Reference" "#PWR041"
+		(property "Reference" "#PWR042"
 			(at 200.66 180.34 0)
 			(effects
 				(font
@@ -15697,7 +15807,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR041")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -15942,7 +16052,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "94704498-304c-4e60-a85c-212add4c8916")
-		(property "Reference" "#PWR064"
+		(property "Reference" "#PWR066"
 			(at 367.03 182.88 0)
 			(effects
 				(font
@@ -15993,7 +16103,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR064")
+					(reference "#PWR066")
 					(unit 1)
 				)
 			)
@@ -16307,7 +16417,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "977baa8c-6c3c-42ee-a47c-9d97965cca69")
-		(property "Reference" "#PWR043"
+		(property "Reference" "#PWR044"
 			(at 207.01 27.94 0)
 			(effects
 				(font
@@ -16357,7 +16467,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR043")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -16439,7 +16549,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "97d09598-668d-4560-9085-208ca0aeb029")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR048"
 			(at 256.54 175.26 0)
 			(effects
 				(font
@@ -16489,7 +16599,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR047")
+					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -17301,7 +17411,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "abefee51-5b1e-49cb-aaea-667510f932e8")
-		(property "Reference" "#PWR059"
+		(property "Reference" "#PWR060"
 			(at 323.85 175.26 0)
 			(effects
 				(font
@@ -17351,7 +17461,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR059")
+					(reference "#PWR060")
 					(unit 1)
 				)
 			)
@@ -17433,7 +17543,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b2ef1c69-0306-43ea-9d4b-0d115e5279e4")
-		(property "Reference" "#PWR063"
+		(property "Reference" "#PWR065"
 			(at 367.03 154.94 0)
 			(effects
 				(font
@@ -17483,7 +17593,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR063")
+					(reference "#PWR065")
 					(unit 1)
 				)
 			)
@@ -17656,7 +17766,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b92dee04-a455-4948-b1dd-aaac8f001bb2")
-		(property "Reference" "R21"
+		(property "Reference" "R22"
 			(at 363.22 43.18 0)
 			(effects
 				(font
@@ -17719,7 +17829,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "R21")
+					(reference "R22")
 					(unit 1)
 				)
 			)
@@ -17735,7 +17845,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "b94567fe-5f6c-4737-a159-f0be7ed3c529")
-		(property "Reference" "#PWR070"
+		(property "Reference" "#PWR072"
 			(at 406.4 243.84 0)
 			(effects
 				(font
@@ -17786,7 +17896,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR070")
+					(reference "#PWR072")
 					(unit 1)
 				)
 			)
@@ -17801,7 +17911,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bbe42748-7b8f-4799-a611-2ba32bf9b684")
-		(property "Reference" "#PWR045"
+		(property "Reference" "#PWR046"
 			(at 223.52 176.53 0)
 			(effects
 				(font
@@ -17852,7 +17962,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR045")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -17867,7 +17977,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "bbed3130-983a-466e-b3a6-22397d1db058")
-		(property "Reference" "#PWR050"
+		(property "Reference" "#PWR051"
 			(at 274.32 173.99 0)
 			(effects
 				(font
@@ -17918,7 +18028,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR050")
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -18055,7 +18165,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c0756bef-8c48-4eb4-b4d2-0fe19608d22d")
-		(property "Reference" "D4"
+		(property "Reference" "D5"
 			(at 373.38 154.94 0)
 			(effects
 				(font
@@ -18123,7 +18233,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "D4")
+					(reference "D5")
 					(unit 1)
 				)
 			)
@@ -18289,7 +18399,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "c1ee652f-81a3-48a9-94d1-60e0e2adf5fe")
-		(property "Reference" "TP5"
+		(property "Reference" "TP7"
 			(at 200.025 26.035 0)
 			(effects
 				(font
@@ -18350,7 +18460,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "TP5")
+					(reference "TP7")
 					(unit 1)
 				)
 			)
@@ -18432,7 +18542,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "c7540165-bc72-4b33-8b07-2d086972aa4c")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR032"
 			(at 139.7 39.37 0)
 			(effects
 				(font
@@ -18482,7 +18592,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR031")
+					(reference "#PWR032")
 					(unit 1)
 				)
 			)
@@ -18563,7 +18673,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "cd946d5c-8031-4650-8b45-1dfe60bf930c")
-		(property "Reference" "TP2"
+		(property "Reference" "TP4"
 			(at 121.285 225.425 0)
 			(effects
 				(font
@@ -18624,7 +18734,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "TP2")
+					(reference "TP4")
 					(unit 1)
 				)
 			)
@@ -18823,7 +18933,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "d0f80298-1606-4834-b14c-1b621892826c")
-		(property "Reference" "#PWR058"
+		(property "Reference" "#PWR059"
 			(at 311.15 99.06 0)
 			(effects
 				(font
@@ -18874,7 +18984,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR058")
+					(reference "#PWR059")
 					(unit 1)
 				)
 			)
@@ -18890,7 +19000,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d2d3ae0c-f552-4c1a-9a47-81262875f175")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR037"
 			(at 170.18 172.72 0)
 			(effects
 				(font
@@ -18940,7 +19050,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR036")
+					(reference "#PWR037")
 					(unit 1)
 				)
 			)
@@ -19111,7 +19221,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dc7cd9af-c6ac-4011-874b-d6a712a2e287")
-		(property "Reference" "D7"
+		(property "Reference" "D4"
 			(at 347.98 43.1164 90)
 			(effects
 				(font
@@ -19174,7 +19284,7 @@
 		(instances
 			(project ""
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "D7")
+					(reference "D4")
 					(unit 1)
 				)
 			)
@@ -19268,7 +19378,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e021f6c2-2bf6-40e5-b24a-59d82cc1f9c7")
-		(property "Reference" "TP3"
+		(property "Reference" "TP5"
 			(at 189.865 26.035 0)
 			(effects
 				(font
@@ -19329,7 +19439,83 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "TP3")
+					(reference "TP5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint")
+		(at 105.41 196.85 270)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e0547658-0ef7-4596-882a-b39cd241280a")
+		(property "Reference" "TP1"
+			(at 111.252 196.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "RCU-0C"
+			(at 107.442 199.39 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "RCU-0C:TP+195X110"
+			(at 105.41 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 105.41 201.93 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 105.41 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "RCU-0C"
+			(at 105.41 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "0974f36f-29c0-4367-baa3-1ca42d3f480f")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
+					(reference "TP1")
 					(unit 1)
 				)
 			)
@@ -19422,7 +19608,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e32bc935-9d59-4ede-8200-6ac31f15c109")
-		(property "Reference" "TP4"
+		(property "Reference" "TP6"
 			(at 194.945 26.035 0)
 			(effects
 				(font
@@ -19483,7 +19669,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "TP4")
+					(reference "TP6")
 					(unit 1)
 				)
 			)
@@ -19498,7 +19684,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "e45905d8-07b1-4f25-94f4-dc7fe161d7f6")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR045"
 			(at 214.63 168.91 0)
 			(effects
 				(font
@@ -19549,7 +19735,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR044")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -19708,7 +19894,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "e7cfc945-162d-4876-b3e7-8895e11296aa")
-		(property "Reference" "#PWR022"
+		(property "Reference" "#PWR024"
 			(at 120.65 74.93 0)
 			(effects
 				(font
@@ -19758,7 +19944,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR022")
+					(reference "#PWR024")
 					(unit 1)
 				)
 			)
@@ -19840,7 +20026,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ea5f5f49-80f9-4ce6-af46-ab5e3448e2e7")
-		(property "Reference" "D5"
+		(property "Reference" "D7"
 			(at 397.51 31.75 0)
 			(effects
 				(font
@@ -19908,7 +20094,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "D5")
+					(reference "D7")
 					(unit 1)
 				)
 			)
@@ -20081,7 +20267,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "eeeb6581-87d8-4832-95c4-46b2b2fd11a2")
-		(property "Reference" "#PWR057"
+		(property "Reference" "#PWR058"
 			(at 311.15 71.12 0)
 			(effects
 				(font
@@ -20131,7 +20317,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR057")
+					(reference "#PWR058")
 					(unit 1)
 				)
 			)
@@ -20214,7 +20400,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f2439da4-078e-4480-ac76-f4c139a2148b")
-		(property "Reference" "#PWR061"
+		(property "Reference" "#PWR062"
 			(at 340.36 184.15 0)
 			(effects
 				(font
@@ -20265,7 +20451,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR061")
+					(reference "#PWR062")
 					(unit 1)
 				)
 			)
@@ -20346,7 +20532,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f7c57106-3c3d-4d47-b2bc-2e70221504d0")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR057"
 			(at 307.34 176.53 0)
 			(effects
 				(font
@@ -20397,7 +20583,7 @@
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd"
-					(reference "#PWR056")
+					(reference "#PWR057")
 					(unit 1)
 				)
 			)

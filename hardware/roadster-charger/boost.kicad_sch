@@ -968,7 +968,7 @@
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "U12"
+			(property "Reference" "U11"
 				(at -8.636 -36.322 0)
 				(effects
 					(font
@@ -1122,10 +1122,19 @@
 					(hide yes)
 				)
 			)
+			(property "MPN" "PI3740-00-LGIZ"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
 			(symbol "PI3740-00-LGIZ_0_0"
 				(rectangle
-					(start -10.16 -33.02)
-					(end 10.16 33.02)
+					(start -10.16 33.02)
+					(end 10.16 -31.75)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -1495,7 +1504,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1513,7 +1522,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1531,7 +1540,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1549,7 +1558,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1567,7 +1576,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1585,7 +1594,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1603,7 +1612,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1621,7 +1630,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1711,7 +1720,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1729,7 +1738,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1747,7 +1756,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1765,7 +1774,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1783,7 +1792,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1801,7 +1810,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1819,7 +1828,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1837,7 +1846,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1945,7 +1954,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1963,7 +1972,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1981,7 +1990,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -1999,7 +2008,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2017,7 +2026,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2035,7 +2044,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2053,7 +2062,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2071,7 +2080,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2179,7 +2188,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2197,7 +2206,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2215,7 +2224,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2233,7 +2242,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2251,7 +2260,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2269,7 +2278,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2287,7 +2296,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2305,7 +2314,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2323,7 +2332,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2341,7 +2350,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2503,7 +2512,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2521,7 +2530,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2683,7 +2692,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2701,7 +2710,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2863,7 +2872,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -2881,7 +2890,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -3043,7 +3052,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -3061,7 +3070,7 @@
 					)
 				)
 				(pin power_in line
-					(at 15.24 -30.48 180)
+					(at -15.24 -27.94 0)
 					(length 5.08)
 					(name "PGND"
 						(effects
@@ -3280,6 +3289,174 @@
 					(at 0 0 270)
 					(length 0) hide
 					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
+		(symbol "power:GNDPWR"
+			(power)
+			(pin_numbers hide)
+			(pin_names
+				(offset 0) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Value" "GNDPWR"
+				(at 0 -3.302 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 -1.27 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "global ground"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GNDPWR_0_1"
+				(polyline
+					(pts
+						(xy 0 -1.27) (xy 0 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.016 -1.27) (xy -1.27 -2.032) (xy -1.27 -2.032)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.508 -1.27) (xy -0.762 -2.032) (xy -0.762 -2.032)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0 -1.27) (xy -0.254 -2.032) (xy -0.254 -2.032)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.508 -1.27) (xy 0.254 -2.032) (xy 0.254 -2.032)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 -1.27) (xy -1.016 -1.27) (xy -1.016 -1.27)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.016 -1.27) (xy 0.762 -2.032) (xy 0.762 -2.032) (xy 0.762 -2.032)
+					)
+					(stroke
+						(width 0.2032)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GNDPWR_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name "~"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -3578,12 +3755,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "998b4979-1c9f-4711-852a-00ce7e07aef2")
-	)
-	(junction
-		(at 231.14 160.02)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "9e11723c-2c83-4a10-9418-c076629023fb")
 	)
 	(junction
 		(at 275.59 111.76)
@@ -4137,6 +4308,16 @@
 	)
 	(wire
 		(pts
+			(xy 198.12 157.48) (xy 198.12 161.29)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5ab8c183-7b93-4c6f-a25f-fc9ed61273b4")
+	)
+	(wire
+		(pts
 			(xy 281.94 104.14) (xy 288.29 104.14)
 		)
 		(stroke
@@ -4174,16 +4355,6 @@
 			(type default)
 		)
 		(uuid "600c00ba-b624-4f9d-948c-bbf6288c8513")
-	)
-	(wire
-		(pts
-			(xy 231.14 157.48) (xy 231.14 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "608387d1-9ca2-417c-b6c8-6f7d5834b1b8")
 	)
 	(wire
 		(pts
@@ -4417,16 +4588,6 @@
 	)
 	(wire
 		(pts
-			(xy 229.87 160.02) (xy 231.14 160.02)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "83a02d0f-ffdb-4298-91cd-d6a07d59a3e8")
-	)
-	(wire
-		(pts
 			(xy 240.03 137.16) (xy 229.87 137.16)
 		)
 		(stroke
@@ -4467,7 +4628,7 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 160.02) (xy 231.14 161.29)
+			(xy 231.14 157.48) (xy 231.14 161.29)
 		)
 		(stroke
 			(width 0)
@@ -4987,6 +5148,16 @@
 	)
 	(wire
 		(pts
+			(xy 199.39 157.48) (xy 198.12 157.48)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f2817673-788f-4495-bc3c-ab4a345efb96")
+	)
+	(wire
+		(pts
 			(xy 229.87 127) (xy 231.14 127)
 		)
 		(stroke
@@ -5236,72 +5407,6 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "#PWR086")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 256.54 113.03 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "039f66c0-e1f7-491d-8dc8-5b12a5db83aa")
-		(property "Reference" "#PWR088"
-			(at 256.54 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 256.54 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 256.54 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 256.54 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "11ed9102-6ac0-4c95-8be6-53b9480d7113")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR088")
 					(unit 1)
 				)
 			)
@@ -6207,6 +6312,71 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDPWR")
+		(at 138.43 113.03 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "40d3cd5c-6085-4173-a489-d8bf051f1706")
+		(property "Reference" "#PWR078"
+			(at 138.43 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PGND"
+			(at 138.303 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 138.43 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 138.43 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
+			(at 138.43 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a9c18ddd-de18-444e-9ecc-f11ca9103be6")
+		)
+		(instances
+			(project ""
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR078")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C_Small")
 		(at 262.89 107.95 0)
 		(unit 1)
@@ -6286,16 +6456,16 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 138.43 113.03 0)
+		(lib_id "power:GNDPWR")
+		(at 198.12 161.29 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "46138502-5078-4f03-bbf2-e96b376e9412")
-		(property "Reference" "#PWR078"
-			(at 138.43 119.38 0)
+		(uuid "48a7dbee-3d13-43e7-bb9a-f4242aa438ed")
+		(property "Reference" "#PWR089"
+			(at 198.12 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6303,17 +6473,16 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 138.43 118.11 0)
+		(property "Value" "PGND"
+			(at 197.993 165.1 0)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(hide yes)
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 113.03 0)
+			(at 198.12 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6322,7 +6491,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 113.03 0)
+			(at 198.12 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6330,8 +6499,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" ""
-			(at 138.43 113.03 0)
+		(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
+			(at 198.12 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6340,12 +6509,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "d24c6d33-6e68-4eae-9cab-e02c171427d6")
+			(uuid "63a86980-f6bb-41d6-b8e7-3ecec61d2a7c")
 		)
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR078")
+					(reference "#PWR089")
 					(unit 1)
 				)
 			)
@@ -6645,6 +6814,71 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "#PWR083")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDPWR")
+		(at 256.54 113.03 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "72dcbf8c-1c79-47e4-9b09-c9dd9fbf1452")
+		(property "Reference" "#PWR088"
+			(at 256.54 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "PGND"
+			(at 256.413 116.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 256.54 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
+			(at 256.54 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b1b4f3e7-a9fe-4e4d-a2bd-4e4b4fa036e8")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR088")
 					(unit 1)
 				)
 			)

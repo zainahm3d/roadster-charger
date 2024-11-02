@@ -110,6 +110,109 @@
 				)
 			)
 		)
+		(symbol "Connector:TestPoint_Alt"
+			(pin_numbers hide)
+			(pin_names
+				(offset 0.762) hide)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "TP"
+				(at 0 6.858 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "TestPoint_Alt"
+				(at 0 5.08 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Datasheet" "~"
+				(at 5.08 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "Description" "test point (alternative shape)"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_keywords" "test point tp"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "ki_fp_filters" "Pin* Test*"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "TestPoint_Alt_0_1"
+				(polyline
+					(pts
+						(xy 0 2.54) (xy -0.762 3.302) (xy 0 4.064) (xy 0.762 3.302) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "TestPoint_Alt_1_1"
+				(pin passive line
+					(at 0 0 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+		)
 		(symbol "DAC70501:DAC70501MDQFR"
 			(pin_names
 				(offset 0.254)
@@ -3305,7 +3408,7 @@
 				)
 			)
 		)
-		(symbol "power:GNDPWR"
+		(symbol "power:GNDD"
 			(power)
 			(pin_numbers hide)
 			(pin_names
@@ -3314,7 +3417,7 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "#PWR"
-				(at 0 -5.08 0)
+				(at 0 -6.35 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -3322,8 +3425,8 @@
 					(hide yes)
 				)
 			)
-			(property "Value" "GNDPWR"
-				(at 0 -3.302 0)
+			(property "Value" "GNDD"
+				(at 0 -3.175 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -3331,7 +3434,7 @@
 				)
 			)
 			(property "Footprint" ""
-				(at 0 -1.27 0)
+				(at 0 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -3340,15 +3443,6 @@
 				)
 			)
 			(property "Datasheet" ""
-				(at 0 -1.27 0)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-					(hide yes)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3357,7 +3451,7 @@
 					(hide yes)
 				)
 			)
-			(property "ki_keywords" "global ground"
+			(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
 				(at 0 0 0)
 				(effects
 					(font
@@ -3366,10 +3460,30 @@
 					(hide yes)
 				)
 			)
-			(symbol "GNDPWR_0_1"
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(symbol "GNDD_0_1"
+				(rectangle
+					(start -1.27 -1.524)
+					(end 1.27 -2.032)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
 				(polyline
 					(pts
-						(xy 0 -1.27) (xy 0 0)
+						(xy 0 0) (xy 0 -1.524)
 					)
 					(stroke
 						(width 0)
@@ -3379,80 +3493,8 @@
 						(type none)
 					)
 				)
-				(polyline
-					(pts
-						(xy -1.016 -1.27) (xy -1.27 -2.032) (xy -1.27 -2.032)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy -0.508 -1.27) (xy -0.762 -2.032) (xy -0.762 -2.032)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 -1.27) (xy -0.254 -2.032) (xy -0.254 -2.032)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.508 -1.27) (xy 0.254 -2.032) (xy 0.254 -2.032)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.016 -1.27) (xy -1.016 -1.27) (xy -1.016 -1.27)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 1.016 -1.27) (xy 0.762 -2.032) (xy 0.762 -2.032) (xy 0.762 -2.032)
-					)
-					(stroke
-						(width 0.2032)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
 			)
-			(symbol "GNDPWR_1_1"
+			(symbol "GNDD_1_1"
 				(pin power_in line
 					(at 0 0 270)
 					(length 0)
@@ -3661,6 +3703,12 @@
 		(uuid "4312b12b-2b82-413d-80d5-6bdb903dc233")
 	)
 	(junction
+		(at 234.95 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "49baca1f-0957-4cf8-b7a7-3241ced6dbb7")
+	)
+	(junction
 		(at 294.64 111.76)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3671,6 +3719,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "4f4729d1-cd90-469d-b85d-e9189baba662")
+	)
+	(junction
+		(at 234.95 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4f684d6c-a78f-4dd9-ab77-56f68d7f1203")
 	)
 	(junction
 		(at 144.78 111.76)
@@ -3707,12 +3761,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "7a43fa01-e5c9-4094-a50a-cabe45e64ce1")
-	)
-	(junction
-		(at 231.14 111.76)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "7cd0b6df-5850-4037-9c73-5f08442e28c4")
 	)
 	(junction
 		(at 231.14 147.32)
@@ -3925,6 +3973,16 @@
 			(type default)
 		)
 		(uuid "12976a09-b8c7-4c6e-9cf1-bd7f7e69b834")
+	)
+	(wire
+		(pts
+			(xy 234.95 111.76) (xy 234.95 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "129d0c89-3ed7-4c83-8847-ce4319ab79f3")
 	)
 	(wire
 		(pts
@@ -4148,7 +4206,7 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 119.38) (xy 233.68 120.65)
+			(xy 234.95 119.38) (xy 234.95 120.65)
 		)
 		(stroke
 			(width 0)
@@ -4255,16 +4313,6 @@
 			(type default)
 		)
 		(uuid "55d6b733-09fc-4c6e-a3e2-1d1cdaea4f37")
-	)
-	(wire
-		(pts
-			(xy 231.14 114.3) (xy 231.14 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "560be4d4-03c4-4a83-8ca5-921545ad2dc3")
 	)
 	(wire
 		(pts
@@ -4478,13 +4526,13 @@
 	)
 	(wire
 		(pts
-			(xy 233.68 111.76) (xy 233.68 114.3)
+			(xy 234.95 114.3) (xy 234.95 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "729ad4af-791f-40d4-99d5-fcd38a5d5eff")
+		(uuid "7249d3b1-4312-4d48-a0c4-9f0e044f2458")
 	)
 	(wire
 		(pts
@@ -4588,7 +4636,7 @@
 	)
 	(wire
 		(pts
-			(xy 240.03 137.16) (xy 229.87 137.16)
+			(xy 238.76 137.16) (xy 229.87 137.16)
 		)
 		(stroke
 			(width 0)
@@ -4648,7 +4696,7 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 111.76) (xy 233.68 111.76)
+			(xy 229.87 111.76) (xy 234.95 111.76)
 		)
 		(stroke
 			(width 0)
@@ -4688,7 +4736,7 @@
 	)
 	(wire
 		(pts
-			(xy 240.03 113.03) (xy 240.03 137.16)
+			(xy 238.76 113.03) (xy 238.76 137.16)
 		)
 		(stroke
 			(width 0)
@@ -4705,16 +4753,6 @@
 			(type default)
 		)
 		(uuid "980ea6fd-3643-4a76-b5f7-b1c7939c8825")
-	)
-	(wire
-		(pts
-			(xy 229.87 111.76) (xy 231.14 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "99dd5c06-a522-4c19-87ea-3c8695dab7c3")
 	)
 	(wire
 		(pts
@@ -4738,7 +4776,7 @@
 	)
 	(wire
 		(pts
-			(xy 242.57 113.03) (xy 240.03 113.03)
+			(xy 242.57 113.03) (xy 238.76 113.03)
 		)
 		(stroke
 			(width 0)
@@ -4918,7 +4956,7 @@
 	)
 	(wire
 		(pts
-			(xy 229.87 119.38) (xy 233.68 119.38)
+			(xy 229.87 119.38) (xy 234.95 119.38)
 		)
 		(stroke
 			(width 0)
@@ -5005,6 +5043,16 @@
 			(type default)
 		)
 		(uuid "d5d92b2c-6120-48fd-a68f-0f1a13208abb")
+	)
+	(wire
+		(pts
+			(xy 115.57 152.4) (xy 115.57 154.94)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d6a087dc-e0d0-41e6-8447-b37cdaf4c434")
 	)
 	(wire
 		(pts
@@ -5128,7 +5176,7 @@
 	)
 	(wire
 		(pts
-			(xy 229.87 114.3) (xy 231.14 114.3)
+			(xy 229.87 114.3) (xy 234.95 114.3)
 		)
 		(stroke
 			(width 0)
@@ -5197,6 +5245,17 @@
 			(justify left bottom)
 		)
 		(uuid "3e4a0ee9-edd3-43ea-a6c4-9f52ffb887b3")
+	)
+	(text "This testpoint in case \nsome GND reference reworks\nneed to be done to the DAC"
+		(exclude_from_sim no)
+		(at 84.582 153.416 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4f4facec-23db-4f80-a048-80deef8255cc")
 	)
 	(text "420nH 3.15mOhm"
 		(exclude_from_sim no)
@@ -5341,72 +5400,6 @@
 			(project ""
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "R25")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 236.22 147.32 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "039d7485-e363-4314-8758-436d9ff7853a")
-		(property "Reference" "#PWR086"
-			(at 236.22 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 236.22 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 236.22 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 236.22 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 236.22 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "9b867e9b-181f-4f64-a406-07af18480fd2")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR086")
 					(unit 1)
 				)
 			)
@@ -5588,73 +5581,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 196.85 125.73 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "11974108-45e8-4cc6-99c1-780eb05b2ec5")
-		(property "Reference" "#PWR080"
-			(at 196.85 132.08 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 196.85 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 196.85 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 196.85 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 196.85 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "47174ea5-c0e6-401f-a281-416dec5b18b9")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR080")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R_Small")
 		(at 175.26 134.62 90)
 		(mirror x)
@@ -5728,6 +5654,138 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "R23")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDD")
+		(at 236.22 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "170a5c52-3a1d-41b1-886d-666ed90151dd")
+		(property "Reference" "#PWR086"
+			(at 236.22 153.67 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 236.22 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 236.22 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 236.22 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 236.22 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "8944f1ff-f64d-4fe7-9b49-61676c4f179a")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR086")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDD")
+		(at 115.57 137.16 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "1a1631af-b238-40d5-9e8c-119b77243e6b")
+		(property "Reference" "#PWR074"
+			(at 115.57 143.51 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 115.57 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 115.57 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 115.57 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 115.57 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b1e09a4c-d091-406c-93d4-978188789f72")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR074")
 					(unit 1)
 				)
 			)
@@ -5890,6 +5948,72 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GNDD")
+		(at 129.54 154.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "203ba2dc-35bd-45f4-b5aa-e8442bd1caba")
+		(property "Reference" "#PWR076"
+			(at 129.54 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 129.54 158.75 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 129.54 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 129.54 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 129.54 154.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "29bfd369-1902-4171-87d6-c026759faffe")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR076")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:R_Small")
 		(at 198.12 110.49 0)
 		(mirror y)
@@ -5969,72 +6093,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 185.42 140.97 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "25d4b24b-8054-4976-811e-43df87ef893e")
-		(property "Reference" "#PWR079"
-			(at 185.42 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 185.42 146.05 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 185.42 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 185.42 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 185.42 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d646fb28-b91b-4a50-9cab-1412a1311061")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR079")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "power:+3.3V")
 		(at 129.54 133.35 0)
 		(unit 1)
@@ -6095,138 +6153,6 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "#PWR075")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 129.54 154.94 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "281715f9-9cc4-4a6c-b216-414f5e871b6e")
-		(property "Reference" "#PWR076"
-			(at 129.54 161.29 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 129.54 160.02 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 129.54 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 129.54 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 129.54 154.94 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "d3a2c451-b6c0-4255-a401-fe173b7e0002")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR076")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 233.68 114.3 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "34d80d31-0e34-4406-8f43-b33bc4ea0eb2")
-		(property "Reference" "#PWR084"
-			(at 233.68 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 233.68 119.38 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 233.68 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 233.68 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 233.68 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "394e8693-c5ea-4a1b-b112-5bdab4766eb5")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR084")
 					(unit 1)
 				)
 			)
@@ -6312,16 +6238,17 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDPWR")
-		(at 138.43 113.03 0)
+		(lib_id "power:GNDD")
+		(at 242.57 121.92 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "40d3cd5c-6085-4173-a489-d8bf051f1706")
-		(property "Reference" "#PWR078"
-			(at 138.43 118.11 0)
+		(fields_autoplaced yes)
+		(uuid "3d77816a-89e9-49bc-a0cf-0eef886e3ce6")
+		(property "Reference" "#PWR087"
+			(at 242.57 128.27 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6329,8 +6256,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PGND"
-			(at 138.303 116.84 0)
+		(property "Value" "SGND"
+			(at 242.57 125.73 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6338,7 +6265,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 138.43 114.3 0)
+			(at 242.57 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6347,7 +6274,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 138.43 114.3 0)
+			(at 242.57 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6355,8 +6282,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
-			(at 138.43 113.03 0)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 242.57 121.92 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6365,12 +6292,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "a9c18ddd-de18-444e-9ecc-f11ca9103be6")
+			(uuid "75058406-c98d-4249-acb1-17228663d6c8")
 		)
 		(instances
-			(project ""
+			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR078")
+					(reference "#PWR087")
 					(unit 1)
 				)
 			)
@@ -6456,16 +6383,17 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GNDPWR")
-		(at 198.12 161.29 0)
+		(lib_id "power:GNDD")
+		(at 196.85 147.32 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "48a7dbee-3d13-43e7-bb9a-f4242aa438ed")
-		(property "Reference" "#PWR089"
-			(at 198.12 166.37 0)
+		(fields_autoplaced yes)
+		(uuid "4aa96076-2cb6-4b48-8a3c-28d2ceae4859")
+		(property "Reference" "#PWR081"
+			(at 196.85 153.67 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6473,8 +6401,8 @@
 				(hide yes)
 			)
 		)
-		(property "Value" "PGND"
-			(at 197.993 165.1 0)
+		(property "Value" "SGND"
+			(at 196.85 151.13 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6482,7 +6410,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 198.12 162.56 0)
+			(at 196.85 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6491,7 +6419,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 198.12 162.56 0)
+			(at 196.85 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6499,8 +6427,8 @@
 				(hide yes)
 			)
 		)
-		(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
-			(at 198.12 161.29 0)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 196.85 147.32 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6509,12 +6437,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "63a86980-f6bb-41d6-b8e7-3ecec61d2a7c")
+			(uuid "563afe35-65e6-43b5-951d-5640c265ca3d")
 		)
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR089")
+					(reference "#PWR081")
 					(unit 1)
 				)
 			)
@@ -6594,6 +6522,139 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "C28")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDD")
+		(at 231.14 130.81 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "5451f1e7-9d2b-43c6-b782-3a32d6afaf52")
+		(property "Reference" "#PWR082"
+			(at 231.14 137.16 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 231.14 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 231.14 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 231.14 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 231.14 130.81 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5c4166e8-cfab-4e59-ba75-89a6a295e213")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR082")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:TestPoint_Alt")
+		(at 115.57 152.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "55ab53b3-127a-45fc-ba14-8c7d6282eab2")
+		(property "Reference" "TP12"
+			(at 113.284 147.066 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "TestPoint_Alt"
+			(at 118.11 150.3679 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Footprint" "TestPoint:TestPoint_THTPad_D1.0mm_Drill0.5mm"
+			(at 120.65 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 120.65 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "test point (alternative shape)"
+			(at 115.57 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "3d668869-3f85-49b5-ac03-2fda6d82e241")
+		)
+		(instances
+			(project ""
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "TP12")
 					(unit 1)
 				)
 			)
@@ -6754,16 +6815,82 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 231.14 161.29 0)
+		(lib_id "power:GNDD")
+		(at 234.95 120.65 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "5f373949-c2a9-4fce-8583-bea52335c2c8")
-		(property "Reference" "#PWR083"
-			(at 231.14 167.64 0)
+		(fields_autoplaced yes)
+		(uuid "5cd79494-4457-4e6f-bc08-bd19734307c9")
+		(property "Reference" "#PWR085"
+			(at 234.95 127 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 234.95 124.46 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 234.95 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 234.95 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 234.95 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "dbbfb9f8-e04e-4b0f-b1c3-4551e0ba0344")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR085")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 115.57 154.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "6a5d4166-615f-4124-98e8-6babfd193ec7")
+		(property "Reference" "#PWR084"
+			(at 115.57 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6772,7 +6899,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 231.14 166.37 0)
+			(at 115.57 160.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6781,7 +6908,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 231.14 161.29 0)
+			(at 115.57 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6790,7 +6917,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 231.14 161.29 0)
+			(at 115.57 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6799,7 +6926,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 231.14 161.29 0)
+			(at 115.57 154.94 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -6808,77 +6935,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "43e148cd-7178-41e4-be10-b6bfd2c12c7d")
+			(uuid "f8d2ca7d-c716-4508-8fb9-ee54567e9095")
 		)
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR083")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GNDPWR")
-		(at 256.54 113.03 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "72dcbf8c-1c79-47e4-9b09-c9dd9fbf1452")
-		(property "Reference" "#PWR088"
-			(at 256.54 118.11 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "PGND"
-			(at 256.413 116.84 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 256.54 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 256.54 114.3 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"GNDPWR\" , global ground"
-			(at 256.54 113.03 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "b1b4f3e7-a9fe-4e4d-a2bd-4e4b4fa036e8")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR088")
+					(reference "#PWR084")
 					(unit 1)
 				)
 			)
@@ -6957,6 +7019,72 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "C24")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDD")
+		(at 196.85 125.73 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "78b3c93b-e3c0-44f1-a25a-9fc0c1a96e5e")
+		(property "Reference" "#PWR080"
+			(at 196.85 132.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 196.85 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 196.85 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 196.85 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 196.85 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a6bb7005-799c-477d-ad08-8e08ef8e2214")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR080")
 					(unit 1)
 				)
 			)
@@ -7565,72 +7693,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 231.14 130.81 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "a765d13f-03ba-4176-8826-c78afc4935e9")
-		(property "Reference" "#PWR082"
-			(at 231.14 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 231.14 135.89 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 231.14 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 231.14 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 231.14 130.81 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e52693ee-d5b3-4747-ac71-1e877b15e22c")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR082")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 294.64 107.95 0)
 		(unit 1)
@@ -7789,73 +7851,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 196.85 147.32 0)
-		(mirror y)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "bbbff02c-362c-43ec-80d1-ff78eea18328")
-		(property "Reference" "#PWR081"
-			(at 196.85 153.67 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 196.85 152.4 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 196.85 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 196.85 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 196.85 147.32 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "00837cb3-ead4-463f-8241-ec5e37b2d912")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR081")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 275.59 107.95 0)
 		(unit 1)
@@ -7936,15 +7931,15 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 242.57 121.92 0)
+		(at 198.12 161.29 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "c2fdb283-5378-4454-b674-f1d8e2d8e4cd")
-		(property "Reference" "#PWR087"
-			(at 242.57 128.27 0)
+		(uuid "c1b18e1b-90fd-4f9b-9207-b7b0583a7bdf")
+		(property "Reference" "#PWR078"
+			(at 198.12 167.64 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7953,7 +7948,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 242.57 127 0)
+			(at 198.12 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7962,7 +7957,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 242.57 121.92 0)
+			(at 198.12 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7971,7 +7966,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 242.57 121.92 0)
+			(at 198.12 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7980,7 +7975,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 242.57 121.92 0)
+			(at 198.12 161.29 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7989,12 +7984,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "0c38c41b-225f-4fae-a06a-8746fdd4f3ec")
+			(uuid "cd0d3fec-fece-426e-97d0-8ec2594a158b")
 		)
 		(instances
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR087")
+					(reference "#PWR078")
 					(unit 1)
 				)
 			)
@@ -8073,6 +8068,72 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "C17")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDD")
+		(at 185.42 140.97 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "d15b6caa-6ad5-4956-b8dd-d48bcf080900")
+		(property "Reference" "#PWR079"
+			(at 185.42 147.32 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 185.42 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 185.42 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 185.42 140.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "69a07a0c-28a2-47f9-84b7-d560993e2bb9")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR079")
 					(unit 1)
 				)
 			)
@@ -8236,138 +8297,6 @@
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 233.68 120.65 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "dde2e830-d81c-4e4b-ba37-b7ddb3f2fae6")
-		(property "Reference" "#PWR085"
-			(at 233.68 127 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 233.68 125.73 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 233.68 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 233.68 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 233.68 120.65 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "7fce5217-0e2d-4682-9856-99c71c5ede5b")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR085")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 115.57 137.16 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "ddf9f813-50fd-41a4-96d0-789dfa6425b5")
-		(property "Reference" "#PWR074"
-			(at 115.57 143.51 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "GND"
-			(at 115.57 142.24 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 115.57 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 115.57 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" ""
-			(at 115.57 137.16 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "a7396a12-08b6-4fda-b578-531b08e5bbca")
-		)
-		(instances
-			(project "roadster-charger"
-				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
-					(reference "#PWR074")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:C_Small")
 		(at 138.43 107.95 0)
 		(unit 1)
@@ -8525,6 +8454,138 @@
 		)
 	)
 	(symbol
+		(lib_id "power:GND")
+		(at 256.54 113.03 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "e19f38f2-835b-410a-9306-50e7202bd856")
+		(property "Reference" "#PWR088"
+			(at 256.54 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 256.54 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 256.54 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "5dd7bb94-698e-4426-aacc-d7b87518ab67")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR088")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GNDD")
+		(at 231.14 161.29 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "ef29c8f1-506e-4ac7-b6af-ce59dae343de")
+		(property "Reference" "#PWR090"
+			(at 231.14 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "SGND"
+			(at 231.14 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 231.14 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 231.14 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Power symbol creates a global label with name \"GNDD\" , digital ground"
+			(at 231.14 161.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b5e5ba98-e68b-4fc3-a1d1-ff02a5a224bf")
+		)
+		(instances
+			(project ""
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR090")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "power:VBUS")
 		(at 138.43 102.87 0)
 		(unit 1)
@@ -8585,6 +8646,72 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "#PWR077")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 138.43 113.03 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "f85c4380-c736-45be-babd-c1892e7705d4")
+		(property "Reference" "#PWR083"
+			(at 138.43 119.38 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 138.43 118.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 138.43 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 138.43 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 138.43 113.03 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "a5dd7594-4711-4725-b9a8-cca7755a73d9")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR083")
 					(unit 1)
 				)
 			)

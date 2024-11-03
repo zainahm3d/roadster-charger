@@ -2636,11 +2636,24 @@
 				)
 			)
 		)
+		(property "MPN" "DNP"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "85e73352-81e2-4b7e-bba7-6b2077d7cad5")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "MountingHole*Pad*")
 		(path "/f1a6e7ca-8c79-4968-9a74-cb6116a07316")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.85 0)
@@ -3007,7 +3020,7 @@
 		(path "/e32bc935-9d59-4ede-8200-6ac31f15c109")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -9205,7 +9218,7 @@
 		(path "/8076eea9-27f3-41c1-8aaf-5ca04614c965")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start -1.225 -0.8)
 			(end 1.225 -0.8)
@@ -9613,7 +9626,7 @@
 		(path "/a799ac91-1787-4274-90e0-230235c8e954")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr smd exclude_from_bom dnp)
+		(attr smd dnp)
 		(fp_line
 			(start -0.14058 -0.51)
 			(end 0.14058 -0.51)
@@ -9821,11 +9834,24 @@
 				)
 			)
 		)
+		(property "MPN" "DNP"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "9692acd4-f1e2-4a10-8d54-cb748a083704")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "MountingHole*Pad*")
 		(path "/92734910-8f20-46dd-824e-99996784508e")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 2.85 0)
@@ -12434,7 +12460,7 @@
 		(path "/e021f6c2-2bf6-40e5-b24a-59d82cc1f9c7")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -13690,7 +13716,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/1a6dc845-e0ef-4b2e-a68e-fdf65047b70a")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start -1.225 -0.8)
 			(end 1.225 -0.8)
@@ -15689,6 +15715,19 @@
 				)
 			)
 		)
+		(property "MPN" "DNP"
+			(at 0 0 -90)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "13f80114-f889-4896-94dc-95613e50d2b7")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "SolderJumper*Open*")
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/9f8ebb27-9175-4a18-a221-f668a950325a")
 		(sheetname "boost")
@@ -16195,7 +16234,7 @@
 		(path "/c1ee652f-81a3-48a9-94d1-60e0e2adf5fe")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -19276,7 +19315,7 @@
 		(path "/dd1417aa-ecff-4039-a021-d5348931a2bb")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr smd exclude_from_bom dnp)
+		(attr smd dnp)
 		(fp_line
 			(start -0.14058 -0.51)
 			(end 0.14058 -0.51)
@@ -19498,7 +19537,7 @@
 		(path "/e0547658-0ef7-4596-882a-b39cd241280a")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -20925,7 +20964,7 @@
 		(path "/2be8217f-e787-4a1b-9488-7368428e0b42")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -21440,7 +21479,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/5b303f34-369b-40ca-961c-1d03a86077a1")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -24192,12 +24231,12 @@
 				)
 			)
 		)
-		(property "MPN " "RC0603JR-07330RL"
+		(property "MPN" "RC0603JR-07330RL"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
 			(hide yes)
-			(uuid "c2198da2-bcfa-4a1e-9436-7da5de8f2ab6")
+			(uuid "e6868c5b-c6bc-4696-9d70-7bed7643b7ba")
 			(effects
 				(font
 					(size 1 1)
@@ -24431,7 +24470,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/92179ce5-fe20-45da-8e59-cc6dcf0d16f4")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -24836,7 +24875,7 @@
 		(path "/cd946d5c-8031-4650-8b45-1dfe60bf930c")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start -1.225 0.8)
 			(end -1.225 -0.8)
@@ -25457,11 +25496,24 @@
 				)
 			)
 		)
+		(property "MPN" "DNP"
+			(at 0 0 0)
+			(unlocked yes)
+			(layer "F.Fab")
+			(hide yes)
+			(uuid "97c23167-c0b3-4ef8-a737-e124b2b2f94b")
+			(effects
+				(font
+					(size 1 1)
+					(thickness 0.15)
+				)
+			)
+		)
 		(property ki_fp_filters "Pin* Test*")
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/55ab53b3-127a-45fc-ba14-8c7d6282eab2")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr exclude_from_pos_files)
+		(attr exclude_from_pos_files exclude_from_bom)
 		(fp_circle
 			(center 0 0)
 			(end 0 0.7)
@@ -27419,7 +27471,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/8da4e233-b515-4cdf-b4fd-bec75e2b65bb")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole)
+		(attr through_hole exclude_from_bom)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)

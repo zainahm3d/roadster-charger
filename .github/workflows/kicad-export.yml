@@ -34,7 +34,7 @@ jobs:
       - name: Export BOM
         run: |
           mkdir -p output/bom
-          for file in *.kicad_sch; do kicad-cli sch export python-bom --output output/bom/$(basename "$file" .kicad_sch).xml "$file"; done
+          for file in *.kicad_sch; do kicad-cli sch export bom --fields "Reference,Value,Footprint,\${QUANTITY},\${DNP},MPN" --group-by "Reference,Value,Footprint,MPN" --format-preset CSV --output output/bom/$(basename "$file" .kicad_sch).csv "$file"; done
 
       - name: Export PCB PDFs
         run: |

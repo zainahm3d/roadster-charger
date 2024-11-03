@@ -5796,7 +5796,7 @@
 		(at 248.92 102.87 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "1a6dc845-e0ef-4b2e-a68e-fdf65047b70a")
@@ -6598,7 +6598,7 @@
 		(at 115.57 152.4 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "55ab53b3-127a-45fc-ba14-8c7d6282eab2")
@@ -6648,6 +6648,15 @@
 				(hide yes)
 			)
 		)
+		(property "MPN" "DNP"
+			(at 115.57 152.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3d668869-3f85-49b5-ac03-2fda6d82e241")
 		)
@@ -6665,7 +6674,7 @@
 		(at 189.23 113.03 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "5b303f34-369b-40ca-961c-1d03a86077a1")
@@ -7174,7 +7183,7 @@
 		(at 184.15 118.11 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "8da4e233-b515-4cdf-b4fd-bec75e2b65bb")
@@ -7250,7 +7259,7 @@
 		(at 182.88 133.35 0)
 		(unit 1)
 		(exclude_from_sim no)
-		(in_bom yes)
+		(in_bom no)
 		(on_board yes)
 		(dnp no)
 		(uuid "92179ce5-fe20-45da-8e59-cc6dcf0d16f4")
@@ -7524,6 +7533,15 @@
 			)
 		)
 		(property "Description" "Solder Jumper, 2-pole, open"
+			(at 175.26 138.43 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "DNP"
 			(at 175.26 138.43 0)
 			(effects
 				(font

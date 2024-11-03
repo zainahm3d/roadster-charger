@@ -2488,7 +2488,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -2506,7 +2506,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -2668,7 +2668,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -2686,7 +2686,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -2848,7 +2848,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -2866,7 +2866,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -3028,7 +3028,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"
@@ -3046,7 +3046,7 @@
 						)
 					)
 				)
-				(pin power_in line
+				(pin passive line
 					(at 15.24 27.94 180)
 					(length 5.08)
 					(name "VS2"

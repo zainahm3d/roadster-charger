@@ -5257,6 +5257,26 @@
 		)
 		(uuid "4f4facec-23db-4f80-a048-80deef8255cc")
 	)
+	(text "2.2uF 100V X7R"
+		(exclude_from_sim no)
+		(at 279.4 102.108 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a37193e9-3847-406c-84b8-cf2f18d51d42")
+	)
+	(text "2.2uF 100V X7R"
+		(exclude_from_sim no)
+		(at 151.13 102.108 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "acb8e606-6773-44d4-84dd-69756451e25f")
+	)
 	(text "420nH 3.15mOhm"
 		(exclude_from_sim no)
 		(at 215.392 94.996 0)

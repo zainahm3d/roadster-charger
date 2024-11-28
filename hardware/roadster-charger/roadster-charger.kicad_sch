@@ -10637,7 +10637,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
 			(at 257.81 138.43 0)
 			(effects
 				(font
@@ -10664,7 +10664,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "ERJ-3BWFR020V"
+		(property "MPN" "PA1206FRF470R02L"
 			(at 257.81 138.43 90)
 			(effects
 				(font
@@ -20145,7 +20145,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
+		(property "Footprint" "Resistor_SMD:R_1206_3216Metric"
 			(at 71.12 39.37 0)
 			(effects
 				(font
@@ -20172,7 +20172,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "LVT06R0100FER"
+		(property "MPN" "PE1206FRF470R01L"
 			(at 71.12 39.37 90)
 			(effects
 				(font

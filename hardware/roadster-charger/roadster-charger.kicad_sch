@@ -19176,26 +19176,6 @@
 				(hide yes)
 			)
 		)
-		(property "Package" "None"
-			(at 393.7 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-				(hide yes)
-			)
-		)
-		(property "Price" "None"
-			(at 393.7 140.97 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify bottom)
-				(hide yes)
-			)
-		)
 		(property "MPN" "54-00166"
 			(at 393.7 140.97 0)
 			(effects

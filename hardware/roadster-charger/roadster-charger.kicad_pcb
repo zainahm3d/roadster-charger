@@ -1617,7 +1617,7 @@
 		(descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C10"
-			(at 0 -1.43 360)
+			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "4d03bf86-5b47-4a43-a378-86e4324aa85f")
@@ -1629,7 +1629,7 @@
 			)
 		)
 		(property "Value" "0.1uF"
-			(at 0 1.43 360)
+			(at 0 1.43 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "cf6b9758-7dd9-4c4f-b2e4-98c6e84c623a")
@@ -1641,7 +1641,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "0a165f82-4802-4136-9612-95b27c81fc42")
@@ -1653,7 +1653,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "3a3d48ba-bfcb-4e53-bb09-3e3751a8a36c")
@@ -1665,7 +1665,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2e5b1b2e-2615-4dda-b514-35aec7070b21")
@@ -1794,7 +1794,7 @@
 			(uuid "c366a7c7-a759-4f22-88a5-186c9164a92a")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "283eeaaa-dd0b-44d2-afae-9e2ccd0dffa8")
 			(effects
@@ -3023,7 +3023,7 @@
 		(path "/e32bc935-9d59-4ede-8200-6ac31f15c109")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -8756,7 +8756,7 @@
 		(descr "5.0mm x 5.0mm Addressable RGB LED NeoPixel, https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf")
 		(tags "LED RGB NeoPixel PLCC-4 5050")
 		(property "Reference" "D1"
-			(at 0 -3.5 360)
+			(at 0 -3.5 0)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "06219c77-045f-4466-aaa2-3c01189c6eab")
@@ -8768,7 +8768,7 @@
 			)
 		)
 		(property "Value" "WS2812B"
-			(at 0 4 360)
+			(at 0 4 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f950509f-26f3-4f54-867b-38c63c9d665c")
@@ -8780,7 +8780,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "45bb2425-0e08-47b6-ac89-7b268f45b662")
@@ -8792,7 +8792,7 @@
 			)
 		)
 		(property "Datasheet" "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "8dbd6943-2919-47c4-8b0f-2d5c3c34634c")
@@ -8804,7 +8804,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "f968dd0e-8f02-4bbc-8e0e-7bd801ca068a")
@@ -8816,7 +8816,7 @@
 			)
 		)
 		(property "MPN" "COM-16347"
-			(at 499.3 228.8 360)
+			(at 499.3 228.8 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "afe02ac9-f48d-478f-b709-2b6e5aa273e5")
@@ -8964,7 +8964,7 @@
 			(uuid "b6f9ca69-65b2-4717-8253-1f3451fd5086")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "150f3ab3-4ba5-4bb5-ba40-8c668bb6ccb5")
 			(effects
@@ -9213,7 +9213,7 @@
 		(path "/8076eea9-27f3-41c1-8aaf-5ca04614c965")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start -1.225 -0.8)
 			(end 1.225 -0.8)
@@ -10297,7 +10297,7 @@
 		(descr "5.0mm x 5.0mm Addressable RGB LED NeoPixel, https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf")
 		(tags "LED RGB NeoPixel PLCC-4 5050")
 		(property "Reference" "D2"
-			(at 0 -3.5 360)
+			(at 0 -3.5 0)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "e6b8bc17-b56e-4c9c-80a0-66668b5b0bb3")
@@ -10309,7 +10309,7 @@
 			)
 		)
 		(property "Value" "WS2812B"
-			(at 0 4 360)
+			(at 0 4 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6b823369-ed01-4f4f-a834-76721f27bacb")
@@ -10321,7 +10321,7 @@
 			)
 		)
 		(property "Footprint" "LED_SMD:LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "42af979e-cd96-4698-9404-70deb535e165")
@@ -10333,7 +10333,7 @@
 			)
 		)
 		(property "Datasheet" "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "62f21835-e8a2-4516-97a2-40d33a29a563")
@@ -10345,7 +10345,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "59ab08cb-c541-472d-b1fc-1674d1760d17")
@@ -10357,7 +10357,7 @@
 			)
 		)
 		(property "MPN" "COM-16347"
-			(at 499.3 241.8 360)
+			(at 499.3 241.8 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "c4f639e6-5e95-421e-9da8-643b54f7da32")
@@ -10505,7 +10505,7 @@
 			(uuid "7427b7e5-6ec0-4316-ac93-616cb94404a3")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "c5d51568-3b3c-4c19-a811-df4b1c759870")
 			(effects
@@ -12444,7 +12444,7 @@
 		(path "/e021f6c2-2bf6-40e5-b24a-59d82cc1f9c7")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -13700,7 +13700,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/1a6dc845-e0ef-4b2e-a68e-fdf65047b70a")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start -1.225 -0.8)
 			(end 1.225 -0.8)
@@ -16218,7 +16218,7 @@
 		(path "/c1ee652f-81a3-48a9-94d1-60e0e2adf5fe")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -19521,7 +19521,7 @@
 		(path "/e0547658-0ef7-4596-882a-b39cd241280a")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -20948,7 +20948,7 @@
 		(path "/2be8217f-e787-4a1b-9488-7368428e0b42")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -21463,7 +21463,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/5b303f34-369b-40ca-961c-1d03a86077a1")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -22941,7 +22941,7 @@
 		(descr "TSOT, 6 Pin (https://www.jedec.org/sites/default/files/docs/MO-193D.pdf variant AA), generated with kicad-footprint-generator ipc_gullwing_generator.py")
 		(tags "TSOT TO_SOT_SMD")
 		(property "Reference" "U7"
-			(at 0 -2.4 360)
+			(at 0 -2.4 0)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "46f89c29-b669-4d8e-8871-62187fd7652a")
@@ -22953,7 +22953,7 @@
 			)
 		)
 		(property "Value" "LM5050-1"
-			(at 0 2.4 360)
+			(at 0 2.4 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "3f937e16-3b3f-4f7b-a6fa-040813da9249")
@@ -22965,7 +22965,7 @@
 			)
 		)
 		(property "Footprint" "Package_TO_SOT_SMD:TSOT-23-6"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "e7948f40-f02e-4a62-8507-a973b9799145")
@@ -22977,7 +22977,7 @@
 			)
 		)
 		(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm5050-1-q1.pdf"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "6fb23e17-864a-4911-8758-9a08b77de7b0")
@@ -22989,7 +22989,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a2584232-8a39-473e-8fb8-b7a7ba2d7f1b")
@@ -23148,7 +23148,7 @@
 			(uuid "b048d20d-5b23-490a-98e4-df68f3362176")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "51c2f370-3bce-4b9c-8155-2e11a777d9cc")
 			(effects
@@ -24454,7 +24454,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/92179ce5-fe20-45da-8e59-cc6dcf0d16f4")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)
@@ -24563,7 +24563,7 @@
 		(descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "capacitor")
 		(property "Reference" "C11"
-			(at 0 -1.43 360)
+			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "e3d39724-e1da-4543-aa05-9aad34c5c004")
@@ -24575,7 +24575,7 @@
 			)
 		)
 		(property "Value" "0.1uF"
-			(at 0 1.43 360)
+			(at 0 1.43 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "a342cf72-b7e1-4201-8463-7d063af08cf2")
@@ -24587,7 +24587,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0603_1608Metric"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "9eb36a6d-9964-4a37-9515-b03a22e8505f")
@@ -24599,7 +24599,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "10a552b0-155d-4abe-9637-27798817857d")
@@ -24611,7 +24611,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "879b27f1-5a0a-41c9-9902-f63bf689e633")
@@ -24740,7 +24740,7 @@
 			(uuid "2611e927-d867-4281-8b1f-3968a7ecdfba")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "59223ec5-2185-4266-a74f-e311e23a9447")
 			(effects
@@ -24859,7 +24859,7 @@
 		(path "/cd946d5c-8031-4650-8b45-1dfe60bf930c")
 		(sheetname "Root")
 		(sheetfile "roadster-charger.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start -1.225 0.8)
 			(end -1.225 -0.8)
@@ -25550,7 +25550,7 @@
 		(descr "Resistor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 72, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
 		(tags "resistor")
 		(property "Reference" "R13"
-			(at 0 -1.43 360)
+			(at 0 -1.43 0)
 			(layer "F.SilkS")
 			(hide yes)
 			(uuid "2a31029d-30b4-4aab-96e0-059a0fc3ccb6")
@@ -25562,7 +25562,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 0 1.43 360)
+			(at 0 1.43 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "2939f5d3-692d-4432-b35c-387528a4a249")
@@ -25574,7 +25574,7 @@
 			)
 		)
 		(property "Footprint" "Resistor_SMD:R_0603_1608Metric"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "bc8b71ba-8281-4d14-8585-80739233587a")
@@ -25586,7 +25586,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "cb8f69d7-8cab-4887-a085-cbcb668a447a")
@@ -25598,7 +25598,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(hide yes)
 			(uuid "b9974536-4dea-4a2b-bd5e-0da31efb8ff0")
@@ -25727,7 +25727,7 @@
 			(uuid "b1d0c9b3-5d16-4c20-8734-30edf81f9185")
 		)
 		(fp_text user "${REFERENCE}"
-			(at 0 0 360)
+			(at 0 0 0)
 			(layer "F.Fab")
 			(uuid "64ab377c-0891-4e57-8763-d54e5d7c61e8")
 			(effects
@@ -27455,7 +27455,7 @@
 		(path "/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0/8da4e233-b515-4cdf-b4fd-bec75e2b65bb")
 		(sheetname "boost")
 		(sheetfile "boost.kicad_sch")
-		(attr through_hole exclude_from_bom)
+		(attr through_hole)
 		(fp_line
 			(start 1.225 -0.8)
 			(end 1.225 0.8)

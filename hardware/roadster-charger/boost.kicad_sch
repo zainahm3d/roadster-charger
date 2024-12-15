@@ -619,7 +619,7 @@
 				)
 			)
 			(property "Datasheet" "~"
-				(at 0 0 0)
+				(at -1.27 0 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -628,6 +628,15 @@
 				)
 			)
 			(property "Description" "Inductor, small symbol"
+				(at 0 0 0)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(hide yes)
+				)
+			)
+			(property "MPN" "PA5119.421NLT"
 				(at 0 0 0)
 				(effects
 					(font
@@ -655,10 +664,9 @@
 				)
 			)
 			(symbol "L_Small_0_1"
-				(arc
-					(start 0 -2.032)
-					(mid 0.5058 -1.524)
-					(end 0 -1.016)
+				(rectangle
+					(start -5.08 3.81)
+					(end 0 -3.81)
 					(stroke
 						(width 0)
 						(type default)
@@ -668,9 +676,9 @@
 					)
 				)
 				(arc
-					(start 0 -1.016)
-					(mid 0.5058 -0.508)
-					(end 0 0)
+					(start -1.27 -2.032)
+					(mid -0.7642 -1.524)
+					(end -1.27 -1.016)
 					(stroke
 						(width 0)
 						(type default)
@@ -680,9 +688,9 @@
 					)
 				)
 				(arc
-					(start 0 0)
-					(mid 0.5058 0.508)
-					(end 0 1.016)
+					(start -1.27 -1.016)
+					(mid -0.7642 -0.508)
+					(end -1.27 0)
 					(stroke
 						(width 0)
 						(type default)
@@ -692,9 +700,21 @@
 					)
 				)
 				(arc
-					(start 0 1.016)
-					(mid 0.5058 1.524)
-					(end 0 2.032)
+					(start -1.27 0)
+					(mid -0.7642 0.508)
+					(end -1.27 1.016)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(arc
+					(start -1.27 1.016)
+					(mid -0.7642 1.524)
+					(end -1.27 2.032)
 					(stroke
 						(width 0)
 						(type default)
@@ -706,8 +726,8 @@
 			)
 			(symbol "L_Small_1_1"
 				(pin passive line
-					(at 0 -2.54 90)
-					(length 0.508)
+					(at -1.27 -5.08 90)
+					(length 3)
 					(name "~"
 						(effects
 							(font
@@ -724,8 +744,8 @@
 					)
 				)
 				(pin passive line
-					(at 0 2.54 270)
-					(length 0.508)
+					(at -1.27 5.08 270)
+					(length 3)
 					(name "~"
 						(effects
 							(font
@@ -742,8 +762,8 @@
 					)
 				)
 				(pin free line
-					(at 6.35 2.54 0)
-					(length 2.54) hide
+					(at -3.81 5.08 270)
+					(length 1.27)
 					(name "MNT"
 						(effects
 							(font
@@ -4286,7 +4306,7 @@
 	)
 	(wire
 		(pts
-			(xy 198.12 92.71) (xy 212.09 92.71)
+			(xy 198.12 85.09) (xy 209.55 85.09)
 		)
 		(stroke
 			(width 0)
@@ -4466,7 +4486,7 @@
 	)
 	(wire
 		(pts
-			(xy 231.14 92.71) (xy 231.14 101.6)
+			(xy 231.14 85.09) (xy 231.14 101.6)
 		)
 		(stroke
 			(width 0)
@@ -4516,6 +4536,16 @@
 	)
 	(wire
 		(pts
+			(xy 209.55 87.63) (xy 208.28 87.63)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70fdfd15-4948-4302-bf32-d695a097ed11")
+	)
+	(wire
+		(pts
 			(xy 236.22 139.7) (xy 236.22 142.24)
 		)
 		(stroke
@@ -4553,6 +4583,16 @@
 			(type default)
 		)
 		(uuid "7638fc99-0b97-4e0c-9187-529e0b91c178")
+	)
+	(wire
+		(pts
+			(xy 208.28 87.63) (xy 208.28 88.9)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "76f088f5-381d-42fd-91c3-47b23b099f34")
 	)
 	(wire
 		(pts
@@ -4756,7 +4796,7 @@
 	)
 	(wire
 		(pts
-			(xy 198.12 101.6) (xy 198.12 92.71)
+			(xy 198.12 101.6) (xy 198.12 85.09)
 		)
 		(stroke
 			(width 0)
@@ -5016,7 +5056,7 @@
 	)
 	(wire
 		(pts
-			(xy 217.17 92.71) (xy 231.14 92.71)
+			(xy 219.71 85.09) (xy 231.14 85.09)
 		)
 		(stroke
 			(width 0)
@@ -5889,7 +5929,7 @@
 	)
 	(symbol
 		(lib_id "Device:L_Small")
-		(at 214.63 92.71 90)
+		(at 214.63 83.82 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5898,7 +5938,7 @@
 		(fields_autoplaced yes)
 		(uuid "1fd50cff-5be8-4c84-94b7-98d849417a32")
 		(property "Reference" "L1"
-			(at 214.63 87.63 90)
+			(at 214.63 78.74 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5906,7 +5946,7 @@
 			)
 		)
 		(property "Value" "PA5119.421NLT"
-			(at 214.63 90.17 90)
+			(at 214.63 81.28 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5914,7 +5954,7 @@
 			)
 		)
 		(property "Footprint" "footprints:SMT_119.421NLT_PUL"
-			(at 214.63 92.71 0)
+			(at 214.63 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5923,7 +5963,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 214.63 92.71 0)
+			(at 214.63 85.09 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5932,7 +5972,7 @@
 			)
 		)
 		(property "Description" "Inductor, small symbol"
-			(at 214.63 92.71 0)
+			(at 214.63 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5941,7 +5981,7 @@
 			)
 		)
 		(property "MPN" "PA5119.421NLT"
-			(at 214.63 92.71 0)
+			(at 214.63 83.82 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7883,6 +7923,73 @@
 			(project "roadster-charger"
 				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
 					(reference "C21")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 208.28 88.9 0)
+		(mirror y)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b62f0168-5643-4aef-b48d-140c89dab943")
+		(property "Reference" "#PWR091"
+			(at 208.28 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "GND"
+			(at 208.28 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 208.28 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" ""
+			(at 208.28 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" ""
+			(at 208.28 88.9 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "2cab58b2-ab3d-4468-b91c-c643843232c8")
+		)
+		(instances
+			(project "roadster-charger"
+				(path "/57ecac41-cd8a-4182-a81e-fed3e381aedd/64ca4e4e-11ba-4e5c-8f8e-2432a1d47dd0"
+					(reference "#PWR091")
 					(unit 1)
 				)
 			)

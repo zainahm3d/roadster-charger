@@ -5307,7 +5307,7 @@
 		)
 		(uuid "a37193e9-3847-406c-84b8-cf2f18d51d42")
 	)
-	(text "2.2uF 100V X7R"
+	(text "10uF 50V X7R"
 		(exclude_from_sim no)
 		(at 151.13 102.108 0)
 		(effects
@@ -5579,7 +5579,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 153.67 109.2262 0)
 			(effects
 				(font
@@ -5616,7 +5616,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 151.13 107.95 0)
 			(effects
 				(font
@@ -6236,7 +6236,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 147.32 109.2262 0)
 			(effects
 				(font
@@ -6273,7 +6273,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 144.78 107.95 0)
 			(effects
 				(font
@@ -7867,7 +7867,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 160.02 109.2262 0)
 			(effects
 				(font
@@ -7904,7 +7904,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 157.48 107.95 0)
 			(effects
 				(font
@@ -8459,7 +8459,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 140.97 109.2262 0)
 			(effects
 				(font
@@ -8496,7 +8496,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 138.43 107.95 0)
 			(effects
 				(font
@@ -8538,7 +8538,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 165.1 109.728 0)
 			(effects
 				(font
@@ -8574,7 +8574,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 163.83 107.95 0)
 			(effects
 				(font

@@ -2360,7 +2360,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 0 2.3 90)
 			(layer "F.Fab")
 			(uuid "5e470a15-39a1-4365-8572-ecf344cfd083")
@@ -2410,7 +2410,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -5381,7 +5381,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 0 2.3 90)
 			(layer "F.Fab")
 			(uuid "fba248bb-2309-40b1-9e16-8341c50a8ec4")
@@ -5431,7 +5431,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -6337,7 +6337,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 0 2.3 90)
 			(layer "F.Fab")
 			(uuid "f8a1aee0-4373-4fc0-a450-0a25d702ea24")
@@ -6387,7 +6387,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -18428,7 +18428,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 0 2.3 90)
 			(layer "F.Fab")
 			(uuid "b724f27e-1e20-45c7-9213-2921f616eba0")
@@ -18478,7 +18478,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 0 0 -90)
 			(unlocked yes)
 			(layer "F.Fab")
@@ -27859,7 +27859,7 @@
 				)
 			)
 		)
-		(property "Value" "2.2uF"
+		(property "Value" "10uF"
 			(at 0 2.3 90)
 			(layer "F.Fab")
 			(uuid "c9719b6d-60ee-4b19-b65f-a36e24542a07")
@@ -27909,7 +27909,7 @@
 				)
 			)
 		)
-		(property "MPN" "GRM32ER72A225KA35L"
+		(property "MPN" "CL32B106KBVVPLE"
 			(at 0 0 90)
 			(unlocked yes)
 			(layer "F.Fab")

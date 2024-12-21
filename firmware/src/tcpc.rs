@@ -11,7 +11,7 @@ use esp_hal::peripherals::I2C0;
 use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::Blocking;
 use esp_println::println;
-use zerocopy::AsBytes;
+use zerocopy::IntoBytes;
 
 use crate::usb_pd;
 
@@ -199,8 +199,8 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>) {
 
 pub fn vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
     let mut vbus: u16 = 0;
-    vbus.as_bytes_mut()[0] = read_reg(i2c, Register::VbusVoltageL);
-    vbus.as_bytes_mut()[1] = read_reg(i2c, Register::VbusVoltageH);
+    vbus.as_mut_bytes()[0] = read_reg(i2c, Register::VbusVoltageL);
+    vbus.as_mut_bytes()[1] = read_reg(i2c, Register::VbusVoltageH);
     vbus as u32 * 25 // LSB = 25mV
 }
 
@@ -323,8 +323,8 @@ fn transmit_message(
 fn get_rx_header(i2c: &mut I2C<'_, I2C0, Blocking>) -> usb_pd::MessageHeader {
     let mut header = usb_pd::MessageHeader(0x00);
 
-    header.0.as_bytes_mut()[0] = read_reg(i2c, Register::RxHeadL);
-    header.0.as_bytes_mut()[1] = read_reg(i2c, Register::RxHeadH);
+    header.0.as_mut_bytes()[0] = read_reg(i2c, Register::RxHeadL);
+    header.0.as_mut_bytes()[1] = read_reg(i2c, Register::RxHeadH);
 
     header
 }

@@ -1,7 +1,7 @@
 // Interface over i2c to the FUSB307B USB-PD type C port controller
 
 use core::panic;
-use core::sync::atomic::{AtomicBool, AtomicU32, Ordering};
+use core::sync::atomic::{AtomicU32, Ordering};
 
 use bitfield::bitfield;
 use esp_hal::delay::Delay;
@@ -17,8 +17,6 @@ use crate::usb_pd;
 
 const ADDRESS: u8 = 0x50;
 const BUF_SIZE: usize = 28; // for both tx and rx buffers
-
-pub static INTERRUPT_PENDING: AtomicBool = AtomicBool::new(false);
 
 pub static PDO_CURRENT_MA: AtomicU32 = AtomicU32::new(0);
 pub static PDO_VOLTAGE_MV: AtomicU32 = AtomicU32::new(0);
@@ -189,14 +187,6 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0, Blocking>, fusb_int: &mut A
     }
 }
 
-// See blurb in establish_pd_contract()
-pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>) {
-    if INTERRUPT_PENDING.load(Ordering::Relaxed) {
-        write_reg(i2c, Register::AlertL, &0xFF);
-        INTERRUPT_PENDING.store(false, Ordering::Relaxed);
-    }
-}
-
 pub fn vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
     let mut vbus: u16 = 0;
     vbus.as_mut_bytes()[0] = read_reg(i2c, Register::VbusVoltageL);
@@ -345,7 +335,7 @@ fn get_rx_buffer(i2c: &mut I2C<'_, I2C0, Blocking>) -> heapless::Vec<u8, BUF_SIZ
     heapless::Vec::<u8, BUF_SIZE>::from_slice(&rx_buf[0..num_bytes]).unwrap()
 }
 
-fn write_reg(i2c: &mut I2C<'_, I2C0, Blocking>, register: Register, byte: &u8) {
+pub fn write_reg(i2c: &mut I2C<'_, I2C0, Blocking>, register: Register, byte: &u8) {
     i2c.write(ADDRESS, &[register as u8, *byte]).unwrap();
 }
 

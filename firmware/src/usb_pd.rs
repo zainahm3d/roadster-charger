@@ -9,6 +9,7 @@ pub enum ControlMessage {
     Reject = 0b0_0100,
     PsRdy = 0b0_0110,
     GetSourceCap = 0b0_0111,
+    SoftReset = 0b0_1101,
     VendorDefined = 0b0_1111,
 }
 

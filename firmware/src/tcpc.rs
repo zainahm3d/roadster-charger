@@ -140,10 +140,13 @@ pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0, Blocking>, fusb_int: &mut AnyInput) -> bool {
-    let timeout = 5 * SystemTimer::ticks_per_second();
+pub fn establish_pd_contract(
+    i2c: &mut I2C<'_, I2C0, Blocking>,
+    fusb_int: &mut AnyInput,
+    delay: &mut Delay,
+) -> bool {
+    let timeout = 1 * SystemTimer::ticks_per_second();
     let mut last_message_tick = SystemTimer::now();
-
     loop {
         // Wait for a message to come in
         loop {
@@ -153,6 +156,15 @@ pub fn establish_pd_contract(i2c: &mut I2C<'_, I2C0, Blocking>, fusb_int: &mut A
                 last_message_tick = SystemTimer::now();
                 break; // got a message
             } else if SystemTimer::now() > last_message_tick + timeout {
+                let mut reset_header = usb_pd::MessageHeader(0x00);
+                reset_header.set_port_power_role(false); // Sink
+                reset_header.set_num_data_objects(0);
+                reset_header.set_message_type(usb_pd::ControlMessage::SoftReset as u16);
+                transmit_message(i2c, &mut reset_header, &[]);
+                delay.delay_millis(500); // Wait for caps to discharge
+
+                // If we are connected to a PD source, we will now reboot.
+                // If not, we will continute to the timeout.
                 println!("pd: negotiation timed out");
                 return false;
             }

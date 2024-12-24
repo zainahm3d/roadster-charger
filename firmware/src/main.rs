@@ -8,10 +8,14 @@ use esp_hal::{
     delay::Delay,
     gpio::{self, GpioPin, Io},
     i2c::I2C,
-    peripherals::{Peripherals, ADC1, I2C0},
+    peripherals::{Peripherals, ADC1, I2C0, TIMG0},
     prelude::*,
     rmt::TxChannelCreator,
     system::SystemControl,
+    timer::{
+        timg::{Timer, TimerGroup, TimerX},
+        PeriodicTimer,
+    },
     Blocking,
 };
 
@@ -35,6 +39,7 @@ mod app {
     #[local]
     struct Local {
         fusb_int: gpio::AnyInput<'static>,
+        periodic: PeriodicTimer<'static, Timer<TimerX<TIMG0>, Blocking>>,
     }
 
     #[init]
@@ -42,9 +47,8 @@ mod app {
         let peripherals = Peripherals::take();
         let system = SystemControl::new(peripherals.SYSTEM);
         let clocks = ClockControl::configure(system.clock_control, CpuClock::Clock160MHz).freeze();
-        let io = Io::new(peripherals.GPIO, peripherals.IO_MUX);
+        let io = Io::new_no_bind_interrupt(peripherals.GPIO, peripherals.IO_MUX);
         let mut delay = Delay::new(&clocks);
-        // io.set_interrupt_handler(gpio_interrupt_handler);
 
         let mut i2c = I2C::new(
             peripherals.I2C0,
@@ -89,7 +93,7 @@ mod app {
         tcpc::init(&mut i2c, &mut delay);
 
         // set PD LED to cyan if we have a contract, red if failed
-        if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int) {
+        if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int, &mut delay) {
             rgb = led::set_pixel(rgb, 0, 0, 20, 5);
             _ = led::set_pixel(rgb, 1, 0, 20, 5);
         } else {
@@ -98,20 +102,33 @@ mod app {
             panic!("failed to establish PD contract");
         }
 
+        let TIMG0 = TimerGroup::new(peripherals.TIMG0, &clocks);
+        let mut periodic = PeriodicTimer::new(TIMG0.timer0);
+        periodic.enable_interrupt(true);
+        periodic.start(100.millis()).unwrap();
+
         // loop {
         vi_sense::run(&mut adc1, &mut v_sense, &mut i_sense, &mut input_i_sense);
         boost::run();
         charger::run(&mut i2c, &mut boost_enable);
         // }
 
-        (Shared { i2c }, Local { fusb_int })
+        (Shared { i2c }, Local { fusb_int, periodic })
     }
 
     #[task(binds=GPIO, local=[fusb_int], shared=[i2c], priority=1)]
     fn gpio_handler(mut cx: gpio_handler::Context) {
-        cx.shared.i2c.lock(|i2c| {
-            tcpc::write_reg(i2c, tcpc::Register::AlertL, &0xFF);
+        if cx.local.fusb_int.is_low() {
             cx.local.fusb_int.clear_interrupt();
-        });
+            cx.shared.i2c.lock(|i2c| {
+                tcpc::write_reg(i2c, tcpc::Register::AlertL, &0xFF);
+            });
+        }
+    }
+
+    // Update control values and read back sensors
+    #[task(binds=TG0_T0_LEVEL, local=[periodic], shared=[i2c], priority=2)]
+    fn timer_handler(cx: timer_handler::Context) {
+        cx.local.periodic.clear_interrupt();
     }
 }

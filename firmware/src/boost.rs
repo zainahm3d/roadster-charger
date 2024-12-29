@@ -16,10 +16,10 @@ use crate::{tcpc, vi_sense};
 pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
     enable_pin.set_low();
 
-    // Set internal reference to 1.25V
+    // Set internal reference to 2.50V
     let mut gain = Gain(0x00);
-    gain.set_buf_gain(false);
-    gain.set_ref_div(true);
+    gain.set_buf_gain(false); // Gain of 1
+    gain.set_ref_div(false); // Divide ref by 1
     i2c.write(
         ADDRESS,
         &[

@@ -40,6 +40,11 @@ mod app {
     struct Local {
         fusb_int: gpio::AnyInput<'static>,
         periodic: PeriodicTimer<'static, Timer<TimerX<TIMG0>, Blocking>>,
+        boost_enable: gpio::AnyOutput<'static>,
+        v_sense: AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
+        i_sense: AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
+        input_i_sense: AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
+        adc1: Adc<'static, ADC1>,
     }
 
     #[init]
@@ -78,13 +83,13 @@ mod app {
 
         // voltage and current sense // todo: cleanup / move into another file?
         let mut adc1_config = AdcConfig::new();
-        let mut v_sense = adc1_config
+        let v_sense = adc1_config
             .enable_pin_with_cal::<GpioPin<1>, AdcCalCurve<ADC1>>(io.pins.gpio1, Attenuation11dB);
-        let mut i_sense = adc1_config
+        let i_sense = adc1_config
             .enable_pin_with_cal::<GpioPin<0>, AdcCalCurve<ADC1>>(io.pins.gpio0, Attenuation11dB);
-        let mut input_i_sense = adc1_config
+        let input_i_sense = adc1_config
             .enable_pin_with_cal::<GpioPin<4>, AdcCalCurve<ADC1>>(io.pins.gpio4, Attenuation11dB);
-        let mut adc1 = Adc::<ADC1>::new(peripherals.ADC1, adc1_config);
+        let adc1 = Adc::<ADC1>::new(peripherals.ADC1, adc1_config);
 
         let mut boost_enable = gpio::AnyOutput::new(io.pins.gpio21, gpio::Level::Low);
         let mut fusb_int = gpio::AnyInput::new(io.pins.gpio7, gpio::Pull::None);
@@ -107,13 +112,18 @@ mod app {
         periodic.enable_interrupt(true);
         periodic.start(100.millis()).unwrap();
 
-        // loop {
-        vi_sense::run(&mut adc1, &mut v_sense, &mut i_sense, &mut input_i_sense);
-        boost::run();
-        charger::run(&mut i2c, &mut boost_enable);
-        // }
-
-        (Shared { i2c }, Local { fusb_int, periodic })
+        (
+            Shared { i2c },
+            Local {
+                fusb_int,
+                periodic,
+                boost_enable,
+                v_sense,
+                i_sense,
+                input_i_sense,
+                adc1,
+            },
+        )
     }
 
     #[task(binds=GPIO, local=[fusb_int], shared=[i2c], priority=1)]
@@ -127,8 +137,18 @@ mod app {
     }
 
     // Update control values and read back sensors
-    #[task(binds=TG0_T0_LEVEL, local=[periodic], shared=[i2c], priority=2)]
-    fn timer_handler(cx: timer_handler::Context) {
-        cx.local.periodic.clear_interrupt();
+    #[ task(binds=TG0_T0_LEVEL,
+        local=[periodic, boost_enable, adc1, v_sense, i_sense, input_i_sense],
+        shared=[i2c], priority=2) ]
+    fn timer_handler(mut cx: timer_handler::Context) {
+        let loc = cx.local;
+        loc.periodic.clear_interrupt();
+
+        vi_sense::run(loc.adc1, loc.v_sense, loc.i_sense, loc.input_i_sense);
+        boost::run();
+
+        cx.shared.i2c.lock(|i2c| {
+            charger::run(i2c, loc.boost_enable);
+        });
     }
 }

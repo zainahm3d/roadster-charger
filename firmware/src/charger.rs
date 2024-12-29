@@ -1,7 +1,6 @@
 use esp_hal::gpio::*;
 use esp_hal::i2c::I2C;
 use esp_hal::peripherals::I2C0;
-use esp_hal::timer::systimer::SystemTimer;
 use esp_hal::Blocking;
 use esp_println::println;
 
@@ -71,58 +70,50 @@ static mut CONTROLLER: ChargeController = ChargeController {
 
 // todo: LED control
 pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
-    static mut LAST_UPDATE_TIME: u64 = 0;
-
     // Safety: none of the statics here are touched by any interrupts,
     // and run() is only called from the main loop + not reentrant.
     unsafe {
-        let now = SystemTimer::now();
-        if now - LAST_UPDATE_TIME >= SystemTimer::ticks_per_second() / 10 {
-            LAST_UPDATE_TIME = now;
-
-            match CONTROLLER.system_state {
-                State::NoBattery => {
-                    println!("charger: no battery");
-                    let battery_voltage = vi_sense::battery_voltage_mv();
-                    if battery_voltage > MIN_BATTERY_VOLTAGE_MV
-                        && battery_voltage < CHARGING_TARGET_MV
-                    {
-                        // battery is connected and not under/over voltage
-                        // todo: decide charge current based on PD source caps
-                        CONTROLLER.system_state = State::ChargingCC;
-                    }
-                }
-
-                State::ChargingCC => {
-                    if vi_sense::battery_voltage_mv() >= CHARGING_TARGET_MV {
-                        CONTROLLER.system_state = State::ChargingCV;
-                    } else {
-                        println!("charger: charging cc");
-                        CONTROLLER.target_ma = CHARGING_CURRENT_MA;
-                        CONTROLLER.charger_mode = ChargerMode::ConstantCurrent;
-                    }
-                }
-
-                State::ChargingCV => {
-                    println!("charger: charging cv");
-                    if vi_sense::output_current_ma() <= CHARGING_CUTOFF_CV_MA {
-                        CONTROLLER.system_state = State::ChargingComplete;
-                    } else {
-                        CONTROLLER.charger_mode = ChargerMode::ConstantVoltage;
-                    }
-                }
-
-                State::ChargingComplete => {
-                    println!("charger: charging complete");
-                    if vi_sense::battery_voltage_mv() < MIN_BATTERY_VOLTAGE_MV {
-                        CONTROLLER.system_state = State::NoBattery;
-                    } else {
-                        CONTROLLER.charger_mode = ChargerMode::Disabled;
-                    }
+        match CONTROLLER.system_state {
+            State::NoBattery => {
+                println!("charger: no battery");
+                let battery_voltage = vi_sense::battery_voltage_mv();
+                if battery_voltage > MIN_BATTERY_VOLTAGE_MV && battery_voltage < CHARGING_TARGET_MV
+                {
+                    // battery is connected and not under/over voltage
+                    // todo: decide charge current based on PD source caps
+                    CONTROLLER.system_state = State::ChargingCC;
                 }
             }
-            update_output(i2c, enable_pin);
+
+            State::ChargingCC => {
+                if vi_sense::battery_voltage_mv() >= CHARGING_TARGET_MV {
+                    CONTROLLER.system_state = State::ChargingCV;
+                } else {
+                    println!("charger: charging cc");
+                    CONTROLLER.target_ma = CHARGING_CURRENT_MA;
+                    CONTROLLER.charger_mode = ChargerMode::ConstantCurrent;
+                }
+            }
+
+            State::ChargingCV => {
+                println!("charger: charging cv");
+                if vi_sense::output_current_ma() <= CHARGING_CUTOFF_CV_MA {
+                    CONTROLLER.system_state = State::ChargingComplete;
+                } else {
+                    CONTROLLER.charger_mode = ChargerMode::ConstantVoltage;
+                }
+            }
+
+            State::ChargingComplete => {
+                println!("charger: charging complete");
+                if vi_sense::battery_voltage_mv() < MIN_BATTERY_VOLTAGE_MV {
+                    CONTROLLER.system_state = State::NoBattery;
+                } else {
+                    CONTROLLER.charger_mode = ChargerMode::Disabled;
+                }
+            }
         }
+        update_output(i2c, enable_pin);
     }
 }
 

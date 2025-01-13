@@ -5264,7 +5264,7 @@
 		)
 		(uuid "fb0a059f-a6c5-4b96-b052-49e75328477b")
 	)
-	(text "EAN targets 1.7V\nR1/R2 set to target 44V @ VOUT"
+	(text "EAN targets 1.7V\nR1/R2 set to target 45.05V @ VOUT"
 		(exclude_from_sim no)
 		(at 255.016 132.08 0)
 		(effects
@@ -5405,7 +5405,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "25K"
+		(property "Value" "25.5K"
 			(at 245.11 110.4899 0)
 			(effects
 				(font
@@ -5441,7 +5441,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "RT1206BRD0725KL"
+		(property "MPN" "RT0603BRD0725K5L"
 			(at 242.57 109.22 0)
 			(effects
 				(font

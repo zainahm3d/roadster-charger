@@ -4,12 +4,10 @@ use core::panic;
 use core::sync::atomic::{AtomicU32, Ordering};
 
 use bitfield::bitfield;
+use embedded_hal::i2c::I2c;
 use esp_hal::delay::Delay;
 use esp_hal::gpio::*;
-use esp_hal::i2c::I2C;
-use esp_hal::peripherals::I2C0;
 use esp_hal::timer::systimer::SystemTimer;
-use esp_hal::Blocking;
 use esp_println::println;
 use zerocopy::IntoBytes;
 
@@ -33,8 +31,8 @@ pub enum PDState {
     NegotiationComplete,
 }
 
-pub fn run_state_machine(
-    i2c: &mut I2C<'_, I2C0, Blocking>,
+pub fn run_state_machine<T: I2c>(
+    i2c: &mut T,
     rx_header: &usb_pd::MessageHeader,
     rx_buffer: &heapless::Vec<u8, BUF_SIZE>,
 ) -> PDState {
@@ -84,7 +82,7 @@ pub fn run_state_machine(
     }
 }
 
-pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, delay: &mut Delay) {
+pub fn init<T: I2c>(i2c: &mut T, delay: &mut Delay) {
     // Reset the chip
     let mut reset = Reset(0x00);
     reset.set_sw_rst(true);
@@ -140,8 +138,8 @@ pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-pub fn establish_pd_contract(
-    i2c: &mut I2C<'_, I2C0, Blocking>,
+pub fn establish_pd_contract<T: I2c>(
+    i2c: &mut T,
     fusb_int: &mut AnyInput,
     delay: &mut Delay,
 ) -> bool {
@@ -199,7 +197,7 @@ pub fn establish_pd_contract(
     }
 }
 
-pub fn vbus_mv(i2c: &mut I2C<'_, I2C0, Blocking>) -> u32 {
+pub fn vbus_mv<T: I2c>(i2c: &mut T) -> u32 {
     let mut vbus: u16 = 0;
     vbus.as_mut_bytes()[0] = read_reg(i2c, Register::VbusVoltageL);
     vbus.as_mut_bytes()[1] = read_reg(i2c, Register::VbusVoltageH);
@@ -257,8 +255,8 @@ fn select_pdo_index(pdos: &heapless::Vec<usb_pd::FixedSupplyPDO, 7>) -> Option<u
     }
 }
 
-pub fn request_pdo_index(
-    i2c: &mut I2C<'_, I2C0, Blocking>,
+pub fn request_pdo_index<T: I2c>(
+    i2c: &mut T,
     pdo_index: u32,
     all_pdos: &heapless::Vec<usb_pd::FixedSupplyPDO, 7>,
 ) {
@@ -277,11 +275,7 @@ pub fn request_pdo_index(
 
 // Take a mutable pointer to the message header so we can fill in the message ID and PD rev
 // Block write the entire 28 byte TX buffer in one i2c transaction
-fn transmit_message(
-    i2c: &mut I2C<'_, I2C0, Blocking>,
-    tx_header: &mut usb_pd::MessageHeader,
-    data: &[u8],
-) {
+fn transmit_message<T: I2c>(i2c: &mut T, tx_header: &mut usb_pd::MessageHeader, data: &[u8]) {
     // 3 bit, needs to roll over @ 0b111
     static mut MESSAGE_ID: u16 = 0;
 
@@ -322,7 +316,7 @@ fn transmit_message(
     write_reg(i2c, Register::Transmit, &transmit.0); // go!
 }
 
-fn get_rx_header(i2c: &mut I2C<'_, I2C0, Blocking>) -> usb_pd::MessageHeader {
+fn get_rx_header<T: I2c>(i2c: &mut T) -> usb_pd::MessageHeader {
     let mut header = usb_pd::MessageHeader(0x00);
 
     header.0.as_mut_bytes()[0] = read_reg(i2c, Register::RxHeadL);
@@ -332,7 +326,7 @@ fn get_rx_header(i2c: &mut I2C<'_, I2C0, Blocking>) -> usb_pd::MessageHeader {
 }
 
 // Block read entire RX buffer
-fn get_rx_buffer(i2c: &mut I2C<'_, I2C0, Blocking>) -> heapless::Vec<u8, BUF_SIZE> {
+fn get_rx_buffer<T: I2c>(i2c: &mut T) -> heapless::Vec<u8, BUF_SIZE> {
     // rxbytecnt includes the two byte header and sop byte, ignore them.
     let num_bytes: usize = read_reg(i2c, Register::RxByteCnt) as usize - 3;
 
@@ -347,11 +341,11 @@ fn get_rx_buffer(i2c: &mut I2C<'_, I2C0, Blocking>) -> heapless::Vec<u8, BUF_SIZ
     heapless::Vec::<u8, BUF_SIZE>::from_slice(&rx_buf[0..num_bytes]).unwrap()
 }
 
-pub fn write_reg(i2c: &mut I2C<'_, I2C0, Blocking>, register: Register, byte: &u8) {
+pub fn write_reg<T: I2c>(i2c: &mut T, register: Register, byte: &u8) {
     i2c.write(ADDRESS, &[register as u8, *byte]).unwrap();
 }
 
-fn read_reg(i2c: &mut I2C<'_, I2C0, Blocking>, register: Register) -> u8 {
+fn read_reg<T: I2c>(i2c: &mut T, register: Register) -> u8 {
     let mut buffer: [u8; 1] = [0x00];
     i2c.write_read(ADDRESS, &[register as u8], &mut buffer)
         .unwrap();

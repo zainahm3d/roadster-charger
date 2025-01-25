@@ -24,6 +24,7 @@ portable-atomic = { version = "1.6.0", default-features = false, features = [
 ] }
 rtic = { version = "2.1.2", features = ["esp32c3", "riscv-esp32c3-backend"] }
 esp32c3 = { version = "0.26.0", features = ["rt"] }
+embedded-hal = "1.0.0"
 
 [profile.dev]
 opt-level = 3

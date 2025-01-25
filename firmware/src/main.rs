@@ -83,13 +83,10 @@ mod app {
 
         // voltage and current sense // todo: cleanup / move into another file?
         let mut adc1_config = AdcConfig::new();
-        let v_sense = adc1_config
-            .enable_pin_with_cal::<GpioPin<1>, AdcCalCurve<ADC1>>(io.pins.gpio1, Attenuation11dB);
-        let i_sense = adc1_config
-            .enable_pin_with_cal::<GpioPin<0>, AdcCalCurve<ADC1>>(io.pins.gpio0, Attenuation11dB);
-        let input_i_sense = adc1_config
-            .enable_pin_with_cal::<GpioPin<4>, AdcCalCurve<ADC1>>(io.pins.gpio4, Attenuation11dB);
-        let adc1 = Adc::<ADC1>::new(peripherals.ADC1, adc1_config);
+        let v_sense = adc1_config.enable_pin_with_cal(io.pins.gpio1, Attenuation11dB);
+        let i_sense = adc1_config.enable_pin_with_cal(io.pins.gpio0, Attenuation11dB);
+        let input_i_sense = adc1_config.enable_pin_with_cal(io.pins.gpio4, Attenuation11dB);
+        let adc1 = Adc::new(peripherals.ADC1, adc1_config);
 
         let mut boost_enable = gpio::AnyOutput::new(io.pins.gpio21, gpio::Level::Low);
         let mut fusb_int = gpio::AnyInput::new(io.pins.gpio7, gpio::Pull::None);

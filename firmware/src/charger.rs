@@ -1,7 +1,5 @@
-use esp_hal::gpio::*;
-use esp_hal::i2c::I2C;
-use esp_hal::peripherals::I2C0;
-use esp_hal::Blocking;
+use embedded_hal::digital::OutputPin;
+use embedded_hal::i2c::I2c;
 use esp_println::println;
 
 use crate::boost;
@@ -69,7 +67,7 @@ static mut CONTROLLER: ChargeController = ChargeController {
 };
 
 // todo: LED control
-pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
+pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
     // Safety: none of the statics here are touched by any interrupts,
     // and run() is only called from the main loop + not reentrant.
     unsafe {
@@ -117,7 +115,7 @@ pub fn run(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
     }
 }
 
-fn update_output(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
+fn update_output<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
     unsafe {
         CONTROLLER.board_temp_c = temp_sense::board_temp_c(i2c);
         CONTROLLER.input_mv = tcpc::vbus_mv(i2c);

@@ -2,10 +2,8 @@
 
 use bitfield::{bitfield, BitRange};
 use core::sync::atomic::{AtomicU16, Ordering};
-use esp_hal::gpio::*;
-use esp_hal::i2c::I2C;
-use esp_hal::peripherals::I2C0;
-use esp_hal::Blocking;
+use embedded_hal::digital::OutputPin;
+use embedded_hal::i2c::I2c;
 use esp_println::println;
 
 const ADDRESS: u8 = 0x48;
@@ -13,8 +11,8 @@ static TARGET_MV: AtomicU16 = AtomicU16::new(0);
 
 use crate::{tcpc, vi_sense};
 
-pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
-    enable_pin.set_low();
+pub fn init<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
+    enable_pin.set_low().unwrap();
 
     // Set internal reference to 2.50V
     let mut gain = Gain(0x00);
@@ -35,17 +33,13 @@ pub fn init(i2c: &mut I2C<'_, I2C0, Blocking>, enable_pin: &mut AnyOutput) {
 
 // Set the boost converter output voltage
 // TODO: no floats
-pub fn set_voltage_mv(
-    i2c: &mut I2C<'_, I2C0, Blocking>,
-    enable_pin: &mut AnyOutput,
-    mut voltage_mv: u16,
-) {
+pub fn set_voltage_mv<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, mut voltage_mv: u16) {
     voltage_mv = voltage_mv.clamp(0, 42_000);
     TARGET_MV.store(voltage_mv, Ordering::Relaxed);
 
     // If we're turning the output off, make sure it turns off by flipping the pin
     if voltage_mv == 0 {
-        enable_pin.set_low();
+        enable_pin.set_low().unwrap();
     }
 
     // 2^14 * (1.20 / 1.25) (DAC full scale output is 1.25V)
@@ -64,9 +58,9 @@ pub fn set_voltage_mv(
     .unwrap();
 
     if voltage_mv == 0 {
-        enable_pin.set_low();
+        enable_pin.set_low().unwrap();
     } else {
-        enable_pin.set_high();
+        enable_pin.set_high().unwrap();
     }
 }
 

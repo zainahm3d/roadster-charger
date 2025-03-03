@@ -1,7 +1,9 @@
 // Remote Control Peripheral (RMT) based WS2812b RGB LED driver
 use bitfield::Bit;
+use esp_hal::delay::Delay;
+use esp_hal::gpio::Level;
 use esp_hal::rmt::{Channel, PulseCode, TxChannel};
-use esp_hal::timer::systimer::SystemTimer;
+use esp_hal::time::{Duration, Instant};
 use esp_hal::Blocking;
 
 #[derive(Debug, Clone, Copy)]
@@ -32,28 +34,29 @@ pub fn set_pixel(
 
 fn update(channel: Channel<Blocking, 0>) -> Channel<Blocking, 0> {
     // We need to wait >70us between updates to trigger a new "frame"
-    let min_update_interval: u64 = 70 * SystemTimer::ticks_per_second() / 1_000_000;
-    static mut LAST_UPDATE_TIME: u64 = 0;
+    let min_update_interval = Duration::from_micros(70);
+    static mut LAST_UPDATE_TIME: Instant = Instant::EPOCH;
 
     let ns_per_tick = 25;
-    let t0 = PulseCode {
-        level1: true,
-        length1: 400 / ns_per_tick,
-        level2: false,
-        length2: 800 / ns_per_tick,
-    };
-    let t1 = PulseCode {
-        level1: true,
-        length1: 800 / ns_per_tick,
-        level2: false,
-        length2: 450 / ns_per_tick,
-    };
 
-    let mut pulse_train: [PulseCode; 48] = [t0; 48];
+    let t0 = PulseCode::new(
+        Level::High,
+        400 / ns_per_tick,
+        Level::Low,
+        800 / ns_per_tick,
+    );
+
+    let t1 = PulseCode::new(
+        Level::High,
+        800 / ns_per_tick,
+        Level::Low,
+        450 / ns_per_tick,
+    );
+
+    let mut pulse_train: [u32; 48] = [t0; 48];
     unsafe {
         for pixel in 0..PIXEL_BUFFER.len() {
             // 24 pulses + 1 stop signal pulse
-            // initialize all to end so that we don't have to manually add "end" later
             let mut pixel_bits: u32 = 0;
             pixel_bits |= PIXEL_BUFFER[pixel].g << 16;
             pixel_bits |= PIXEL_BUFFER[pixel].r << 8;
@@ -73,11 +76,13 @@ fn update(channel: Channel<Blocking, 0>) -> Channel<Blocking, 0> {
         }
     }
 
-    pulse_train.last_mut().unwrap().length2 = 0; // signal end of transaction
+    // Modify the final pulse to have a length2 of 0 to signal end of transaction to RMT.
+    *pulse_train.last_mut().unwrap() &= 0x8000_FFFF;
+    Delay::new().delay(min_update_interval);
 
-    unsafe { while SystemTimer::now() - LAST_UPDATE_TIME < min_update_interval {} }
+    unsafe { while Instant::now() - LAST_UPDATE_TIME < min_update_interval {} }
 
-    let channel = channel.transmit(&pulse_train).wait().unwrap();
-    unsafe { LAST_UPDATE_TIME = SystemTimer::now() }
+    let channel = channel.transmit(&pulse_train).unwrap().wait().unwrap();
+    unsafe { LAST_UPDATE_TIME = Instant::now() }
     channel
 }

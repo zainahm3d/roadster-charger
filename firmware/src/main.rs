@@ -3,19 +3,13 @@
 
 use esp_backtrace as _;
 use esp_hal::{
-    analog::adc::{Attenuation::*, *},
-    clock::{ClockControl, CpuClock},
+    analog::adc::*,
     delay::Delay,
-    gpio::{self, GpioPin, Io},
-    i2c::I2C,
-    peripherals::{Peripherals, ADC1, I2C0, TIMG0},
-    prelude::*,
+    gpio::{self, GpioPin, InputConfig, Level, Output, OutputConfig},
+    i2c,
+    peripherals::ADC1,
     rmt::TxChannelCreator,
-    system::SystemControl,
-    timer::{
-        timg::{Timer, TimerGroup, TimerX},
-        PeriodicTimer,
-    },
+    timer::{timg::TimerGroup, PeriodicTimer},
     Blocking,
 };
 
@@ -29,67 +23,67 @@ mod vi_sense;
 
 #[rtic::app(device = esp32c3, dispatchers=[FROM_CPU_INTR0, FROM_CPU_INTR1])]
 mod app {
+    use esp_hal::{
+        gpio::Input,
+        rmt::TxChannelConfig,
+        time::{Duration, Rate},
+    };
+
     use super::*;
 
     #[shared]
     struct Shared {
-        i2c: esp_hal::i2c::I2C<'static, I2C0, Blocking>,
+        i2c: i2c::master::I2c<'static, Blocking>,
     }
 
     #[local]
     struct Local {
-        fusb_int: gpio::AnyInput<'static>,
-        periodic: PeriodicTimer<'static, Timer<TimerX<TIMG0>, Blocking>>,
-        boost_enable: gpio::AnyOutput<'static>,
+        fusb_int: gpio::Input<'static>,
+        periodic: PeriodicTimer<'static, Blocking>,
+        boost_enable: gpio::Output<'static>,
         v_sense: AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
         i_sense: AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
         input_i_sense: AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
-        adc1: Adc<'static, ADC1>,
+        adc1: Adc<'static, ADC1, Blocking>,
     }
 
     #[init]
     fn init(_: init::Context) -> (Shared, Local) {
-        let peripherals = Peripherals::take();
-        let system = SystemControl::new(peripherals.SYSTEM);
-        let clocks = ClockControl::configure(system.clock_control, CpuClock::Clock160MHz).freeze();
-        let io = Io::new_no_bind_interrupt(peripherals.GPIO, peripherals.IO_MUX);
-        let mut delay = Delay::new(&clocks);
+        let peripherals = esp_hal::init(esp_hal::Config::default());
+        let mut delay = Delay::new();
 
-        let mut i2c = I2C::new(
-            peripherals.I2C0,
-            io.pins.gpio10,
-            io.pins.gpio8,
-            100u32.kHz(), // TODO: why doesn't 400khz work?
-            &clocks,
-        );
+        let i2c_config = i2c::master::Config::default().with_frequency(Rate::from_khz(100));
+        let mut i2c = i2c::master::I2c::new(peripherals.I2C0, i2c_config)
+            .unwrap()
+            .with_scl(peripherals.GPIO10) // TODO: check if SCL and SDA are swapped!
+            .with_sda(peripherals.GPIO8);
 
-        let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, 80u32.MHz(), &clocks).unwrap();
+        let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, Rate::from_mhz(80)).unwrap();
 
         let mut rgb = rmt
             .channel0
             .configure(
-                io.pins.gpio3,
-                esp_hal::rmt::TxChannelConfig {
-                    clk_divider: 2,
-                    idle_output_level: false,
-                    idle_output: true,
-                    carrier_modulation: false,
-                    carrier_high: 1,
-                    carrier_low: 1,
-                    carrier_level: false,
-                },
+                peripherals.GPIO3,
+                TxChannelConfig::default()
+                    .with_clk_divider(2)
+                    .with_idle_output_level(Level::Low)
+                    .with_idle_output(true)
+                    .with_carrier_modulation(false)
+                    .with_carrier_high(1)
+                    .with_carrier_low(1)
+                    .with_carrier_level(Level::Low),
             )
             .unwrap();
 
         // voltage and current sense // todo: cleanup / move into another file?
         let mut adc1_config = AdcConfig::new();
-        let v_sense = adc1_config.enable_pin_with_cal(io.pins.gpio1, Attenuation11dB);
-        let i_sense = adc1_config.enable_pin_with_cal(io.pins.gpio0, Attenuation11dB);
-        let input_i_sense = adc1_config.enable_pin_with_cal(io.pins.gpio4, Attenuation11dB);
+        let v_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO1, Attenuation::_11dB);
+        let i_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO0, Attenuation::_11dB);
+        let input_i_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO4, Attenuation::_11dB);
         let adc1 = Adc::new(peripherals.ADC1, adc1_config);
 
-        let mut boost_enable = gpio::AnyOutput::new(io.pins.gpio21, gpio::Level::Low);
-        let mut fusb_int = gpio::AnyInput::new(io.pins.gpio7, gpio::Pull::None);
+        let mut boost_enable = Output::new(peripherals.GPIO21, Level::Low, OutputConfig::default());
+        let mut fusb_int = Input::new(peripherals.GPIO7, InputConfig::default());
 
         boost::init(&mut i2c, &mut boost_enable);
         tcpc::init(&mut i2c, &mut delay);
@@ -104,10 +98,10 @@ mod app {
             panic!("failed to establish PD contract");
         }
 
-        let TIMG0 = TimerGroup::new(peripherals.TIMG0, &clocks);
-        let mut periodic = PeriodicTimer::new(TIMG0.timer0);
+        let timg0 = TimerGroup::new(peripherals.TIMG0);
+        let mut periodic = PeriodicTimer::new(timg0.timer0);
         periodic.enable_interrupt(true);
-        periodic.start(100.millis()).unwrap();
+        periodic.start(Duration::from_millis(100)).unwrap();
 
         (
             Shared { i2c },

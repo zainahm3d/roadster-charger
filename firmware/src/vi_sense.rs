@@ -1,8 +1,7 @@
 // todo: clean up includes
 use esp_hal::analog::adc::*;
-use esp_hal::gpio::*;
 use esp_hal::peripherals::ADC1;
-use esp_hal::prelude::nb;
+use esp_hal::{gpio::*, Blocking};
 
 struct ViData {
     input_current_ma: u32,
@@ -17,7 +16,7 @@ static mut VI_DATA: ViData = ViData {
 };
 
 pub fn run(
-    adc1_instance: &mut Adc<ADC1>,
+    adc1_instance: &mut Adc<ADC1, Blocking>,
     v_sense: &mut AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
     i_sense: &mut AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
     input_i_sense: &mut AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
@@ -29,9 +28,9 @@ pub fn run(
 
     let num_samples = 50;
     for _ in 0..num_samples {
-        v_mv += nb::block!(adc1_instance.read_oneshot(v_sense)).unwrap() as u32;
-        i_mv += nb::block!(adc1_instance.read_oneshot(i_sense)).unwrap() as u32;
-        input_i_mv += nb::block!(adc1_instance.read_oneshot(input_i_sense)).unwrap() as u32;
+        v_mv += adc1_instance.read_oneshot(v_sense).unwrap() as u32;
+        i_mv += adc1_instance.read_oneshot(i_sense).unwrap() as u32;
+        input_i_mv += adc1_instance.read_oneshot(input_i_sense).unwrap() as u32;
     }
 
     v_mv /= num_samples;

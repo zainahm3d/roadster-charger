@@ -7,7 +7,7 @@ use bitfield::bitfield;
 use embedded_hal::i2c::I2c;
 use esp_hal::delay::Delay;
 use esp_hal::gpio::*;
-use esp_hal::timer::systimer::SystemTimer;
+use esp_hal::time::{Duration, Instant};
 use esp_println::println;
 use zerocopy::IntoBytes;
 
@@ -138,22 +138,18 @@ pub fn init<T: I2c>(i2c: &mut T, delay: &mut Delay) {
     write_reg(i2c, Register::RxDetect, &rx_detect.0);
 }
 
-pub fn establish_pd_contract<T: I2c>(
-    i2c: &mut T,
-    fusb_int: &mut AnyInput,
-    delay: &mut Delay,
-) -> bool {
-    let timeout = 1 * SystemTimer::ticks_per_second();
-    let mut last_message_tick = SystemTimer::now();
+pub fn establish_pd_contract<T: I2c>(i2c: &mut T, fusb_int: &mut Input, delay: &mut Delay) -> bool {
+    let timeout = Duration::from_secs(1);
+    let mut last_message_time = Instant::now();
     loop {
         // Wait for a message to come in
         loop {
             let mut alertl = AlertL(0x00);
             alertl.0 = read_reg(i2c, Register::AlertL);
             if alertl.recieve_status() {
-                last_message_tick = SystemTimer::now();
+                last_message_time = Instant::now();
                 break; // got a message
-            } else if SystemTimer::now() > last_message_tick + timeout {
+            } else if Instant::now() > last_message_time + timeout {
                 let mut reset_header = usb_pd::MessageHeader(0x00);
                 reset_header.set_port_power_role(false); // Sink
                 reset_header.set_num_data_objects(0);

@@ -14,10 +14,10 @@ use crate::{tcpc, vi_sense};
 pub fn init<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
     enable_pin.set_low().unwrap();
 
-    // Set internal reference to 2.50V
+    // Set internal reference to 2.50V with no division
     let mut gain = Gain(0x00);
-    gain.set_buf_gain(false); // Gain of 1
-    gain.set_ref_div(false); // Divide ref by 1
+    gain.set_buf_gain(true);
+    gain.set_ref_div(true);
     i2c.write(
         ADDRESS,
         &[
@@ -42,10 +42,11 @@ pub fn set_voltage_mv<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, mut
         enable_pin.set_low().unwrap();
     }
 
-    // 2^14 * (1.20 / 1.25) (DAC full scale output is 1.25V)
-    const FULL_SCALE: u16 = 15729; // 1.20V @ DAC, 48V @ boost
+    const BOOST_FULL_SCALE: f32 = 16_384.0 * 1.7 / 2.5;
+    let dac_value = voltage_mv as f32 * BOOST_FULL_SCALE / 45_050.0;
+
     let mut data = Data(0x00);
-    data.set_data(((voltage_mv as f32 / 48000.0) * FULL_SCALE as f32) as u16);
+    data.set_data(dac_value as u16);
 
     i2c.write(
         ADDRESS,

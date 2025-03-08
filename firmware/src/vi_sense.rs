@@ -16,7 +16,7 @@ static mut VI_DATA: ViData = ViData {
 };
 
 pub fn run(
-    adc1_instance: &mut Adc<ADC1, Blocking>,
+    adc1: &mut Adc<ADC1, Blocking>,
     v_sense: &mut AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
     i_sense: &mut AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
     input_i_sense: &mut AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
@@ -28,9 +28,9 @@ pub fn run(
 
     let num_samples = 50;
     for _ in 0..num_samples {
-        v_mv += adc1_instance.read_oneshot(v_sense).unwrap() as u32;
-        i_mv += adc1_instance.read_oneshot(i_sense).unwrap() as u32;
-        input_i_mv += adc1_instance.read_oneshot(input_i_sense).unwrap() as u32;
+        v_mv += nb::block!(adc1.read_oneshot(v_sense)).unwrap() as u32;
+        i_mv += nb::block!(adc1.read_oneshot(i_sense)).unwrap() as u32;
+        input_i_mv += nb::block!(adc1.read_oneshot(input_i_sense)).unwrap() as u32;
     }
 
     v_mv /= num_samples;
@@ -41,7 +41,7 @@ pub fn run(
     unsafe {
         VI_DATA.input_current_ma = input_i_mv * 2; // 0.5mV per mA
         VI_DATA.output_current_ma = i_mv; // 1 mV per mA
-        VI_DATA.battery_voltage_mv = v_mv * 16;
+        VI_DATA.battery_voltage_mv = v_mv * 20;
     }
 }
 

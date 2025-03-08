@@ -483,6 +483,7 @@ dependencies = [
  "esp32c3 0.26.0",
  "fugit",
  "heapless",
+ "nb 1.1.0",
  "portable-atomic",
  "rtic",
  "zerocopy",

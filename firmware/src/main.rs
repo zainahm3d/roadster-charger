@@ -55,8 +55,8 @@ mod app {
         let i2c_config = i2c::master::Config::default().with_frequency(Rate::from_khz(100));
         let mut i2c = i2c::master::I2c::new(peripherals.I2C0, i2c_config)
             .unwrap()
-            .with_scl(peripherals.GPIO10) // TODO: check if SCL and SDA are swapped!
-            .with_sda(peripherals.GPIO8);
+            .with_scl(peripherals.GPIO8)
+            .with_sda(peripherals.GPIO10);
 
         let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, Rate::from_mhz(80)).unwrap();
 
@@ -82,7 +82,7 @@ mod app {
         let input_i_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO4, Attenuation::_11dB);
         let adc1 = Adc::new(peripherals.ADC1, adc1_config);
 
-        let mut boost_enable = Output::new(peripherals.GPIO21, Level::Low, OutputConfig::default());
+        let mut boost_enable = Output::new(peripherals.GPIO6, Level::Low, OutputConfig::default());
         let mut fusb_int = Input::new(peripherals.GPIO7, InputConfig::default());
 
         boost::init(&mut i2c, &mut boost_enable);

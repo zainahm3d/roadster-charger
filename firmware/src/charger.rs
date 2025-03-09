@@ -26,6 +26,7 @@ enum Mode {
 pub struct State {
     tick: u32,
     mode: Mode,
+    tick_disabled: u32,
 
     board_temp_c: i16,
 
@@ -45,9 +46,10 @@ pub struct State {
 impl Default for State {
     fn default() -> Self {
         State {
-            mode: Mode::Disabled,
-            board_temp_c: 0,
             tick: 0,
+            mode: Mode::Disabled,
+            tick_disabled: 0,
+            board_temp_c: 0,
             target_ma: 2_000,
             duty: 0,
             input_mv: 0,
@@ -89,6 +91,7 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
                 s.mode = Mode::ConstantVoltage;
             } else if s.output_ma < MIN_CURRENT_MA {
                 s.mode = Mode::Disabled; // Battery is gone!
+                s.tick_disabled = s.tick;
             } else {
                 boost::set_duty(i2c, enable_pin, s.duty);
             }
@@ -105,6 +108,7 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
 
             if s.output_ma <= CHARGING_CUTOFF_MA {
                 s.mode = Mode::Disabled;
+                s.tick_disabled = s.tick;
                 // Set LED to green
             } else {
                 boost::set_duty(i2c, enable_pin, s.duty);
@@ -117,9 +121,13 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
             // If boost is off and we see a voltage then a battery has been plugged in.
             // Only switch to CC if battery exists and is > 0.5V below fully charged target.
             if s.output_mv > MIN_BATTERY_VOLTAGE_MV && s.output_mv < CV_TARGET_MV - 500 {
-                s.mode = Mode::ConstantCurrent;
-                // Set LED to yellow
-            } // Else set LED to off
+                // Make sure we've been in the disabled state for at least 3 seconds before
+                // enabling the charger. This allows time for output caps to discharge
+                // once a battery has been disconnected.
+                if s.tick - s.tick_disabled > 30 {
+                    s.mode = Mode::ConstantCurrent;
+                }
+            }
         }
     }
 }

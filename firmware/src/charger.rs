@@ -1,29 +1,21 @@
 use embedded_hal::digital::OutputPin;
 use embedded_hal::i2c::I2c;
-use esp_println::println;
+use esp_println::dbg;
 
 use crate::boost;
 use crate::tcpc;
 use crate::temp_sense;
 use crate::vi_sense;
 
-const CHARGING_TARGET_MV: u32 = 41_500;
-const CHARGING_CURRENT_MA: u32 = 750;
-
+// Battery specs for 10S2P INR18650-35E pack
+const CV_TARGET_MV: u32 = 41_500;
 // 75mA per parallel string
-const CHARGING_CUTOFF_CV_MA: u32 = 150;
+const CHARGING_CUTOFF_MA: u32 = 150;
 const MIN_BATTERY_VOLTAGE_MV: u32 = 28_000;
+const MIN_CURRENT_MA: u32 = 50;
 
 #[derive(Debug)]
-enum State {
-    NoBattery,
-    ChargingCC,
-    ChargingCV,
-    ChargingComplete,
-}
-
-#[derive(Debug)]
-enum ChargerMode {
+enum Mode {
     ConstantCurrent,
     ConstantVoltage,
     Disabled,
@@ -31,147 +23,103 @@ enum ChargerMode {
 
 // This struct is currently doubling as a telemetry struct
 #[derive(Debug)]
-struct ChargeController {
-    system_state: State,
-    charger_mode: ChargerMode,
+pub struct State {
+    tick: u32,
+    mode: Mode,
 
     board_temp_c: i16,
 
-    tick: u32,
-
     target_ma: u32,
-    target_mv: u32,
+    duty: u16,
 
     input_mv: u32,
     input_ma: u32,
 
     output_mv: u32,
     output_ma: u32,
+
+    pub pdo_mv: u32,
+    pub pdo_ma: u32,
 }
 
-static mut CONTROLLER: ChargeController = ChargeController {
-    system_state: State::NoBattery,
-    charger_mode: ChargerMode::Disabled,
-
-    board_temp_c: 0,
-
-    tick: 0,
-
-    target_ma: 0,
-    target_mv: 0,
-
-    input_mv: 0,
-    input_ma: 0,
-    output_mv: 0,
-    output_ma: 0,
-};
-
-// todo: LED control
-pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
-    // Safety: none of the statics here are touched by any interrupts,
-    // and run() is only called from the main loop + not reentrant.
-    unsafe {
-        match CONTROLLER.system_state {
-            State::NoBattery => {
-                println!("charger: no battery");
-                let battery_voltage = vi_sense::battery_voltage_mv();
-                if battery_voltage > MIN_BATTERY_VOLTAGE_MV && battery_voltage < CHARGING_TARGET_MV
-                {
-                    // battery is connected and not under/over voltage
-                    // todo: decide charge current based on PD source caps
-                    CONTROLLER.system_state = State::ChargingCC;
-                }
-            }
-
-            State::ChargingCC => {
-                if vi_sense::battery_voltage_mv() >= CHARGING_TARGET_MV {
-                    CONTROLLER.system_state = State::ChargingCV;
-                } else {
-                    println!("charger: charging cc");
-                    CONTROLLER.target_ma = CHARGING_CURRENT_MA;
-                    CONTROLLER.charger_mode = ChargerMode::ConstantCurrent;
-                }
-            }
-
-            State::ChargingCV => {
-                println!("charger: charging cv");
-                if vi_sense::output_current_ma() <= CHARGING_CUTOFF_CV_MA {
-                    CONTROLLER.system_state = State::ChargingComplete;
-                } else {
-                    CONTROLLER.charger_mode = ChargerMode::ConstantVoltage;
-                }
-            }
-
-            State::ChargingComplete => {
-                println!("charger: charging complete");
-                if vi_sense::battery_voltage_mv() < MIN_BATTERY_VOLTAGE_MV {
-                    CONTROLLER.system_state = State::NoBattery;
-                } else {
-                    CONTROLLER.charger_mode = ChargerMode::Disabled;
-                }
-            }
+impl Default for State {
+    fn default() -> Self {
+        State {
+            mode: Mode::Disabled,
+            board_temp_c: 0,
+            tick: 0,
+            target_ma: 2_000,
+            duty: 0,
+            input_mv: 0,
+            input_ma: 0,
+            output_mv: 0,
+            output_ma: 0,
+            pdo_mv: 0,
+            pdo_ma: 0,
         }
-        update_output(i2c, enable_pin);
     }
 }
 
-fn update_output<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
-    unsafe {
-        CONTROLLER.board_temp_c = temp_sense::board_temp_c(i2c);
-        CONTROLLER.input_mv = tcpc::vbus_mv(i2c);
-        CONTROLLER.input_ma = vi_sense::input_current_ma();
+// Run charge controller. CC and CV controllers are slew rate limited P controllers.
+// In practice, they act as integrating controllers at large P errors, and P controllers
+// at small P errors.
+pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State) {
+    // Slew rate in DAC ticks / update period
+    const MAX_BOOST_DIFF: i32 = 250;
 
-        CONTROLLER.output_ma = vi_sense::output_current_ma();
-        CONTROLLER.output_mv = vi_sense::battery_voltage_mv();
+    s.tick += 1;
+    s.board_temp_c = temp_sense::board_temp_c(i2c);
+    s.input_mv = tcpc::vbus_mv(i2c);
+    s.input_ma = vi_sense::input_current_ma();
+    s.output_mv = vi_sense::battery_voltage_mv();
+    s.output_ma = vi_sense::output_current_ma();
+    dbg!(&s); // Print out the results of the last update
 
-        CONTROLLER.tick = CONTROLLER.tick.wrapping_add(1);
+    match s.mode {
+        Mode::ConstantCurrent => {
+            let p_error = s.target_ma as i32 - s.output_ma as i32;
 
-        match CONTROLLER.charger_mode {
-            // integrating controller
-            ChargerMode::ConstantCurrent => {
-                // positive error_ma means we need more current
-                let error_ma: i32 = CONTROLLER.target_ma as i32 - CONTROLLER.output_ma as i32;
-                if error_ma > 100 {
-                    CONTROLLER.target_mv += 100;
-                } else if error_ma < -100 {
-                    CONTROLLER.target_mv -= 100;
-                } else if error_ma > 1 {
-                    CONTROLLER.target_mv += 1;
-                } else if error_ma < 1 {
-                    CONTROLLER.target_mv -= 1;
-                }
-                CONTROLLER.target_mv = CONTROLLER
-                    .target_mv
-                    .clamp(MIN_BATTERY_VOLTAGE_MV, CHARGING_TARGET_MV);
-                boost::set_voltage_mv(i2c, enable_pin, CONTROLLER.target_mv as u16);
-            }
+            // Slew rate limit only in positive direction
+            let duty_shift = p_error.clamp(i32::MIN, MAX_BOOST_DIFF);
 
-            ChargerMode::ConstantVoltage => {
-                // treat the output_mv measurement as source of truth, target is not as accurate.
-                // positive error_mv means we need more voltage
-                let error_mv: i32 = CHARGING_TARGET_MV as i32 - CONTROLLER.output_mv as i32;
-                if error_mv >= 100 {
-                    CONTROLLER.target_mv += 100;
-                } else if error_mv <= -100 {
-                    CONTROLLER.target_mv -= 100;
-                } else if error_mv > 1 {
-                    CONTROLLER.target_mv += 1;
-                } else if error_mv < 1 {
-                    CONTROLLER.target_mv -= 1;
-                }
-                // allow 1V of slop in boost controller
-                CONTROLLER.target_mv = CONTROLLER
-                    .target_mv
-                    .clamp(MIN_BATTERY_VOLTAGE_MV, CHARGING_TARGET_MV + 1_000);
-                boost::set_voltage_mv(i2c, enable_pin, CONTROLLER.target_mv as u16);
-            }
+            // Prevent windup past boost limits
+            s.duty = (s.duty as i32 + duty_shift).clamp(0, boost::DAC_MAX_OUTPUT as i32) as u16;
 
-            ChargerMode::Disabled => {
-                CONTROLLER.target_ma = 0;
-                CONTROLLER.target_mv = 0;
-                boost::set_voltage_mv(i2c, enable_pin, 0);
+            if s.output_mv >= CV_TARGET_MV {
+                s.mode = Mode::ConstantVoltage;
+            } else if s.output_ma < MIN_CURRENT_MA {
+                s.mode = Mode::Disabled; // Battery is gone!
+            } else {
+                boost::set_duty(i2c, enable_pin, s.duty);
             }
         }
-        println!("{:?}", CONTROLLER)
+
+        Mode::ConstantVoltage => {
+            let p_error = CV_TARGET_MV as i32 - s.output_mv as i32;
+
+            // Slew rate limit only in positive direction
+            let duty_shift = p_error.clamp(i32::MIN, MAX_BOOST_DIFF);
+
+            // Clamp to boost converter limits
+            s.duty = (s.duty as i32 + duty_shift).clamp(0, boost::DAC_MAX_OUTPUT as i32) as u16;
+
+            if s.output_ma <= CHARGING_CUTOFF_MA {
+                s.mode = Mode::Disabled;
+                // Set LED to green
+            } else {
+                boost::set_duty(i2c, enable_pin, s.duty);
+            }
+        }
+
+        Mode::Disabled => {
+            boost::set_duty(i2c, enable_pin, 0);
+
+            // If boost is off and we see a voltage then a battery has been plugged in.
+            // Only switch to CC if battery exists and is > 0.5V below fully charged target.
+            if s.output_mv > MIN_BATTERY_VOLTAGE_MV && s.output_mv < CV_TARGET_MV - 500 {
+                s.mode = Mode::ConstantCurrent;
+                // Set LED to yellow
+            } // Else set LED to off
+        }
     }
 }

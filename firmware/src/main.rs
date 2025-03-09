@@ -5,13 +5,16 @@ use esp_backtrace as _;
 use esp_hal::{
     analog::adc::*,
     delay::Delay,
-    gpio::{self, GpioPin, InputConfig, Level, Output, OutputConfig},
+    gpio::{self, GpioPin, Input, InputConfig, Level, Output, OutputConfig},
     i2c,
     peripherals::ADC1,
-    rmt::TxChannelCreator,
+    rmt::{TxChannelConfig, TxChannelCreator},
+    time::{Duration, Rate},
     timer::{timg::TimerGroup, PeriodicTimer},
     Blocking,
 };
+
+use core::sync::atomic::Ordering;
 
 mod boost;
 mod charger;
@@ -23,12 +26,6 @@ mod vi_sense;
 
 #[rtic::app(device = esp32c3, dispatchers=[FROM_CPU_INTR0, FROM_CPU_INTR1])]
 mod app {
-    use esp_hal::{
-        gpio::Input,
-        rmt::TxChannelConfig,
-        time::{Duration, Rate},
-    };
-
     use super::*;
 
     #[shared]
@@ -45,6 +42,7 @@ mod app {
         i_sense: AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
         input_i_sense: AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
         adc1: Adc<'static, ADC1, Blocking>,
+        state: charger::State,
     }
 
     #[init]
@@ -103,6 +101,10 @@ mod app {
         periodic.enable_interrupt(true);
         periodic.start(Duration::from_millis(100)).unwrap();
 
+        let mut state = charger::State::default();
+        state.pdo_mv = tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed);
+        state.pdo_ma = tcpc::PDO_CURRENT_MA.load(Ordering::Relaxed);
+
         (
             Shared { i2c },
             Local {
@@ -113,6 +115,7 @@ mod app {
                 i_sense,
                 input_i_sense,
                 adc1,
+                state,
             },
         )
     }
@@ -129,17 +132,16 @@ mod app {
 
     // Update control values and read back sensors
     #[ task(binds=TG0_T0_LEVEL,
-        local=[periodic, boost_enable, adc1, v_sense, i_sense, input_i_sense],
+        local=[periodic, boost_enable, adc1, v_sense, i_sense, input_i_sense, state],
         shared=[i2c], priority=2) ]
     fn timer_handler(mut cx: timer_handler::Context) {
         let loc = cx.local;
         loc.periodic.clear_interrupt();
 
         vi_sense::run(loc.adc1, loc.v_sense, loc.i_sense, loc.input_i_sense);
-        boost::run();
 
         cx.shared.i2c.lock(|i2c| {
-            charger::run(i2c, loc.boost_enable);
+            charger::run(i2c, loc.boost_enable, loc.state);
         });
     }
 }

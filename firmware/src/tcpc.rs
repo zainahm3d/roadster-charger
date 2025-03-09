@@ -39,7 +39,6 @@ pub fn run_state_machine<T: I2c>(
     static mut STATE: PDState = PDState::WaitingForSourceCaps;
     let msg_type = rx_header.message_type();
     let is_ctrl_msg = rx_header.num_data_objects() == 0;
-    let mut pdo: &usb_pd::FixedSupplyPDO = &usb_pd::FixedSupplyPDO(0);
 
     unsafe {
         match STATE {
@@ -48,13 +47,15 @@ pub fn run_state_machine<T: I2c>(
                     println!("pd: source capabilities recieved");
                     let pdos = parse_pdos(rx_header, rx_buffer);
                     let index = select_pdo_index(&pdos).unwrap() as u32;
-                    pdo = &pdos[index as usize];
+                    let pdo = &pdos[index as usize];
                     request_pdo_index(i2c, index, &pdos);
                     println!(
                         "pd: requested {:?}mV @ {:?}mA",
                         pdo.voltage_mv(),
                         pdo.current_ma()
                     );
+                    PDO_CURRENT_MA.store(pdo.current_ma(), Ordering::Relaxed);
+                    PDO_VOLTAGE_MV.store(pdo.voltage_mv(), Ordering::Relaxed);
                     STATE = PDState::WaitingForPsAccept;
                 }
             }
@@ -68,11 +69,12 @@ pub fn run_state_machine<T: I2c>(
 
             PDState::WaitingForPsRdy => {
                 if is_ctrl_msg && msg_type == usb_pd::ControlMessage::PsRdy as u16 {
-                    PDO_CURRENT_MA.store(pdo.current_ma(), Ordering::Relaxed);
-                    PDO_VOLTAGE_MV.store(pdo.voltage_mv(), Ordering::Relaxed);
-
                     println!("pd: psu ready");
                     STATE = PDState::NegotiationComplete;
+                } else {
+                    // Something went wrong, invalidate the PDO
+                    PDO_CURRENT_MA.store(0, Ordering::Relaxed);
+                    PDO_VOLTAGE_MV.store(0, Ordering::Relaxed);
                 }
             }
 

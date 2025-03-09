@@ -38,9 +38,24 @@ pub struct State {
 
     output_mv: u32,
     output_ma: u32,
+    max_output_ma: u32,
 
     pub pdo_mv: u32,
     pub pdo_ma: u32,
+}
+
+impl State {
+    // Calculate max charge current based on charger PDO and current temperature.
+    fn update_max_charge_current(&mut self) {
+        // Only output 85% of brick's advertised capabilities to account for
+        // power dissapated in cable and our own 92ish % efficiency.
+        let pdo_mw = self.pdo_ma * self.pdo_mv / 1000;
+        let max_output_mw = (pdo_mw as f32 * 0.85) as u32;
+
+        // Based on PDO and current output voltage, never charge at > 2A
+        esp_println::dbg!(max_output_mw / self.output_mv * 1000);
+        self.max_output_ma = (max_output_mw / self.output_mv * 1000).clamp(0, 2_000);
+    }
 }
 
 impl Default for State {
@@ -50,12 +65,13 @@ impl Default for State {
             mode: Mode::Disabled,
             tick_disabled: 0,
             board_temp_c: 0,
-            target_ma: 2_000,
+            target_ma: 0,
             duty: 0,
             input_mv: 0,
             input_ma: 0,
             output_mv: 0,
             output_ma: 0,
+            max_output_ma: 0,
             pdo_mv: 0,
             pdo_ma: 0,
         }
@@ -79,6 +95,8 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
 
     match s.mode {
         Mode::ConstantCurrent => {
+            s.update_max_charge_current();
+            s.target_ma = s.target_ma.clamp(0, s.max_output_ma);
             let p_error = s.target_ma as i32 - s.output_ma as i32;
 
             // Slew rate limit only in positive direction

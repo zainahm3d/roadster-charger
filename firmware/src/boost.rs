@@ -26,11 +26,11 @@ pub fn init<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P) {
     set_duty(i2c, enable_pin, 0);
 }
 
-// 16384 * 1.75 / 2.5
-// 1.65V at DAC output equals 44V at boost output, add 100mV for drop across
-// 1K resistor in between DAC and boost converter.
-pub const DAC_MAX_OUTPUT: u16 = 11_470;
-pub fn set_duty<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, duty: u16) {
+// Limit boost converter outut to 43V.
+pub const DAC_MAX_OUTPUT: u16 = 11_200;
+pub fn set_duty<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, mut duty: u16) {
+    duty = duty.clamp(0, DAC_MAX_OUTPUT);
+
     // If we're turning the output off, make sure it turns off by flipping the pin
     if duty == 0 {
         enable_pin.set_low().unwrap();

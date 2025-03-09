@@ -90,7 +90,7 @@ pub fn init<T: I2c>(i2c: &mut T, delay: &mut Delay) {
     reset.set_sw_rst(true);
     write_reg(i2c, Register::Reset, &reset.0);
 
-    delay.delay_millis(20u32);
+    delay.delay_millis(10u32);
 
     // Clear the "chip has reset" fault
     let mut fault_stat = FaultStat(0x00);

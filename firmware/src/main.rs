@@ -1,21 +1,19 @@
 #![no_std]
 #![no_main]
 
+use core::sync::atomic::Ordering;
 use esp_backtrace as _;
 use esp_hal::{
     analog::adc::*,
     delay::Delay,
-    gpio::{self, GpioPin, Input, InputConfig, Level, Output, OutputConfig},
+    gpio::{self, Input, InputConfig, Level, Output, OutputConfig},
     i2c,
-    peripherals::ADC1,
-    rmt::{TxChannelConfig, TxChannelCreator},
     time::{Duration, Rate},
     timer::{timg::TimerGroup, PeriodicTimer},
     Blocking,
 };
 
-use core::sync::atomic::Ordering;
-
+use crate::led::color;
 mod boost;
 mod charger;
 mod led;
@@ -26,6 +24,8 @@ mod vi_sense;
 
 #[rtic::app(device = esp32c3, dispatchers=[FROM_CPU_INTR0, FROM_CPU_INTR1])]
 mod app {
+    use crate::vi_sense::VISense;
+
     use super::*;
 
     #[shared]
@@ -38,11 +38,9 @@ mod app {
         fusb_int: gpio::Input<'static>,
         periodic: PeriodicTimer<'static, Blocking>,
         boost_enable: gpio::Output<'static>,
-        v_sense: AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
-        i_sense: AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
-        input_i_sense: AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
-        adc1: Adc<'static, ADC1, Blocking>,
+        vi_sense: VISense,
         state: charger::State,
+        leds: led::Led,
     }
 
     #[init]
@@ -57,28 +55,22 @@ mod app {
             .with_sda(peripherals.GPIO10);
 
         let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, Rate::from_mhz(80)).unwrap();
+        let mut leds = led::Led {
+            pixel_buffer: [led::Rgb { r: 0, g: 0, b: 0 }; 2],
+            rmt_channel: Some(led::Led::configure_rmt(rmt, peripherals.GPIO3)),
+            last_update_time: esp_hal::time::Instant::EPOCH,
+        };
 
-        let mut rgb = rmt
-            .channel0
-            .configure(
-                peripherals.GPIO3,
-                TxChannelConfig::default()
-                    .with_clk_divider(2)
-                    .with_idle_output_level(Level::Low)
-                    .with_idle_output(true)
-                    .with_carrier_modulation(false)
-                    .with_carrier_high(1)
-                    .with_carrier_low(1)
-                    .with_carrier_level(Level::Low),
-            )
-            .unwrap();
-
-        // voltage and current sense // todo: cleanup / move into another file?
         let mut adc1_config = AdcConfig::new();
-        let v_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO1, Attenuation::_11dB);
-        let i_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO0, Attenuation::_11dB);
-        let input_i_sense = adc1_config.enable_pin_with_cal(peripherals.GPIO4, Attenuation::_11dB);
-        let adc1 = Adc::new(peripherals.ADC1, adc1_config);
+        let vi_sense = VISense {
+            v_sense: adc1_config.enable_pin_with_cal(peripherals.GPIO1, Attenuation::_11dB),
+            i_sense: adc1_config.enable_pin_with_cal(peripherals.GPIO0, Attenuation::_11dB),
+            input_i_sense: adc1_config.enable_pin_with_cal(peripherals.GPIO4, Attenuation::_11dB),
+            adc: Adc::new(peripherals.ADC1, adc1_config),
+            input_current_ma: 0,
+            output_current_ma: 0,
+            battery_voltage_mv: 0,
+        };
 
         let mut boost_enable = Output::new(peripherals.GPIO6, Level::Low, OutputConfig::default());
         let mut fusb_int = Input::new(peripherals.GPIO7, InputConfig::default());
@@ -86,15 +78,13 @@ mod app {
         boost::init(&mut i2c, &mut boost_enable);
         tcpc::init(&mut i2c, &mut delay);
 
-        // set PD LED to cyan if we have a contract, red if failed
         if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int, &mut delay) {
-            rgb = led::set_pixel(rgb, 0, 0, 20, 5);
-            _ = led::set_pixel(rgb, 1, 0, 20, 5);
+            leds.set_pixel(0, color::GREEN);
         } else {
-            rgb = led::set_pixel(rgb, 0, 20, 0, 0);
-            _ = led::set_pixel(rgb, 1, 20, 0, 0);
+            leds.set_pixel(0, color::RED);
             panic!("failed to establish PD contract");
         }
+        leds.set_pixel(1, color::RED);
 
         let timg0 = TimerGroup::new(peripherals.TIMG0);
         let mut periodic = PeriodicTimer::new(timg0.timer0);
@@ -111,20 +101,18 @@ mod app {
                 fusb_int,
                 periodic,
                 boost_enable,
-                v_sense,
-                i_sense,
-                input_i_sense,
-                adc1,
+                vi_sense,
                 state,
+                leds,
             },
         )
     }
 
     #[task(binds=GPIO, local=[fusb_int], shared=[i2c], priority=1)]
-    fn gpio_handler(mut cx: gpio_handler::Context) {
-        if cx.local.fusb_int.is_low() {
-            cx.local.fusb_int.clear_interrupt();
-            cx.shared.i2c.lock(|i2c| {
+    fn gpio_handler(mut c: gpio_handler::Context) {
+        if c.local.fusb_int.is_low() {
+            c.local.fusb_int.clear_interrupt();
+            c.shared.i2c.lock(|i2c| {
                 tcpc::write_reg(i2c, tcpc::Register::AlertL, &0xFF);
             });
         }
@@ -132,16 +120,19 @@ mod app {
 
     // Update control values and read back sensors
     #[ task(binds=TG0_T0_LEVEL,
-        local=[periodic, boost_enable, adc1, v_sense, i_sense, input_i_sense, state],
+        local=[periodic, boost_enable, vi_sense, state, leds],
         shared=[i2c], priority=2) ]
-    fn timer_handler(mut cx: timer_handler::Context) {
-        let loc = cx.local;
-        loc.periodic.clear_interrupt();
-
-        vi_sense::run(loc.adc1, loc.v_sense, loc.i_sense, loc.input_i_sense);
-
-        cx.shared.i2c.lock(|i2c| {
-            charger::run(i2c, loc.boost_enable, loc.state);
+    fn timer_handler(mut c: timer_handler::Context) {
+        c.local.periodic.clear_interrupt();
+        c.local.vi_sense.run();
+        c.shared.i2c.lock(|i2c| {
+            charger::run(
+                i2c,
+                c.local.boost_enable,
+                c.local.state,
+                c.local.vi_sense,
+                c.local.leds,
+            );
         });
     }
 }

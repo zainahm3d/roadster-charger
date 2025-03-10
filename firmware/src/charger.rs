@@ -3,9 +3,10 @@ use embedded_hal::i2c::I2c;
 use esp_println::dbg;
 
 use crate::boost;
+use crate::led::{color, Led};
 use crate::tcpc;
 use crate::temp_sense;
-use crate::vi_sense;
+use crate::vi_sense::VISense;
 
 // Battery specs for 10S2P INR18650-35E pack
 const CV_TARGET_MV: u32 = 41_500;
@@ -83,16 +84,22 @@ impl Default for State {
 // Run charge controller. CC and CV controllers are slew rate limited P controllers.
 // In practice, they act as integrating controllers at large P errors, and P controllers
 // at small P errors.
-pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State) {
+pub fn run<T: I2c, P: OutputPin>(
+    i2c: &mut T,
+    enable_pin: &mut P,
+    s: &mut State,
+    vi_sense: &VISense,
+    leds: &mut Led,
+) {
     // Slew rate in DAC ticks / update period
     const MAX_BOOST_DIFF: i32 = 250;
 
     s.tick += 1;
     s.board_temp_c = temp_sense::board_temp_c(i2c);
     s.input_mv = tcpc::vbus_mv(i2c);
-    s.input_ma = vi_sense::input_current_ma();
-    s.output_mv = vi_sense::battery_voltage_mv();
-    s.output_ma = vi_sense::output_current_ma();
+    s.input_ma = vi_sense.input_current_ma();
+    s.output_mv = vi_sense.battery_voltage_mv();
+    s.output_ma = vi_sense.output_current_ma();
     dbg!(&s); // Print out the results of the last update
 
     match s.mode {
@@ -110,9 +117,11 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
                 s.target_ma = 0;
                 s.mode = Mode::ConstantVoltage;
             } else if s.output_ma < MIN_CURRENT_MA {
+                // Battery is gone!
                 s.target_ma = 0;
-                s.mode = Mode::Disabled; // Battery is gone!
+                s.mode = Mode::Disabled;
                 s.tick_disabled = s.tick;
+                leds.set_pixel(1, color::RED);
             } else {
                 boost::set_duty(i2c, enable_pin, s.duty);
             }
@@ -128,9 +137,10 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
             s.duty = (s.duty as i32 + duty_shift).clamp(0, boost::DAC_MAX_OUTPUT as i32) as u16;
 
             if s.output_ma <= CHARGING_CUTOFF_MA {
+                // Charging is done
                 s.mode = Mode::Disabled;
                 s.tick_disabled = s.tick;
-                // Set LED to green
+                leds.set_pixel(1, color::GREEN);
             } else {
                 boost::set_duty(i2c, enable_pin, s.duty);
             }
@@ -147,6 +157,7 @@ pub fn run<T: I2c, P: OutputPin>(i2c: &mut T, enable_pin: &mut P, s: &mut State)
                 // once a battery has been disconnected.
                 if s.tick - s.tick_disabled > 30 {
                     s.mode = Mode::ConstantCurrent;
+                    leds.set_pixel(1, color::YELLOW);
                 }
             }
         }

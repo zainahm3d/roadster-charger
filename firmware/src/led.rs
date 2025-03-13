@@ -16,6 +16,11 @@ pub mod color {
         b: 0,
     };
     pub const GREEN: Rgb = Rgb { r: 0, g: 100, b: 0 };
+    pub const PURPLE: Rgb = Rgb {
+        r: 100,
+        g: 0,
+        b: 100,
+    };
 }
 
 #[derive(Debug, Clone, Copy)]

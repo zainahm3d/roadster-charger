@@ -7,11 +7,15 @@ use esp_hal::{
     analog::adc::*,
     delay::Delay,
     gpio::{self, Input, InputConfig, Level, Output, OutputConfig},
-    i2c,
+    i2c, rtc_cntl,
     time::{Duration, Rate},
-    timer::{timg::TimerGroup, PeriodicTimer},
+    timer::{
+        timg::{MwdtStage, MwdtStageAction, TimerGroup, Wdt},
+        PeriodicTimer,
+    },
     Blocking,
 };
+use esp_println::println;
 
 use crate::led::color;
 mod boost;
@@ -24,6 +28,7 @@ mod vi_sense;
 
 #[rtic::app(device = esp32c3, dispatchers=[FROM_CPU_INTR0, FROM_CPU_INTR1])]
 mod app {
+
     use crate::vi_sense::VISense;
 
     use super::*;
@@ -41,6 +46,7 @@ mod app {
         vi_sense: VISense,
         state: charger::State,
         leds: led::Led,
+        watchdog: Wdt<esp_hal::peripherals::TIMG0>,
     }
 
     #[init]
@@ -78,6 +84,16 @@ mod app {
         boost::init(&mut i2c, &mut boost_enable);
         tcpc::init(&mut i2c, &mut delay);
 
+        let reset_reason = rtc_cntl::reset_reason(esp_hal::system::Cpu::ProCpu);
+        if let Some(reason) = reset_reason {
+            if reason == rtc_cntl::SocResetReason::CoreMwdt0 {
+                println!("System reset was due to watchdog");
+                leds.set_pixel(0, color::PURPLE);
+                leds.set_pixel(1, color::PURPLE);
+                loop {}
+            }
+        }
+
         if tcpc::establish_pd_contract(&mut i2c, &mut fusb_int, &mut delay) {
             leds.set_pixel(0, color::GREEN);
         } else {
@@ -87,6 +103,12 @@ mod app {
         leds.set_pixel(1, color::RED);
 
         let timg0 = TimerGroup::new(peripherals.TIMG0);
+
+        let mut watchdog = timg0.wdt;
+        watchdog.set_stage_action(MwdtStage::Stage3, MwdtStageAction::ResetSystem);
+        watchdog.set_timeout(MwdtStage::Stage3, Duration::from_secs(2));
+        watchdog.enable();
+
         let mut periodic = PeriodicTimer::new(timg0.timer0);
         periodic.enable_interrupt(true);
         periodic.start(Duration::from_millis(100)).unwrap();
@@ -104,6 +126,7 @@ mod app {
                 vi_sense,
                 state,
                 leds,
+                watchdog,
             },
         )
     }
@@ -120,10 +143,11 @@ mod app {
 
     // Update control values and read back sensors
     #[ task(binds=TG0_T0_LEVEL,
-        local=[periodic, boost_enable, vi_sense, state, leds],
+        local=[periodic, boost_enable, vi_sense, state, leds, watchdog],
         shared=[i2c], priority=2) ]
     fn timer_handler(mut c: timer_handler::Context) {
         c.local.periodic.clear_interrupt();
+        c.local.watchdog.feed();
         c.local.vi_sense.run();
         c.shared.i2c.lock(|i2c| {
             charger::run(

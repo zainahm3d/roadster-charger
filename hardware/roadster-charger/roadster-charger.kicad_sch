@@ -16355,7 +16355,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "LM75B"
+		(property "Value" "LM75BD,118"
 			(at 177.8 168.91 0)
 			(effects
 				(font
@@ -16391,7 +16391,7 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "LM75BDP"
+		(property "MPN" "LM75BD,118"
 			(at 189.23 180.34 0)
 			(effects
 				(font

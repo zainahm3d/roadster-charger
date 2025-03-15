@@ -103,7 +103,6 @@ mod app {
         leds.set_pixel(1, color::RED);
 
         let timg0 = TimerGroup::new(peripherals.TIMG0);
-
         let mut watchdog = timg0.wdt;
         watchdog.set_stage_action(MwdtStage::Stage3, MwdtStageAction::ResetSystem);
         watchdog.set_timeout(MwdtStage::Stage3, Duration::from_secs(2));

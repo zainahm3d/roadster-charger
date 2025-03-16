@@ -3,24 +3,26 @@ use influxdb::{Client, InfluxDbWriteable, WriteQuery};
 use std::{io::BufRead, time::Duration};
 
 #[derive(Clone, Debug, InfluxDbWriteable)]
-struct ChargeController {
+pub struct State {
     time: DateTime<Utc>,
 
-    system_state: String,
-    charger_mode: String,
+    tick: u32,
+    mode: String,
+    tick_disabled: u32,
 
     board_temp_c: i16,
 
-    tick: u32,
-
     target_ma: u32,
-    target_mv: u32,
+    duty: u16,
 
     input_mv: u32,
     input_ma: u32,
 
     output_mv: u32,
     output_ma: u32,
+
+    pub pdo_mv: u32,
+    pub pdo_ma: u32,
 }
 
 #[tokio::main]
@@ -46,7 +48,7 @@ async fn main() {
         reader.read_line(&mut line).unwrap();
 
         // do a very illegal thing- use a debug printed struct as a data source
-        if line.starts_with("ChargeController {") {
+        if line.starts_with("State {") {
             let frame = parse_status_line(&line);
             dbg!(&frame);
             frames.push(frame.into_query("roadster"));
@@ -88,27 +90,24 @@ fn find_port() -> Option<String> {
 
 // This parser is temporary- future works includes sending the bare struct from the charger
 // instead of a stringified form like this. Readable info is good for debugging right now.
-fn parse_status_line(line: &str) -> ChargeController {
-    let mut status = ChargeController {
+fn parse_status_line(line: &str) -> State {
+    let mut status = State {
         time: chrono::Utc::now(),
-
-        system_state: "".to_string(),
-        charger_mode: "".to_string(),
-
-        board_temp_c: 0,
-
         tick: 0,
-
+        mode: "".to_string(),
+        tick_disabled: 0,
+        board_temp_c: 0,
         target_ma: 0,
-        target_mv: 0,
-
+        duty: 0,
         input_mv: 0,
         input_ma: 0,
         output_mv: 0,
         output_ma: 0,
+        pdo_mv: 0,
+        pdo_ma: 0,
     };
 
-    let mut line = line.strip_prefix("ChargeController {").unwrap().to_string();
+    let mut line = line.strip_prefix("State {").unwrap().to_string();
     line = line.strip_suffix("}\n").unwrap().to_string();
 
     for item in line.split(',') {
@@ -119,16 +118,19 @@ fn parse_status_line(line: &str) -> ChargeController {
         let value = pair[1].trim().to_lowercase();
 
         match key.as_str() {
-            "system_state" => status.system_state = value.parse().unwrap(),
-            "charger_mode" => status.charger_mode = value.parse().unwrap(),
-            "board_temp_c" => status.board_temp_c = value.parse().unwrap(),
             "tick" => status.tick = value.parse().unwrap(),
+            "mode" => status.mode = value.parse().unwrap(),
+            "tick_disabled" => status.tick_disabled = value.parse().unwrap(),
+            "board_temp_c" => status.board_temp_c = value.parse().unwrap(),
             "target_ma" => status.target_ma = value.parse().unwrap(),
-            "target_mv" => status.target_mv = value.parse().unwrap(),
+            "duty" => status.duty = value.parse().unwrap(),
             "input_mv" => status.input_mv = value.parse().unwrap(),
             "input_ma" => status.input_ma = value.parse().unwrap(),
             "output_mv" => status.output_mv = value.parse().unwrap(),
             "output_ma" => status.output_ma = value.parse().unwrap(),
+            "pdo_mv" => status.pdo_mv = value.parse().unwrap(),
+            "pdo_ma" => status.pdo_ma = value.parse().unwrap(),
+
             _ => {
                 panic!("Unknown key in status message")
             }

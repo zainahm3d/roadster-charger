@@ -17,6 +17,7 @@ const MIN_CURRENT_MA: u32 = 50;
 
 #[derive(Debug)]
 enum Mode {
+    Ramping,
     ConstantCurrent,
     ConstantVoltage,
     Disabled,
@@ -108,6 +109,21 @@ pub fn run<T: I2c, P: OutputPin>(
     }
 
     match s.mode {
+        // Battery has been detected, slowly ramp up until we get >= 25mA of draw
+        Mode::Ramping => {
+            if s.output_ma < 25 {
+                if s.duty >= boost::DAC_MAX_OUTPUT {
+                    disable(s, leds, color::RED);
+                } else {
+                    s.duty += MAX_BOOST_DIFF as u16;
+                    boost::set_duty(i2c, enable_pin, s.duty);
+                }
+            } else {
+                s.mode = Mode::ConstantCurrent;
+                leds.set_pixel(1, color::YELLOW);
+            }
+        }
+
         Mode::ConstantCurrent => {
             s.update_target_ma();
             let p_error = s.target_ma as i32 - s.output_ma as i32;
@@ -123,10 +139,7 @@ pub fn run<T: I2c, P: OutputPin>(
                 s.mode = Mode::ConstantVoltage;
             } else if s.output_ma < MIN_CURRENT_MA {
                 // Battery is gone!
-                s.target_ma = 0;
-                s.mode = Mode::Disabled;
-                s.tick_disabled = s.tick;
-                leds.set_pixel(1, color::RED);
+                disable(s, leds, color::RED);
             } else {
                 boost::set_duty(i2c, enable_pin, s.duty);
             }
@@ -148,9 +161,7 @@ pub fn run<T: I2c, P: OutputPin>(
 
             if s.output_ma <= CHARGING_CUTOFF_MA {
                 // Charging is done
-                s.mode = Mode::Disabled;
-                s.tick_disabled = s.tick;
-                leds.set_pixel(1, color::GREEN);
+                disable(s, leds, color::GREEN);
             } else {
                 boost::set_duty(i2c, enable_pin, s.duty);
             }
@@ -166,7 +177,7 @@ pub fn run<T: I2c, P: OutputPin>(
                 // enabling the charger. This allows time for output caps to discharge
                 // once a battery has been disconnected.
                 if s.tick - s.tick_disabled > 30 {
-                    s.mode = Mode::ConstantCurrent;
+                    s.mode = Mode::Ramping;
                     leds.set_pixel(1, color::YELLOW);
                 }
             }
@@ -181,4 +192,12 @@ pub fn run<T: I2c, P: OutputPin>(
             }
         }
     }
+}
+
+fn disable(s: &mut State, leds: &mut Led, color: crate::led::Rgb) {
+    s.target_ma = 0;
+    s.mode = Mode::Disabled;
+    s.tick_disabled = s.tick;
+    s.duty = 0;
+    leds.set_pixel(1, color);
 }

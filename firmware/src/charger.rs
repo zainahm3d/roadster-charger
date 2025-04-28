@@ -20,6 +20,7 @@ enum Mode {
     ConstantCurrent,
     ConstantVoltage,
     Disabled,
+    OverTemp,
 }
 
 // This struct is currently doubling as a telemetry struct
@@ -47,7 +48,7 @@ pub struct State {
 impl State {
     // Calculate max charge current based on charger PDO and current temperature.
     fn update_target_ma(&mut self) {
-        if self.output_mv > MIN_BATTERY_VOLTAGE_MV {
+        if true {
             // Only output 90% of brick's advertised capabilities to account for
             // power dissapated in cable and our own 92ish % efficiency.
             let pdo_mw = self.pdo_ma as f32 * self.pdo_mv as f32 / 1000.0;
@@ -55,7 +56,7 @@ impl State {
 
             // Based on PDO and current output voltage, never charge at > 2A
             self.target_ma =
-                ((max_output_mw / self.output_mv as f32 * 1000.0).clamp(0.0, 2_000.0)) as u32;
+                ((max_output_mw / self.output_mv as f32 * 1000.0).clamp(0.0, 1_500.0)) as u32;
         } else {
             self.target_ma = 0;
         }
@@ -92,7 +93,7 @@ pub fn run<T: I2c, P: OutputPin>(
     leds: &mut Led,
 ) {
     // Slew rate in DAC ticks / update period
-    const MAX_BOOST_DIFF: i32 = 250;
+    const MAX_BOOST_DIFF: i32 = 25;
 
     s.tick += 1;
     s.board_temp_c = temp_sense::board_temp_c(i2c);
@@ -101,6 +102,10 @@ pub fn run<T: I2c, P: OutputPin>(
     s.output_mv = vi_sense.battery_voltage_mv();
     s.output_ma = vi_sense.output_current_ma();
     dbg!(&s); // Print out the results of the last update
+
+    if s.board_temp_c >= 90 {
+        s.mode = Mode::OverTemp;
+    }
 
     match s.mode {
         Mode::ConstantCurrent => {
@@ -165,6 +170,15 @@ pub fn run<T: I2c, P: OutputPin>(
                     s.mode = Mode::ConstantCurrent;
                     leds.set_pixel(1, color::YELLOW);
                 }
+            }
+        }
+
+        Mode::OverTemp => {
+            boost::set_duty(i2c, enable_pin, 0);
+            if s.tick % 10 == 0 {
+                leds.set_pixel(1, color::OFF);
+            } else if s.tick % 5 == 0 {
+                leds.set_pixel(1, color::RED);
             }
         }
     }

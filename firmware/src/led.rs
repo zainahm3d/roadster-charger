@@ -9,18 +9,19 @@ use esp_hal::Blocking;
 #[allow(unused)]
 pub mod color {
     use super::Rgb;
-    pub const RED: Rgb = Rgb { r: 200, g: 0, b: 0 };
+    pub const RED: Rgb = Rgb { r: 255, g: 0, b: 0 };
     pub const YELLOW: Rgb = Rgb {
-        r: 100,
-        g: 100,
+        r: 255,
+        g: 255,
         b: 0,
     };
-    pub const GREEN: Rgb = Rgb { r: 0, g: 100, b: 0 };
+    pub const GREEN: Rgb = Rgb { r: 0, g: 255, b: 0 };
     pub const PURPLE: Rgb = Rgb {
-        r: 100,
+        r: 255,
         g: 0,
-        b: 100,
+        b: 255,
     };
+    pub const OFF: Rgb = Rgb { r: 0, g: 0, b: 0 };
 }
 
 #[derive(Debug, Clone, Copy)]

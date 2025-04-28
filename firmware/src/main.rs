@@ -54,7 +54,7 @@ mod app {
         let peripherals = esp_hal::init(esp_hal::Config::default());
         let mut delay = Delay::new();
 
-        let i2c_config = i2c::master::Config::default().with_frequency(Rate::from_khz(100));
+        let i2c_config = i2c::master::Config::default().with_frequency(Rate::from_khz(400));
         let mut i2c = i2c::master::I2c::new(peripherals.I2C0, i2c_config)
             .unwrap()
             .with_scl(peripherals.GPIO8)

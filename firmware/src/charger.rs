@@ -135,14 +135,13 @@ pub fn run<T: I2c, P: OutputPin>(
         Mode::ConstantVoltage => {
             let p_error = CV_TARGET_MV as i32 - s.output_mv as i32;
 
-            let duty_shift;
-            if p_error.abs() < 100 {
+            let duty_shift = if p_error.abs() < 100 {
                 // Limit slew rate severely within 100mV of target
-                duty_shift = p_error.clamp(-1, 1);
+                p_error.clamp(-1, 1)
             } else {
                 // If error is large, allow large negative movement
-                duty_shift = p_error.clamp(i32::MIN, MAX_BOOST_DIFF);
-            }
+                p_error.clamp(i32::MIN, MAX_BOOST_DIFF)
+            };
 
             // Clamp to boost converter limits
             s.duty = (s.duty as i32 + duty_shift).clamp(0, boost::DAC_MAX_OUTPUT as i32) as u16;

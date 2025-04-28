@@ -90,6 +90,8 @@ mod app {
                 println!("System reset was due to watchdog");
                 leds.set_pixel(0, color::PURPLE);
                 leds.set_pixel(1, color::PURPLE);
+
+                #[allow(clippy::empty_loop)]
                 loop {}
             }
         }

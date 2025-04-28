@@ -9,6 +9,9 @@ defaults:
     working-directory:
       ./firmware/
 
+env:
+  CARGO_TERM_COLOR: always
+
 jobs:
   build-firmware:
     runs-on: ubuntu-latest

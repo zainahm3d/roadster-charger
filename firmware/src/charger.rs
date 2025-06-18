@@ -49,13 +49,13 @@ pub struct State {
 impl State {
     // Calculate max charge current based on charger PDO and current temperature.
     fn update_target_ma(&mut self) {
-        if true {
+        if self.output_mv > MIN_BATTERY_VOLTAGE_MV {
             // Only output 90% of brick's advertised capabilities to account for
             // power dissapated in cable and our own 92ish % efficiency.
             let pdo_mw = self.pdo_ma as f32 * self.pdo_mv as f32 / 1000.0;
             let max_output_mw = pdo_mw * 0.9;
 
-            // Based on PDO and current output voltage, never charge at > 2A
+            // Based on PDO and current output voltage, never charge at > 1.5A
             self.target_ma =
                 ((max_output_mw / self.output_mv as f32 * 1000.0).clamp(0.0, 1_500.0)) as u32;
         } else {
@@ -109,9 +109,9 @@ pub fn run<T: I2c, P: OutputPin>(
     }
 
     match s.mode {
-        // Battery has been detected, slowly ramp up until we get >= 25mA of draw
+        // Battery has been detected, slowly ramp up until we flow current
         Mode::Ramping => {
-            if s.output_ma < 25 {
+            if s.output_ma < MIN_CURRENT_MA * 2 {
                 if s.duty >= boost::DAC_MAX_OUTPUT {
                     disable(s, leds, color::RED);
                 } else {

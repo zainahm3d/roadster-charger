@@ -1,0 +1,42 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "preLaunchTask": "build release",
+            "type": "probe-rs-debug",
+            "request": "launch",
+            "name": "launch",
+            "cwd": "${workspaceFolder}",
+            "connectUnderReset": true,
+            "chip": "esp32c3",
+            "flashingConfig": {
+                "flashingEnabled": true,
+                "haltAfterReset": true
+            },
+            "coreConfigs": [
+                {
+                    "coreIndex": 0,
+                    "programBinary": "target/riscv32imc-unknown-none-elf/release/firmware"
+                }
+            ]
+        },
+        {
+            "preLaunchTask": "build release",
+            "type": "probe-rs-debug",
+            "request": "attach",
+            "name": "attach",
+            "cwd": "${workspaceFolder}",
+            "connectUnderReset": true,
+            "chip": "esp32c3",
+            "coreConfigs": [
+                {
+                    "coreIndex": 0,
+                    "programBinary": "target/riscv32imc-unknown-none-elf/release/firmware"
+                }
+            ]
+        }
+    ]
+}

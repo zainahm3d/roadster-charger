@@ -1,0 +1,8 @@
+[package]
+name = "telemetry-rerun"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+rerun = "0.23.3"
+serialport = "4.7.2"

@@ -1,3 +1,4 @@
 .DS_Store
 *.lck
 hardware/roadster-charger/#auto_saved_files#
+**/target

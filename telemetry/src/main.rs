@@ -48,12 +48,17 @@ async fn main() {
         reader.read_line(&mut line).unwrap();
 
         // do a very illegal thing- use a debug printed struct as a data source
-        if line.starts_with("State {") {
-            let frame = parse_status_line(&line);
+        if line.contains("&s = State {") {
+            let mut buf: Vec<u8> = std::vec![];
+            reader.read_until(b'}', &mut buf).unwrap();
+            let message = String::from_utf8(buf).unwrap();
+            let message = message.strip_suffix('}').unwrap();
+
+            let frame = parse_status_message(&message);
             dbg!(&frame);
             frames.push(frame.into_query("roadster"));
         } else {
-            print!("{}", line); // pass through normal print statements
+            print!("{}", line.trim()); // pass through normal print statements
         }
 
         if frames.len() >= 20 {
@@ -88,9 +93,9 @@ fn find_port() -> Option<String> {
     None
 }
 
-// This parser is temporary- future works includes sending the bare struct from the charger
+// This parser is temporary- future work includes sending the bare struct from the charger
 // instead of a stringified form like this. Readable info is good for debugging right now.
-fn parse_status_line(line: &str) -> State {
+fn parse_status_message(message: &str) -> State {
     let mut status = State {
         time: chrono::Utc::now(),
         tick: 0,
@@ -107,32 +112,33 @@ fn parse_status_line(line: &str) -> State {
         pdo_ma: 0,
     };
 
-    let mut line = line.strip_prefix("State {").unwrap().to_string();
-    line = line.strip_suffix("}\n").unwrap().to_string();
+    for line in message.split(",\n") {
+        if line.contains(":") {
+            let line = line.trim();
 
-    for item in line.split(',') {
-        let pair: Vec<&str> = item.split(':').collect();
-        assert!(pair.len() == 2);
+            let pair: Vec<&str> = line.split(':').collect();
+            assert!(pair.len() == 2);
 
-        let key = pair[0].trim().to_lowercase();
-        let value = pair[1].trim().to_lowercase();
+            let key = pair[0].trim().to_lowercase();
+            let value = pair[1].trim().to_lowercase();
 
-        match key.as_str() {
-            "tick" => status.tick = value.parse().unwrap(),
-            "mode" => status.mode = value.parse().unwrap(),
-            "tick_disabled" => status.tick_disabled = value.parse().unwrap(),
-            "board_temp_c" => status.board_temp_c = value.parse().unwrap(),
-            "target_ma" => status.target_ma = value.parse().unwrap(),
-            "duty" => status.duty = value.parse().unwrap(),
-            "input_mv" => status.input_mv = value.parse().unwrap(),
-            "input_ma" => status.input_ma = value.parse().unwrap(),
-            "output_mv" => status.output_mv = value.parse().unwrap(),
-            "output_ma" => status.output_ma = value.parse().unwrap(),
-            "pdo_mv" => status.pdo_mv = value.parse().unwrap(),
-            "pdo_ma" => status.pdo_ma = value.parse().unwrap(),
+            match key.as_str() {
+                "tick" => status.tick = value.parse().unwrap(),
+                "mode" => status.mode = value.parse().unwrap(),
+                "tick_disabled" => status.tick_disabled = value.parse().unwrap(),
+                "board_temp_c" => status.board_temp_c = value.parse().unwrap(),
+                "target_ma" => status.target_ma = value.parse().unwrap(),
+                "duty" => status.duty = value.parse().unwrap(),
+                "input_mv" => status.input_mv = value.parse().unwrap(),
+                "input_ma" => status.input_ma = value.parse().unwrap(),
+                "output_mv" => status.output_mv = value.parse().unwrap(),
+                "output_ma" => status.output_ma = value.parse().unwrap(),
+                "pdo_mv" => status.pdo_mv = value.parse().unwrap(),
+                "pdo_ma" => status.pdo_ma = value.parse().unwrap(),
 
-            _ => {
-                panic!("Unknown key in status message")
+                _ => {
+                    panic!("Unknown key in status message")
+                }
             }
         }
     }

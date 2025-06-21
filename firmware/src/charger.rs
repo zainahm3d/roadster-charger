@@ -111,7 +111,7 @@ pub fn run<T: I2c, P: OutputPin>(
     match s.mode {
         // Battery has been detected, slowly ramp up until we flow current
         Mode::Ramping => {
-            if s.output_ma < MIN_CURRENT_MA * 2 {
+            if s.output_ma < CHARGING_CUTOFF_MA {
                 if s.duty >= boost::DAC_MAX_OUTPUT {
                     disable(s, leds, color::RED);
                 } else {

@@ -14,6 +14,7 @@ const CV_TARGET_MV: u32 = 41_500;
 const CHARGING_CUTOFF_MA: u32 = 150;
 const MIN_BATTERY_VOLTAGE_MV: u32 = 28_000;
 const MIN_CURRENT_MA: u32 = 50;
+const TICKS_PER_SECOND: u32 = 10;
 
 #[derive(Debug)]
 enum Mode {
@@ -108,6 +109,10 @@ pub fn run<T: I2c, P: OutputPin>(
         s.mode = Mode::OverTemp;
     }
 
+    if s.output_mv >= CV_TARGET_MV + 500 {
+        disable(s, leds, color::WHITE);
+    }
+
     match s.mode {
         // Battery has been detected, slowly ramp up until we flow current
         Mode::Ramping => {
@@ -176,7 +181,7 @@ pub fn run<T: I2c, P: OutputPin>(
                 // Make sure we've been in the disabled state for at least 3 seconds before
                 // enabling the charger. This allows time for output caps to discharge
                 // once a battery has been disconnected.
-                if s.tick - s.tick_disabled > 30 {
+                if s.tick - s.tick_disabled > 3 * TICKS_PER_SECOND {
                     s.mode = Mode::Ramping;
                     leds.set_pixel(1, color::YELLOW);
                 }
@@ -185,9 +190,9 @@ pub fn run<T: I2c, P: OutputPin>(
 
         Mode::OverTemp => {
             boost::set_duty(i2c, enable_pin, 0);
-            if s.tick % 10 == 0 {
+            if s.tick % TICKS_PER_SECOND == 0 {
                 leds.set_pixel(1, color::OFF);
-            } else if s.tick % 5 == 0 {
+            } else if s.tick % TICKS_PER_SECOND / 2 == 0 {
                 leds.set_pixel(1, color::RED);
             }
         }

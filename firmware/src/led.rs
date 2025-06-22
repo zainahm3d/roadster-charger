@@ -10,6 +10,11 @@ use esp_hal::Blocking;
 pub mod color {
     use super::Rgb;
     pub const RED: Rgb = Rgb { r: 255, g: 0, b: 0 };
+    pub const WHITE: Rgb = Rgb {
+        r: 100,
+        g: 100,
+        b: 100,
+    };
     pub const YELLOW: Rgb = Rgb {
         r: 128,
         g: 128,

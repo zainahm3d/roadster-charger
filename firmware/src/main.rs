@@ -17,6 +17,8 @@ use esp_hal::{
 };
 use esp_println::println;
 
+esp_bootloader_esp_idf::esp_app_desc!();
+
 use crate::led::color;
 mod boost;
 mod charger;
@@ -46,7 +48,7 @@ mod app {
         vi_sense: VISense,
         state: charger::State,
         leds: led::Led,
-        watchdog: Wdt<esp_hal::peripherals::TIMG0>,
+        watchdog: Wdt<esp_hal::peripherals::TIMG0<'static>>,
     }
 
     #[init]
@@ -61,9 +63,10 @@ mod app {
             .with_sda(peripherals.GPIO10);
 
         let rmt = esp_hal::rmt::Rmt::new(peripherals.RMT, Rate::from_mhz(80)).unwrap();
+        let rmt_output = Output::new(peripherals.GPIO3, Level::Low, Default::default());
         let mut leds = led::Led {
             pixel_buffer: [led::Rgb { r: 0, g: 0, b: 0 }; 2],
-            rmt_channel: Some(led::Led::configure_rmt(rmt, peripherals.GPIO3)),
+            rmt_channel: Some(led::Led::configure_rmt(rmt, rmt_output)),
             last_update_time: esp_hal::time::Instant::EPOCH,
         };
 
@@ -111,7 +114,7 @@ mod app {
         watchdog.enable();
 
         let mut periodic = PeriodicTimer::new(timg0.timer0);
-        periodic.enable_interrupt(true);
+        periodic.listen(); // Enable interrupt
         periodic.start(Duration::from_millis(100)).unwrap();
 
         let mut state = charger::State::default();

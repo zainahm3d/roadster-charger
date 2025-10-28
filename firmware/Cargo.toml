@@ -6,11 +6,10 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-esp-hal = { version = "1.0.0-beta.0", features = ["esp32c3", "unstable"] }
+esp-hal = { version = "1.0.0-rc.1", features = ["esp32c3", "unstable"] }
 esp-backtrace = { version = "0.14", features = [
     "esp32c3",
     "panic-handler",
-    "exception-handler",
     "println",
 ] }
 esp-println = { version = "0.12", features = ["esp32c3"] }
@@ -24,6 +23,7 @@ portable-atomic = { version = "1.6", default-features = false, features = [
 ] }
 rtic = { version = "2.1", features = ["esp32c3", "riscv-esp32c3-backend"] }
 esp32c3 = { version = "0.26", features = ["rt"] }
+esp-bootloader-esp-idf = { version = "0.3.0", features = ["esp32c3"] }
 embedded-hal = "1.0"
 nb = "1.1.0"
 

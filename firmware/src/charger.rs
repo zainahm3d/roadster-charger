@@ -190,7 +190,7 @@ pub fn run<T: I2c, P: OutputPin>(
 
         Mode::OverTemp => {
             boost::set_duty(i2c, enable_pin, 0);
-            if s.tick % TICKS_PER_SECOND == 0 {
+            if s.tick.is_multiple_of(TICKS_PER_SECOND) {
                 leds.set_pixel(1, color::OFF);
             } else if s.tick % TICKS_PER_SECOND / 2 == 0 {
                 leds.set_pixel(1, color::RED);

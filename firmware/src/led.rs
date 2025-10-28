@@ -1,8 +1,8 @@
 // Remote Control Peripheral (RMT) based WS2812b RGB LED driver
 use bitfield::Bit;
 use esp_hal::delay::Delay;
-use esp_hal::gpio::{GpioPin, Level};
-use esp_hal::rmt::{Channel, PulseCode, Rmt, TxChannel, TxChannelConfig, TxChannelCreator};
+use esp_hal::gpio::{Level, Output};
+use esp_hal::rmt::{Channel, PulseCode, Rmt, Tx, TxChannelConfig, TxChannelCreator};
 use esp_hal::time::{Duration, Instant};
 use esp_hal::Blocking;
 
@@ -38,7 +38,7 @@ pub struct Rgb {
 
 pub struct Led {
     pub pixel_buffer: [Rgb; 2],
-    pub rmt_channel: Option<Channel<Blocking, 0>>,
+    pub rmt_channel: Option<Channel<'static, Blocking, Tx>>,
     pub last_update_time: Instant,
 }
 
@@ -70,7 +70,7 @@ impl Led {
             450 / ns_per_tick,
         );
 
-        let mut pulse_train: [u32; 48] = [t0; 48];
+        let mut pulse_train: [u32; 48] = [t0.into(); 48];
         for pixel in 0..self.pixel_buffer.len() {
             // 24 pulses + 1 stop signal pulse
             let mut pixel_bits: u32 = 0;
@@ -84,9 +84,9 @@ impl Led {
                 .enumerate()
             {
                 if pixel_bits.bit(i) {
-                    *pulse = t1;
+                    *pulse = t1.into();
                 } else {
-                    *pulse = t0;
+                    *pulse = t0.into();
                 }
             }
         }
@@ -102,9 +102,12 @@ impl Led {
         self.last_update_time = Instant::now();
     }
 
-    pub fn configure_rmt(rmt: Rmt<Blocking>, pin: GpioPin<3>) -> Channel<Blocking, 0> {
+    pub fn configure_rmt(
+        rmt: Rmt<'static, Blocking>,
+        pin: Output<'static>,
+    ) -> Channel<'static, Blocking, Tx> {
         rmt.channel0
-            .configure(
+            .configure_tx(
                 pin,
                 TxChannelConfig::default()
                     .with_clk_divider(2)

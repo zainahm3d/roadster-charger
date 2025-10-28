@@ -1,8 +1,10 @@
 // Remote Control Peripheral (RMT) based WS2812b RGB LED driver
 use bitfield::Bit;
 use esp_hal::delay::Delay;
-use esp_hal::gpio::{GpioPin, Level};
-use esp_hal::rmt::{Channel, PulseCode, Rmt, TxChannel, TxChannelConfig, TxChannelCreator};
+use esp_hal::gpio::{Level, Output};
+use esp_hal::rmt::{
+    Channel, ConstChannelAccess, PulseCode, Rmt, Tx, TxChannel, TxChannelConfig, TxChannelCreator,
+};
 use esp_hal::time::{Duration, Instant};
 use esp_hal::Blocking;
 
@@ -38,7 +40,7 @@ pub struct Rgb {
 
 pub struct Led {
     pub pixel_buffer: [Rgb; 2],
-    pub rmt_channel: Option<Channel<Blocking, 0>>,
+    pub rmt_channel: Option<Channel<Blocking, ConstChannelAccess<Tx, 0>>>,
     pub last_update_time: Instant,
 }
 
@@ -102,9 +104,12 @@ impl Led {
         self.last_update_time = Instant::now();
     }
 
-    pub fn configure_rmt(rmt: Rmt<Blocking>, pin: GpioPin<3>) -> Channel<Blocking, 0> {
+    pub fn configure_rmt(
+        rmt: Rmt<Blocking>,
+        pin: Output,
+    ) -> Channel<Blocking, ConstChannelAccess<Tx, 0>> {
         rmt.channel0
-            .configure(
+            .configure_tx(
                 pin,
                 TxChannelConfig::default()
                     .with_clk_divider(2)

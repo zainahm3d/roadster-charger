@@ -2,12 +2,11 @@ name: Build Firmware
 run-name: Build Firmware 🏎️
 on:
   push:
-    paths: ['firmware/**']
+    paths: ["firmware/**"]
 
 defaults:
   run:
-    working-directory:
-      ./firmware/
+    working-directory: ./firmware/
 
 env:
   CARGO_TERM_COLOR: always
@@ -17,12 +16,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check out repository code  # needs to be first for working-directory to succeed
+      - name: Check out repository code # needs to be first for working-directory to succeed
         uses: actions/checkout@v4
 
       - name: Setup rust
         run: |
-          rustup toolchain install nightly --profile minimal --target riscv32imc-unknown-none-elf
+          rustup toolchain install stable --profile minimal --target riscv32imc-unknown-none-elf
           rustup component add --toolchain nightly-x86_64-unknown-linux-gnu rustfmt
           rustup component add --toolchain nightly-x86_64-unknown-linux-gnu clippy
 

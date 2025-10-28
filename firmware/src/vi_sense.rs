@@ -1,13 +1,15 @@
 // todo: clean up includes
 use esp_hal::analog::adc::*;
-use esp_hal::peripherals::ADC1;
-use esp_hal::{gpio::*, Blocking};
+use esp_hal::peripherals::{ADC1, GPIO0, GPIO1, GPIO4};
+use esp_hal::Blocking;
+
+type Adc1CalCurve = AdcCalCurve<ADC1<'static>>;
 
 pub struct VISense {
-    pub v_sense: AdcPin<GpioPin<1>, ADC1, AdcCalCurve<ADC1>>,
-    pub i_sense: AdcPin<GpioPin<0>, ADC1, AdcCalCurve<ADC1>>,
-    pub input_i_sense: AdcPin<GpioPin<4>, ADC1, AdcCalCurve<ADC1>>,
-    pub adc: Adc<'static, ADC1, Blocking>,
+    pub v_sense: AdcPin<GPIO1<'static>, ADC1<'static>, Adc1CalCurve>,
+    pub i_sense: AdcPin<GPIO0<'static>, ADC1<'static>, Adc1CalCurve>,
+    pub input_i_sense: AdcPin<GPIO4<'static>, ADC1<'static>, Adc1CalCurve>,
+    pub adc: Adc<'static, ADC1<'static>, Blocking>,
 
     pub input_current_ma: u32,
     pub output_current_ma: u32,

@@ -6,26 +6,26 @@ edition = "2021"
 license = "MIT OR Apache-2.0"
 
 [dependencies]
-esp-hal = { version = "1.0.0-rc.1", features = ["esp32c3", "unstable"] }
-esp-backtrace = { version = "0.14", features = [
+esp-hal = { version = "1.0.0", features = ["esp32c3", "unstable"] }
+esp-backtrace = { version = "0.18", features = [
     "esp32c3",
     "panic-handler",
     "println",
 ] }
-esp-println = { version = "0.12", features = ["esp32c3"] }
+esp-println = { version = "0.16", features = ["esp32c3"] }
 zerocopy = { version = "0.8", features = ["derive"] }
-bitfield = "0.17"
-heapless = "0.8"
+bitfield = "0.19"
+heapless = "0.9"
 critical-section = "1.2"
 fugit = "0.3"
 portable-atomic = { version = "1.6", default-features = false, features = [
     "require-cas",
 ] }
-rtic = { version = "2.1", features = ["esp32c3", "riscv-esp32c3-backend"] }
-esp32c3 = { version = "0.26", features = ["rt"] }
-esp-bootloader-esp-idf = { version = "0.3.0", features = ["esp32c3"] }
+rtic = { version = "2.2", features = ["esp32c3", "riscv-esp32c3-backend"] }
+esp32c3 = { version = "0.29", features = ["rt"] }
+esp-bootloader-esp-idf = { version = "0.4", features = ["esp32c3"] }
 embedded-hal = "1.0"
-nb = "1.1.0"
+nb = "1.1"
 
 [profile.dev]
 opt-level = 3

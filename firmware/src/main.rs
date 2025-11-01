@@ -23,6 +23,7 @@ use crate::led::color;
 mod boost;
 mod charger;
 mod led;
+mod pi;
 mod tcpc;
 mod temp_sense;
 mod usb_pd;

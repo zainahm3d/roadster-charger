@@ -2,8 +2,9 @@ use embedded_hal::digital::OutputPin;
 use embedded_hal::i2c::I2c;
 use esp_println::dbg;
 
-use crate::boost;
+use crate::boost::{self, DAC_MAX_OUTPUT};
 use crate::led::{color, Led};
+use crate::pi::Pi;
 use crate::tcpc;
 use crate::temp_sense;
 use crate::vi_sense::VISense;
@@ -15,6 +16,7 @@ const CHARGING_CUTOFF_MA: u32 = 150;
 const MIN_BATTERY_VOLTAGE_MV: u32 = 28_000;
 const MIN_CURRENT_MA: u32 = 50;
 const TICKS_PER_SECOND: u32 = 10;
+const MAX_OUTPUT_MV: f32 = 43_000.0;
 
 #[derive(Debug)]
 enum Mode {
@@ -45,6 +47,9 @@ pub struct State {
 
     pub pdo_mv: u32,
     pub pdo_ma: u32,
+
+    i_ctrl: crate::pi::Pi,
+    v_ctrl: crate::pi::Pi,
 }
 
 impl State {
@@ -80,6 +85,42 @@ impl Default for State {
             output_ma: 0,
             pdo_mv: 0,
             pdo_ma: 0,
+
+            // current controller output is fed into voltage controller
+            // input / output units are millivolts
+            i_ctrl: Pi {
+                target: 0.0,
+
+                kp: 0.0,
+                ki: 0.005,
+                p_ff: 0.0,
+
+                p: 0.0,
+                i: 0.0,
+                ff: 0.0,
+
+                i_max: MAX_OUTPUT_MV,
+                output_max: MAX_OUTPUT_MV,
+
+                output: 0.0,
+            },
+
+            v_ctrl: Pi {
+                target: 0.0,
+
+                kp: 0.26,
+                ki: 0.1,
+                p_ff: (DAC_MAX_OUTPUT as f32) / MAX_OUTPUT_MV, // Nominal ticks / mv
+
+                p: 0.0,
+                i: 0.0,
+                ff: 0.0,
+
+                i_max: DAC_MAX_OUTPUT as f32,
+                output_max: DAC_MAX_OUTPUT as f32,
+
+                output: 0.0,
+            },
         }
     }
 }
@@ -94,16 +135,13 @@ pub fn run<T: I2c, P: OutputPin>(
     vi_sense: &VISense,
     leds: &mut Led,
 ) {
-    // Slew rate in DAC ticks / update period
-    const MAX_BOOST_DIFF: i32 = 25;
-
     s.tick += 1;
     s.board_temp_c = temp_sense::board_temp_c(i2c);
     s.input_mv = tcpc::vbus_mv(i2c);
     s.input_ma = vi_sense.input_current_ma();
     s.output_mv = vi_sense.battery_voltage_mv();
     s.output_ma = vi_sense.output_current_ma();
-    dbg!(&s); // Print out the results of the last update
+    dbg!(&s);
 
     if s.board_temp_c >= 90 {
         s.mode = Mode::OverTemp;
@@ -120,24 +158,25 @@ pub fn run<T: I2c, P: OutputPin>(
                 if s.duty >= boost::DAC_MAX_OUTPUT {
                     disable(s, leds, color::RED);
                 } else {
-                    s.duty += MAX_BOOST_DIFF as u16;
+                    s.duty += 25u16;
                     boost::set_duty(i2c, enable_pin, s.duty);
                 }
             } else {
                 s.mode = Mode::ConstantCurrent;
+                s.i_ctrl.i = s.output_mv as f32; // Don't wait for i term to ramp up
                 leds.set_pixel(1, color::YELLOW);
             }
         }
 
         Mode::ConstantCurrent => {
             s.update_target_ma();
-            let p_error = s.target_ma as i32 - s.output_ma as i32;
 
-            // Slew rate limit only in positive direction
-            let duty_shift = p_error.clamp(i32::MIN, MAX_BOOST_DIFF);
-
-            // Prevent windup past boost limits
-            s.duty = (s.duty as i32 + duty_shift).clamp(0, boost::DAC_MAX_OUTPUT as i32) as u16;
+            // Current controller provides a target voltage to drive a current through
+            // the battery.
+            s.duty = s.v_ctrl.update(
+                s.output_mv as f32,
+                s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32),
+            ) as u16;
 
             if s.output_mv >= CV_TARGET_MV {
                 s.target_ma = 0;
@@ -151,18 +190,7 @@ pub fn run<T: I2c, P: OutputPin>(
         }
 
         Mode::ConstantVoltage => {
-            let p_error = CV_TARGET_MV as i32 - s.output_mv as i32;
-
-            let duty_shift = if p_error.abs() < 100 {
-                // Limit slew rate severely within 100mV of target
-                p_error.clamp(-1, 1)
-            } else {
-                // If error is large, allow large negative movement
-                p_error.clamp(i32::MIN, MAX_BOOST_DIFF)
-            };
-
-            // Clamp to boost converter limits
-            s.duty = (s.duty as i32 + duty_shift).clamp(0, boost::DAC_MAX_OUTPUT as i32) as u16;
+            s.duty = s.v_ctrl.update(s.output_mv as f32, CV_TARGET_MV as f32) as u16;
 
             if s.output_ma <= CHARGING_CUTOFF_MA {
                 // Charging is done
@@ -174,6 +202,9 @@ pub fn run<T: I2c, P: OutputPin>(
 
         Mode::Disabled => {
             boost::set_duty(i2c, enable_pin, 0);
+
+            s.i_ctrl.reset();
+            s.v_ctrl.reset();
 
             // If boost is off and we see a voltage then a battery has been plugged in.
             // Only switch to CC if battery exists and is > 0.5V below fully charged target.

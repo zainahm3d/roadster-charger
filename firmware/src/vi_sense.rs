@@ -23,7 +23,7 @@ impl VISense {
         let mut i_mv: u32 = 0;
         let mut input_i_mv: u32 = 0;
 
-        let num_samples = 50;
+        let num_samples = 100;
         for _ in 0..num_samples {
             v_mv += nb::block!(self.adc.read_oneshot(&mut self.v_sense)).unwrap() as u32;
             i_mv += nb::block!(self.adc.read_oneshot(&mut self.i_sense)).unwrap() as u32;

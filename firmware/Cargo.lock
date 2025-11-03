@@ -644,6 +644,8 @@ dependencies = [
  "nb 1.1.0",
  "portable-atomic",
  "rtic",
+ "serde",
+ "shared",
  "zerocopy",
 ]
 
@@ -1120,6 +1122,13 @@ dependencies = [
  "ryu",
  "serde",
  "unsafe-libyaml",
+]
+
+[[package]]
+name = "shared"
+version = "0.1.0"
+dependencies = [
+ "zerocopy",
 ]
 
 [[package]]

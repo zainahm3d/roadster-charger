@@ -23,7 +23,6 @@ use crate::led::color;
 mod boost;
 mod charger;
 mod led;
-mod pi;
 mod tcpc;
 mod temp_sense;
 mod usb_pd;
@@ -46,7 +45,7 @@ mod app {
         periodic: PeriodicTimer<'static, Blocking>,
         boost_enable: gpio::Output<'static>,
         vi_sense: VISense,
-        state: charger::State,
+        state: shared::state::State,
         leds: led::Led,
         watchdog: Wdt<esp_hal::peripherals::TIMG0<'static>>,
     }
@@ -117,9 +116,13 @@ mod app {
         periodic.enable_interrupt(true);
         periodic.start(Duration::from_millis(100)).unwrap();
 
-        let mut state = charger::State::default();
-        state.pdo_mv = tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed);
-        state.pdo_ma = tcpc::PDO_CURRENT_MA.load(Ordering::Relaxed);
+        let mut state = shared::state::State {
+            pdo_mv: tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed),
+            pdo_ma: tcpc::PDO_CURRENT_MA.load(Ordering::Relaxed),
+            ..Default::default()
+        };
+
+        charger::init(&mut state); // Set PI gains
 
         (
             Shared { i2c },

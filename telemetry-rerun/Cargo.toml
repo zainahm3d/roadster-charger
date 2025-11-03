@@ -2,7 +2,11 @@
 name = "telemetry-rerun"
 version = "0.1.0"
 edition = "2024"
+authors = ["Zain Ahmed <zainahmed1559@gmail.com>"]
+license = "MIT OR Apache-2.0"
 
 [dependencies]
 rerun = "0.23.3"
 serialport = "4.7.2"
+shared = {path = "../shared"}
+zerocopy = { version = "0.8.27", features = ["alloc", "std"] }

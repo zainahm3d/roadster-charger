@@ -1,8 +1,17 @@
-use std::{io::Read, time::Duration};
-
+use shared::state::State;
+use std::{
+    collections::VecDeque,
+    io::Read,
+    sync::RwLock,
+    time::{Duration, SystemTime},
+};
 use zerocopy::TryFromBytes;
 
+type StampedPacket = (SystemTime, State);
+
 fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let mut queue: VecDeque<StampedPacket> = VecDeque::new();
+
     let rec = rerun::RecordingStreamBuilder::new("roadster").connect_grpc()?;
 
     let port_name = find_port().expect("ESP32 not found");
@@ -38,17 +47,24 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             >= std::time::Duration::from_millis(10)
             && !packet_complete
         {
-            let packet_len = core::mem::size_of::<shared::state::State>();
+            let packet_len = core::mem::size_of::<State>();
 
             if packet_buf.len() == packet_len {
                 let packet_buf = &mut packet_buf[0..packet_len];
-                let state = shared::state::State::try_mut_from_bytes(packet_buf).unwrap();
-                log_status_message(state, &rec);
-                dbg!(&state);
+                let state = State::try_mut_from_bytes(packet_buf).unwrap();
+                queue_packet(state, &mut queue);
             }
 
             packet_complete = true;
             packet_buf.clear();
+        }
+
+        // Log each packet 100ms late to prevent underflowing the queue
+        if let Some((time, _state)) = queue.front()
+            && SystemTime::now().duration_since(*time).unwrap() >= Duration::from_millis(100)
+        {
+            let (time, state) = queue.pop_front().unwrap();
+            send_to_rerun(&state, time, &rec);
         }
     }
 }
@@ -67,12 +83,35 @@ fn find_port() -> Option<String> {
     None
 }
 
-// This parser is temporary- future work includes sending the bare struct from the charger
-// instead of a stringified form like this. Readable info is good for debugging right now.
-fn log_status_message(s: &shared::state::State, r: &rerun::RecordingStream) {
+// Adds a packet to queue, but adds it 10x with equally spaced timestamps to allow
+// rerun to plot @ 100FPS
+fn queue_packet(new_packet: &State, queue: &mut VecDeque<StampedPacket>) {
+    static LAST_PACKET_TIME: RwLock<Option<SystemTime>> = RwLock::new(None);
+
+    let new_packet_time = SystemTime::now(); // TODO: make monotonic
+
+    if let Some(last) = *LAST_PACKET_TIME.read().unwrap() {
+        let time_since_last = new_packet_time
+            .duration_since(LAST_PACKET_TIME.read().unwrap().unwrap())
+            .unwrap();
+        let interval = time_since_last / 10;
+
+        let timestamps: [SystemTime; 10] =
+            std::array::from_fn(|i| last + (interval.mul_f32(i as f32)));
+
+        for stamp in timestamps {
+            queue.push_back((stamp, *new_packet));
+        }
+    }
+
+    *LAST_PACKET_TIME.write().unwrap() = Some(new_packet_time);
+}
+
+// TODO: come up with something less repetetive
+fn send_to_rerun(s: &State, time: SystemTime, r: &rerun::RecordingStream) {
     use rerun::Scalars;
 
-    r.set_time("roadster", std::time::SystemTime::now());
+    r.set_time("roadster", time);
 
     r.log("roadster/tick", &Scalars::single(s.tick as f64))
         .unwrap();

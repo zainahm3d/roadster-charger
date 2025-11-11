@@ -15,13 +15,13 @@ const CV_TARGET_MV: u32 = 41_500;
 const CHARGING_CUTOFF_MA: u32 = 150;
 const MIN_BATTERY_VOLTAGE_MV: u32 = 28_000;
 const MIN_CURRENT_MA: u32 = 50;
-const TICKS_PER_SECOND: u32 = 10;
+pub const TICKS_PER_SECOND: u32 = 100;
 const MAX_OUTPUT_MV: f32 = 43_000.0;
 
 pub fn init(state: &mut State) {
     state.i_ctrl = Pi::new(shared::pi::Config {
         kp: 0.0,
-        ki: 0.005,
+        ki: 0.01,
         i_max: MAX_OUTPUT_MV,
         output_max: MAX_OUTPUT_MV,
         p_ff: 0.0,
@@ -36,9 +36,6 @@ pub fn init(state: &mut State) {
     });
 }
 
-// Run charge controller. CC and CV controllers are slew rate limited P controllers.
-// In practice, they act as integrating controllers at large P errors, and P controllers
-// at small P errors.
 pub fn run<T: I2c, P: OutputPin>(
     i2c: &mut T,
     enable_pin: &mut P,
@@ -70,7 +67,7 @@ pub fn run<T: I2c, P: OutputPin>(
                 if s.duty >= boost::DAC_MAX_OUTPUT {
                     disable(s, leds, color::RED);
                 } else {
-                    s.duty += 25u16;
+                    s.duty += 5u16;
                     boost::set_duty(i2c, enable_pin, s.duty);
                 }
             } else {
@@ -83,21 +80,19 @@ pub fn run<T: I2c, P: OutputPin>(
         Mode::ConstantCurrent => {
             update_cc_target(s);
 
-            // Current controller provides a target voltage to drive a current through
-            // the battery.
-            s.duty = s.v_ctrl.update(
-                s.output_mv as f32,
-                s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32),
-            ) as u16;
-
             if s.output_mv >= CV_TARGET_MV {
                 s.target_ma = 0;
                 s.mode = Mode::ConstantVoltage;
             } else if s.output_ma < MIN_CURRENT_MA {
                 // Battery is gone!
                 disable(s, leds, color::RED);
-            } else {
-                boost::set_duty(i2c, enable_pin, s.duty);
+            } else if s.output_ma.abs_diff(s.target_ma) >= 5 {
+                // 5mA deadband. Halting the controller works because CC is done via
+                // a pure i controller, so leaving the integral charged up is ok.
+                s.duty = s.v_ctrl.update(
+                    s.output_mv as f32,
+                    s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32),
+                ) as u16;
             }
         }
 

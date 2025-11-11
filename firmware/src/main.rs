@@ -114,7 +114,11 @@ mod app {
 
         let mut periodic = PeriodicTimer::new(timg0.timer0);
         periodic.enable_interrupt(true);
-        periodic.start(Duration::from_millis(100)).unwrap();
+        periodic
+            .start(Duration::from_millis(
+                1_000 / charger::TICKS_PER_SECOND as u64,
+            ))
+            .unwrap();
 
         let mut state = shared::state::State {
             pdo_mv: tcpc::PDO_VOLTAGE_MV.load(Ordering::Relaxed),

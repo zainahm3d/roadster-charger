@@ -40,6 +40,20 @@ pub mod state {
         pub i_ctrl: Pi,
         pub v_ctrl: Pi,
     }
+
+    impl State {
+        pub fn input_mw(&self) -> u32 {
+            (self.input_ma * self.input_mv) / 1_000
+        }
+
+        pub fn output_mw(&self) -> u32 {
+            (self.output_ma * self.output_mv) / 1_000
+        }
+
+        pub fn efficiency(&self) -> f32 {
+            (self.output_mw() as f32) / (self.input_mw() as f32)
+        }
+    }
 }
 
 pub mod pi {

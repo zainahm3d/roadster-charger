@@ -109,6 +109,30 @@ fn send_to_rerun(s: &State, time: SystemTime, r: &rerun::RecordingStream) {
         .unwrap();
 
     r.log(
+        "roadster/efficiency",
+        &Scalars::single(s.efficiency() as f64),
+    )
+    .unwrap();
+
+    r.log("roadster/input_mw", &Scalars::single(s.input_mw() as f64))
+        .unwrap();
+
+    r.log("roadster/output_mw", &Scalars::single(s.output_mw() as f64))
+        .unwrap();
+
+    r.log(
+        "roadster/loss_mw",
+        &Scalars::single((s.input_mw().saturating_sub(s.output_mw())) as f64),
+    )
+    .unwrap();
+
+    r.log(
+        "roadster/load_resistance",
+        &Scalars::single((s.output_mv as f64) / (s.output_ma as f64)),
+    )
+    .unwrap();
+
+    r.log(
         "roadster/current_pi/output",
         &Scalars::single(s.i_ctrl.output as f64),
     )

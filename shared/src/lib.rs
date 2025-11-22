@@ -17,6 +17,18 @@ pub mod state {
         OverTemp,
     }
 
+    impl Mode {
+        pub fn to_string(&self) -> &'static str {
+            match self {
+                Mode::Disabled => "Disabled",
+                Mode::Ramping => "Ramping",
+                Mode::ConstantCurrent => "ConstantCurrent",
+                Mode::ConstantVoltage => "ConstantVoltage",
+                Mode::OverTemp => "OverTemp",
+            }
+        }
+    }
+
     #[derive(Debug, Clone, Copy, IntoBytes, TryFromBytes, Immutable, KnownLayout, Default)]
     pub struct State {
         pub tick: u32,

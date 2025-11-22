@@ -44,7 +44,7 @@ pub fn run_state_machine<T: I2c>(
         match STATE {
             PDState::WaitingForSourceCaps => {
                 if !is_ctrl_msg && msg_type == usb_pd::DataMessage::SourceCaps as u16 {
-                    println!("pd: source capabilities recieved");
+                    println!("pd: source capabilities received");
                     let pdos = parse_pdos(rx_header, rx_buffer);
                     let index = select_pdo_index(&pdos).unwrap() as u32;
                     let pdo = &pdos[index as usize];
@@ -160,7 +160,7 @@ pub fn establish_pd_contract<T: I2c>(i2c: &mut T, fusb_int: &mut Input, delay: &
                 delay.delay_millis(500); // Wait for caps to discharge
 
                 // If we are connected to a PD source, we will now reboot.
-                // If not, we will continute to the timeout.
+                // If not, we will continue to the timeout.
                 println!("pd: negotiation timed out");
                 return false;
             }

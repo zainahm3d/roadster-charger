@@ -93,6 +93,7 @@ pub fn run<T: I2c, P: OutputPin>(
                     s.output_mv as f32,
                     s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32),
                 ) as u16;
+                boost::set_duty(i2c, enable_pin, s.duty);
             }
         }
 
@@ -149,7 +150,7 @@ fn disable(s: &mut State, leds: &mut Led, color: crate::led::Rgb) {
 fn update_cc_target(state: &mut State) {
     if state.output_mv > MIN_BATTERY_VOLTAGE_MV {
         // Only output 90% of brick's advertised capabilities to account for
-        // power dissapated in cable and our own 92ish % efficiency.
+        // power dissipated in cable and our own 92ish % efficiency.
         let pdo_mw = state.pdo_ma as f32 * state.pdo_mv as f32 / 1000.0;
         let max_output_mw = pdo_mw * 0.9;
 

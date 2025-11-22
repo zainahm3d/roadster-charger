@@ -69,7 +69,7 @@ fn find_port() -> Option<String> {
     None
 }
 
-// TODO: come up with something less repetetive
+// TODO: come up with something less repetitive
 fn send_to_rerun(s: &State, time: SystemTime, r: &rerun::RecordingStream) {
     use rerun::Scalars;
 
@@ -155,4 +155,10 @@ fn send_to_rerun(s: &State, time: SystemTime, r: &rerun::RecordingStream) {
 
     r.log("roadster/voltage_pi/i", &Scalars::single(s.v_ctrl.i as f64))
         .unwrap();
+
+    r.log(
+        "roadster/mode",
+        &rerun::TextDocument::new(s.mode.to_string()),
+    )
+    .unwrap();
 }

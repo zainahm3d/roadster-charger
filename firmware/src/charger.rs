@@ -21,7 +21,7 @@ const MAX_OUTPUT_MV: f32 = 43_000.0;
 pub fn init(state: &mut State) {
     state.i_ctrl = Pi::new(shared::pi::Config {
         kp: 0.0,
-        ki: 0.01,
+        ki: 0.001,
         i_max: MAX_OUTPUT_MV,
         output_max: MAX_OUTPUT_MV,
         p_ff: 0.0,
@@ -63,7 +63,9 @@ pub fn run<T: I2c, P: OutputPin>(
     match s.mode {
         // Battery has been detected, slowly ramp up until we flow current
         Mode::Ramping => {
-            if s.output_ma < CHARGING_CUTOFF_MA {
+            if s.output_mv < MIN_BATTERY_VOLTAGE_MV {
+                disable(s, leds, color::RED); // Battery is gone
+            } else if s.output_ma < MIN_CURRENT_MA {
                 if s.duty >= boost::DAC_MAX_OUTPUT {
                     disable(s, leds, color::RED);
                 } else {
@@ -72,7 +74,7 @@ pub fn run<T: I2c, P: OutputPin>(
                 }
             } else {
                 s.mode = Mode::ConstantCurrent;
-                s.i_ctrl.i = s.output_mv as f32; // Don't wait for i term to ramp up
+                s.i_ctrl.i = s.output_mv as f32; // Don't wait for i term
                 leds.set_pixel(1, color::YELLOW);
             }
         }
@@ -83,12 +85,10 @@ pub fn run<T: I2c, P: OutputPin>(
             if s.output_mv >= CV_TARGET_MV {
                 s.target_ma = 0;
                 s.mode = Mode::ConstantVoltage;
+                leds.set_pixel(1, color::BLUE);
             } else if s.output_ma < MIN_CURRENT_MA {
-                // Battery is gone!
-                disable(s, leds, color::RED);
-            } else if s.output_ma.abs_diff(s.target_ma) >= 5 {
-                // 5mA deadband. Halting the controller works because CC is done via
-                // a pure i controller, so leaving the integral charged up is ok.
+                disable(s, leds, color::RED); // Battery is gone
+            } else {
                 s.duty = s.v_ctrl.update(
                     s.output_mv as f32,
                     s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32),

@@ -23,6 +23,11 @@ pub mod color {
         b: 0,
     };
     pub const GREEN: Rgb = Rgb { r: 0, g: 128, b: 0 };
+    pub const BLUE: Rgb = Rgb {
+        r: 0,
+        g: 32,
+        b: 255,
+    };
     pub const PURPLE: Rgb = Rgb {
         r: 128,
         g: 0,

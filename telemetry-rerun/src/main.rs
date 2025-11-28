@@ -38,7 +38,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
         // Wait for serial port to go idle to frame packets
         if std::time::Instant::now().duration_since(last_rx_time)
-            >= std::time::Duration::from_millis(10)
+            >= std::time::Duration::from_millis(5)
             && !packet_complete
         {
             let packet_len = core::mem::size_of::<State>();

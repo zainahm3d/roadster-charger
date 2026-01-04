@@ -21,9 +21,9 @@ const MAX_OUTPUT_MV: f32 = 43_000.0;
 pub fn init(state: &mut State) {
     state.i_ctrl = Pi::new(shared::pi::Config {
         kp: 0.0,
-        ki: 0.001,
-        i_max: MAX_OUTPUT_MV,
-        output_max: MAX_OUTPUT_MV,
+        ki: 0.01,
+        i_max: DAC_MAX_OUTPUT as f32,
+        output_max: DAC_MAX_OUTPUT as f32,
         p_ff: 0.0,
     });
 
@@ -66,7 +66,7 @@ pub fn run<T: I2c, P: OutputPin>(
             if s.output_mv < MIN_BATTERY_VOLTAGE_MV {
                 disable(s, leds, color::RED); // Battery is gone
             } else if s.output_ma < MIN_CURRENT_MA {
-                if s.duty >= boost::DAC_MAX_OUTPUT {
+                if s.duty >= DAC_MAX_OUTPUT {
                     disable(s, leds, color::RED);
                 } else {
                     s.duty += 5u16;
@@ -74,7 +74,8 @@ pub fn run<T: I2c, P: OutputPin>(
                 }
             } else {
                 s.mode = Mode::ConstantCurrent;
-                s.i_ctrl.i = s.output_mv as f32; // Don't wait for i term
+                s.i_ctrl.i = s.duty as f32; // Don't wait for i term
+                s.i_ctrl.output = s.duty as f32;
                 leds.set_pixel(1, color::YELLOW);
             }
         }
@@ -85,14 +86,12 @@ pub fn run<T: I2c, P: OutputPin>(
             if s.output_mv >= CV_TARGET_MV {
                 s.target_ma = 0;
                 s.mode = Mode::ConstantVoltage;
+                s.i_ctrl.reset();
                 leds.set_pixel(1, color::BLUE);
             } else if s.output_ma < MIN_CURRENT_MA {
                 disable(s, leds, color::RED); // Battery is gone
-            } else {
-                s.duty = s.v_ctrl.update(
-                    s.output_mv as f32,
-                    s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32),
-                ) as u16;
+            } else if s.output_ma.abs_diff(s.target_ma) >= 10 {
+                s.duty = s.i_ctrl.update(s.output_ma as f32, s.target_ma as f32) as u16;
                 boost::set_duty(i2c, enable_pin, s.duty);
             }
         }
@@ -120,7 +119,7 @@ pub fn run<T: I2c, P: OutputPin>(
                 // Make sure we've been in the disabled state for at least 3 seconds before
                 // enabling the charger. This allows time for output caps to discharge
                 // once a battery has been disconnected.
-                if s.tick - s.tick_disabled > 3 * TICKS_PER_SECOND {
+                if s.tick.wrapping_sub(s.tick_disabled) > 3 * TICKS_PER_SECOND {
                     s.mode = Mode::Ramping;
                     leds.set_pixel(1, color::YELLOW);
                 }
@@ -131,7 +130,7 @@ pub fn run<T: I2c, P: OutputPin>(
             boost::set_duty(i2c, enable_pin, 0);
             if s.tick.is_multiple_of(TICKS_PER_SECOND) {
                 leds.set_pixel(1, color::OFF);
-            } else if s.tick % TICKS_PER_SECOND / 2 == 0 {
+            } else if s.tick.is_multiple_of(TICKS_PER_SECOND / 2) {
                 leds.set_pixel(1, color::RED);
             }
         }
